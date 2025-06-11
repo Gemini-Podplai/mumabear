@@ -1,0 +1,355 @@
+/* Enhanced Theme System CSS Variables and Utilities */
+
+:root {
+  /* Default Theme Variables - Sanctuary */
+  --theme-primary: linear-gradient(135deg, #2D5A3D 0%, #4A7C59 100%);
+  --theme-secondary: linear-gradient(135deg, #5D8A6B 0%, #7BA185 100%);
+  --theme-accent: linear-gradient(135deg, #8FBC8F 0%, #98FB98 100%);
+  --theme-background: #F8FDF9;
+  --theme-surface: rgba(255, 255, 255, 0.95);
+  --theme-text: #2C3E2F;
+  --theme-border: #D1FAE5;
+  
+  /* Animation & Transition Variables */
+  --theme-animation-duration: 1s;
+  --theme-transition-duration: 0.3s;
+  --theme-animation-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Spacing Variables */
+  --theme-spacing-unit: 1rem;
+  --theme-spacing-xs: calc(var(--theme-spacing-unit) * 0.25);
+  --theme-spacing-sm: calc(var(--theme-spacing-unit) * 0.5);
+  --theme-spacing-md: var(--theme-spacing-unit);
+  --theme-spacing-lg: calc(var(--theme-spacing-unit) * 1.5);
+  --theme-spacing-xl: calc(var(--theme-spacing-unit) * 2);
+  --theme-spacing-2xl: calc(var(--theme-spacing-unit) * 3);
+  
+  /* Font Size Variables */
+  --theme-font-size-base: 1rem;
+  --theme-font-size-xs: calc(var(--theme-font-size-base) * 0.75);
+  --theme-font-size-sm: calc(var(--theme-font-size-base) * 0.875);
+  --theme-font-size-md: var(--theme-font-size-base);
+  --theme-font-size-lg: calc(var(--theme-font-size-base) * 1.125);
+  --theme-font-size-xl: calc(var(--theme-font-size-base) * 1.25);
+  --theme-font-size-2xl: calc(var(--theme-font-size-base) * 1.5);
+  
+  /* Shadow Variables */
+  --theme-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --theme-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --theme-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Blur Variables */
+  --theme-blur-sm: blur(4px);
+  --theme-blur-md: blur(8px);
+  --theme-blur-lg: blur(16px);
+  
+  /* Border Radius Variables */
+  --theme-radius-sm: 0.375rem;
+  --theme-radius-md: 0.5rem;
+  --theme-radius-lg: 0.75rem;
+  --theme-radius-xl: 1rem;
+}
+
+/* Theme-specific overrides */
+.theme-sanctuary {
+  --theme-glow-color: #8FBC8F;
+}
+
+.theme-neon {
+  --theme-glow-color: #FF0080;
+  --theme-shadow-glow: 0 0 20px var(--theme-glow-color);
+}
+
+.theme-ocean {
+  --theme-glow-color: #0EA5E9;
+}
+
+.theme-cosmic {
+  --theme-glow-color: #8B5CF6;
+}
+
+/* Accessibility Classes */
+.high-contrast {
+  --theme-contrast-multiplier: 1.5;
+  filter: contrast(var(--theme-contrast-multiplier));
+}
+
+.reduced-motion {
+  --theme-animation-duration: 0s !important;
+  --theme-transition-duration: 0s !important;
+}
+
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+}
+
+/* Layout Classes */
+.layout-compact {
+  --theme-spacing-unit: 0.5rem;
+}
+
+.layout-comfortable {
+  --theme-spacing-unit: 1rem;
+}
+
+.layout-spacious {
+  --theme-spacing-unit: 1.5rem;
+}
+
+/* Utility Classes */
+.theme-gradient-bg {
+  background: var(--theme-primary);
+}
+
+.theme-text-gradient {
+  background: var(--theme-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.theme-border-gradient {
+  position: relative;
+  border: 2px solid transparent;
+  background: var(--theme-surface);
+}
+
+.theme-border-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--theme-primary);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+}
+
+.theme-glow {
+  box-shadow: 0 0 20px var(--theme-glow-color, var(--theme-primary));
+}
+
+.theme-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: var(--theme-blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animation Classes */
+.theme-animate-in {
+  animation: theme-fade-in var(--theme-animation-duration) var(--theme-animation-ease);
+}
+
+.theme-animate-out {
+  animation: theme-fade-out var(--theme-animation-duration) var(--theme-animation-ease);
+}
+
+.theme-animate-slide-up {
+  animation: theme-slide-up var(--theme-animation-duration) var(--theme-animation-ease);
+}
+
+.theme-animate-slide-down {
+  animation: theme-slide-down var(--theme-animation-duration) var(--theme-animation-ease);
+}
+
+.theme-animate-scale {
+  animation: theme-scale var(--theme-animation-duration) var(--theme-animation-ease);
+}
+
+.theme-animate-pulse {
+  animation: theme-pulse calc(var(--theme-animation-duration) * 2) infinite;
+}
+
+/* Keyframe Animations */
+@keyframes theme-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes theme-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes theme-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes theme-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes theme-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes theme-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive Theme Utilities */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-animation-duration: 0s;
+    --theme-transition-duration: 0s;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --theme-contrast-multiplier: 1.3;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --theme-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --theme-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* Component-specific theme integration */
+.theme-button {
+  background: var(--theme-primary);
+  color: var(--theme-surface);
+  border: 1px solid transparent;
+  transition: all var(--theme-transition-duration) var(--theme-animation-ease);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+  font-size: var(--theme-font-size-base);
+}
+
+.theme-button:hover {
+  background: var(--theme-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--theme-shadow-md);
+}
+
+.theme-button:active {
+  transform: translateY(0);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+.theme-card {
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-sm);
+  transition: all var(--theme-transition-duration) var(--theme-animation-ease);
+  color: var(--theme-text);
+}
+
+.theme-card:hover {
+  box-shadow: var(--theme-shadow-md);
+  transform: translateY(-2px);
+}
+
+.theme-input {
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-radius-md);
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+  font-size: var(--theme-font-size-base);
+  color: var(--theme-text);
+  transition: all var(--theme-transition-duration) var(--theme-animation-ease);
+}
+
+.theme-input:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px rgba(var(--theme-primary), 0.1);
+}
+
+/* Particle system variables */
+.theme-particles {
+  --particle-color: var(--theme-accent);
+  --particle-size: 2px;
+  --particle-count: 50;
+  --particle-speed: 1s;
+}
+
+/* Background gradient utilities */
+.theme-bg-gradient-primary {
+  background: var(--theme-primary);
+}
+
+.theme-bg-gradient-secondary {
+  background: var(--theme-secondary);
+}
+
+.theme-bg-gradient-accent {
+  background: var(--theme-accent);
+}
+
+/* Text utilities */
+.theme-text-primary {
+  color: var(--theme-text);
+}
+
+.theme-text-muted {
+  color: rgba(var(--theme-text), 0.7);
+}
+
+.theme-text-subtle {
+  color: rgba(var(--theme-text), 0.5);
+}
+
+/* Border utilities */
+.theme-border {
+  border-color: var(--theme-border);
+}
+
+.theme-border-primary {
+  border-color: var(--theme-primary);
+}
+
+/* Surface utilities */
+.theme-surface {
+  background: var(--theme-surface);
+}
+
+.theme-background {
+  background: var(--theme-background);
+}

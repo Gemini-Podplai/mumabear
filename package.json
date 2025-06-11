@@ -1,0 +1,43 @@
+{
+  "name": "podplay-sanctuary",
+  "version": "2.5.0",
+  "description": "Podplay Sanctuary - AI Model Friends Chat with Enhanced Navigation and Agent Workbench",
+  "main": "index.js",
+  "scripts": {
+    "setup": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "start": "./start-backend.sh && ./start-frontend.sh",
+    "start:backend": "./start-backend.sh",
+    "start:frontend": "./start-frontend.sh",
+    "test": "cd backend && python -m pytest && cd ../frontend && npm test",
+    "build": "cd frontend && npm run build",
+    "verify": "./install-and-verify.sh"
+  },
+  "keywords": [
+    "ai",
+    "chat",
+    "agents",
+    "workbench",
+    "sanctuary",
+    "multi-modal",
+    "execution-router"
+  ],
+  "author": "Podplay Sanctuary Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/podplay/sanctuary"
+  },
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared-components"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "python": ">=3.9.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3"
+  }
+}
