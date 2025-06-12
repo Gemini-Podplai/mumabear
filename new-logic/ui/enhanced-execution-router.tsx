@@ -182,17 +182,101 @@ const EnhancedExecutionRouter = ({ theme }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Analyze task complexity
-  const analyzeTaskComplexity = (description: string): TaskComplexity => {
+  // Get AI-powered task analysis
+  const getAITaskAnalysis = async (taskDescription: string) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5001/api/openai-vertex/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert task complexity analyst for execution platforms. Analyze tasks and provide numerical scores (0-100) for different complexity factors. Respond with a JSON object containing scores and analysis.'
+            },
+            {
+              role: 'user',
+              content: `Analyze this task for complexity: "${taskDescription}"
+
+Please provide analysis with scores (0-100) for:
+1. computational_requirements - CPU/memory intensive operations
+2. data_processing - Amount and complexity of data handling
+3. integration_complexity - Number of systems/APIs to integrate
+4. real_time_requirements - Time sensitivity and latency requirements
+5. security_requirements - Security and compliance needs
+6. estimated_duration - Estimated time in minutes
+
+Respond with JSON format:
+{
+  "computational_requirements": 50,
+  "data_processing": 40,
+  "integration_complexity": 30,
+  "real_time_requirements": 20,
+  "security_requirements": 60,
+  "estimated_duration": 15,
+  "reasoning": "Brief explanation of the analysis"
+}`
+            }
+          ],
+          max_tokens: 500,
+          temperature: 0.3
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content;
+      
+      if (content) {
+        // Try to extract JSON from the response
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          return JSON.parse(jsonMatch[0]);
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error getting AI task analysis:', error);
+      return null;
+    }
+  };
+
+  // Analyze task complexity with AI assistance
+  const analyzeTaskComplexity = async (description: string): Promise<TaskComplexity> => {
+    // First get AI analysis
+    let aiAnalysis = null;
+    try {
+      aiAnalysis = await getAITaskAnalysis(description);
+    } catch (error) {
+      console.error('Error getting AI task analysis:', error);
+    }
+
     const words = description.toLowerCase().split(' ');
     
-    // Simple complexity analysis based on keywords
+    // Enhanced complexity analysis using AI + keyword fallback
     const factors = {
-      computational_requirements: words.some(w => ['ai', 'ml', 'training', 'compute'].includes(w)) ? 80 : 40,
-      data_processing: words.some(w => ['data', 'process', 'analyze', 'transform'].includes(w)) ? 70 : 30,
-      integration_complexity: words.some(w => ['integrate', 'api', 'connect', 'sync'].includes(w)) ? 60 : 25,
-      real_time_requirements: words.some(w => ['real-time', 'live', 'instant', 'streaming'].includes(w)) ? 85 : 20,
-      security_requirements: words.some(w => ['secure', 'encrypt', 'auth', 'privacy'].includes(w)) ? 75 : 35
+      computational_requirements: aiAnalysis?.computational_requirements || (
+        words.some(w => ['ai', 'ml', 'training', 'compute'].includes(w)) ? 80 : 40
+      ),
+      data_processing: aiAnalysis?.data_processing || (
+        words.some(w => ['data', 'process', 'analyze', 'transform'].includes(w)) ? 70 : 30
+      ),
+      integration_complexity: aiAnalysis?.integration_complexity || (
+        words.some(w => ['integrate', 'api', 'connect', 'sync'].includes(w)) ? 60 : 25
+      ),
+      real_time_requirements: aiAnalysis?.real_time_requirements || (
+        words.some(w => ['real-time', 'live', 'instant', 'streaming'].includes(w)) ? 85 : 20
+      ),
+      security_requirements: aiAnalysis?.security_requirements || (
+        words.some(w => ['secure', 'encrypt', 'auth', 'privacy'].includes(w)) ? 75 : 35
+      )
     };
 
     const score = Object.values(factors).reduce((sum, val) => sum + val, 0) / Object.keys(factors).length;
@@ -217,8 +301,10 @@ const EnhancedExecutionRouter = ({ theme }) => {
       level,
       score,
       factors,
-      estimated_duration: Math.max(1, Math.round(score / 10)),
+      estimated_duration: aiAnalysis?.estimated_duration || Math.max(1, Math.round(score / 10)),
       recommended_platforms
+    };
+  };
     };
   };
 
@@ -352,10 +438,10 @@ const EnhancedExecutionRouter = ({ theme }) => {
   };
 
   // Handle task submission
-  const handleTaskSubmission = () => {
+  const handleTaskSubmission = async () => {
     if (!taskDescription.trim()) return;
 
-    const complexity = analyzeTaskComplexity(taskDescription);
+    const complexity = await analyzeTaskComplexity(taskDescription);
     setTaskComplexity(complexity);
 
     const workflow = createWorkflowPlan(taskDescription, complexity);

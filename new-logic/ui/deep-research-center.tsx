@@ -231,24 +231,89 @@ const DeepResearchCenter = ({ theme }) => {
       ));
     }, 500);
 
-    // Simulate completion
-    setTimeout(() => {
+    // Simulate completion with AI synthesis
+    setTimeout(async () => {
       clearInterval(progressInterval);
+      
+      const searchResults = mockResults.map((result, idx) => ({
+        ...result,
+        id: `${newQuery.id}_result_${idx}`,
+        relevance: Math.random() * 30 + 70
+      }));
+
+      // Get AI synthesis of results
+      try {
+        const synthesis = await getAIResearchSynthesis(query, searchResults);
+        setMasterSynthesis(prev => prev + '\n\n' + synthesis);
+      } catch (error) {
+        console.error('Error getting AI synthesis:', error);
+      }
+
       setSearchQueries(prev => prev.map(q => 
         q.id === newQuery.id 
           ? { 
               ...q, 
               status: 'completed', 
               progress: 100,
-              results: mockResults.map((result, idx) => ({
-                ...result,
-                id: `${newQuery.id}_result_${idx}`,
-                relevance: Math.random() * 30 + 70
-              }))
+              results: searchResults
             }
           : q
       ));
     }, 3000);
+  };
+
+  // Get AI-powered research synthesis
+  const getAIResearchSynthesis = async (query: string, results: ResearchResult[]): Promise<string> => {
+    try {
+      const resultsContext = results.map(r => 
+        `Title: ${r.title}\nSnippet: ${r.snippet}\nSource: ${r.source}\nRelevance: ${r.relevance}%`
+      ).join('\n\n');
+
+      const response = await fetch('http://127.0.0.1:5001/api/openai-vertex/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert research analyst. Analyze the provided search results and create a comprehensive synthesis that identifies key themes, insights, and actionable recommendations. Focus on patterns, contradictions, and gaps in the research.'
+            },
+            {
+              role: 'user',
+              content: `Research Query: "${query}"
+
+Search Results:
+${resultsContext}
+
+Please provide a comprehensive synthesis of these results, including:
+1. Key themes and patterns
+2. Important insights and findings
+3. Gaps in current research
+4. Actionable recommendations
+5. Areas for further investigation
+
+Keep the synthesis concise but thorough, highlighting the most valuable information for developers and researchers.`
+            }
+          ],
+          max_tokens: 800,
+          temperature: 0.3
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || 'AI synthesis temporarily unavailable.';
+    } catch (error) {
+      console.error('Error getting AI research synthesis:', error);
+      return 'AI synthesis temporarily unavailable. Please review the individual results for insights.';
+    }
+  };
 
     setCurrentQuery('');
   };

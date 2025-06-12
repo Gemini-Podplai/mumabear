@@ -220,8 +220,8 @@ const EnhancedMainChat = ({ theme }) => {
     setIsLoading(true);
 
     try {
-      // Call backend API
-      const response = await fetch('http://127.0.0.1:5001/api/mama-bear/chat', {
+      // Call OpenAI Vertex API
+      const response = await fetch('http://127.0.0.1:5001/api/openai-vertex/mama-bear/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -229,22 +229,30 @@ const EnhancedMainChat = ({ theme }) => {
         body: JSON.stringify({
           message: inputMessage,
           variant: currentVariant,
-          context: messages.slice(-10) // Last 10 messages for context
+          model: 'gpt-4o', // Use GPT-4o for high-quality responses
+          context: messages.slice(-10).map(msg => ({
+            role: msg.type === 'user' ? 'user' : 'assistant',
+            content: msg.content
+          })) // Last 10 messages for context
         }),
       });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
 
       const data = await response.json();
       
       const aiResponse: Message = {
         id: `resp_${Date.now()}`,
         type: 'mama-bear',
-        content: data.response || "I'm here to help! Let me process that for you. 🐻",
+        content: data.message || "I'm here to help! Let me process that for you. 🐻",
         timestamp: new Date().toLocaleTimeString(),
         variant: currentVariant,
         metadata: {
-          model: data.model_used,
-          tokens: data.tokens_used,
-          confidence: data.confidence_score
+          model: data.model || 'gpt-4o',
+          tokens: data.usage?.total_tokens,
+          confidence: data.confidence || 'high'
         }
       };
 

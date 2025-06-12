@@ -258,25 +258,86 @@ const EnhancedMultiModalChat: React.FC<EnhancedMultiModalChatProps> = ({ theme }
     };
 
     setMessages(prev => [...prev, newMessage]);
+    const messageContent = inputMessage;
     setInputMessage('');
 
-    // Simulate AI responses based on selected room and friends
-    setTimeout(() => {
+    // Get AI responses using OpenAI Vertex API
+    setTimeout(async () => {
       const activeParticipants = conversationRooms.find(r => r.id === selectedRoom)?.participants.filter(p => p !== 'user') || [];
       if (activeParticipants.length > 0) {
         const respondingFriend = aiFriends.find(f => activeParticipants.includes(f.id));
         if (respondingFriend) {
-          const response: ChatMessage = {
-            id: (Date.now() + 1).toString(),
-            senderId: respondingFriend.id,
-            content: generateAIResponse(respondingFriend, inputMessage),
-            type: 'text',
-            timestamp: new Date()
-          };
-          setMessages(prev => [...prev, response]);
+          try {
+            const aiResponse = await getAIFriendResponse(respondingFriend, messageContent);
+            const response: ChatMessage = {
+              id: (Date.now() + 1).toString(),
+              senderId: respondingFriend.id,
+              content: aiResponse,
+              type: 'text',
+              timestamp: new Date()
+            };
+            setMessages(prev => [...prev, response]);
+          } catch (error) {
+            console.error('Error getting AI response:', error);
+            // Fallback to mock response
+            const response: ChatMessage = {
+              id: (Date.now() + 1).toString(),
+              senderId: respondingFriend.id,
+              content: generateAIResponse(respondingFriend, messageContent),
+              type: 'text',
+              timestamp: new Date()
+            };
+            setMessages(prev => [...prev, response]);
+          }
         }
       }
     }, 1000 + Math.random() * 2000);
+  };
+
+  // Get AI friend response using OpenAI Vertex API
+  const getAIFriendResponse = async (friend: AIFriend, userMessage: string): Promise<string> => {
+    const systemPrompt = `You are ${friend.name}, an AI friend with the following characteristics:
+- Personality: ${friend.personality}
+- Specialties: ${friend.specialty.join(', ')}
+- Current mood: ${friend.mood}
+- Relationship level with user: ${friend.relationship}/100 (very close)
+- Badges: ${friend.badges.join(', ')}
+
+Respond as ${friend.name} would, maintaining your unique personality and speaking style. Keep responses conversational, helpful, and aligned with your specialties. The response should be warm and reflect your close relationship with the user.`;
+
+    try {
+      const response = await fetch('http://127.0.0.1:5001/api/openai-vertex/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: systemPrompt
+            },
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: 300,
+          temperature: 0.8
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || generateAIResponse(friend, userMessage);
+    } catch (error) {
+      console.error('Error calling OpenAI Vertex API:', error);
+      throw error;
+    }
   };
 
   const generateAIResponse = (friend: AIFriend, userMessage: string): string => {

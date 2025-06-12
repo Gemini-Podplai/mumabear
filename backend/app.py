@@ -336,6 +336,14 @@ async def initialize_sanctuary_services():
             except ImportError as e:
                 logger.warning(f"Themes API not available: {e}")
             
+            # Register OpenAI Vertex API
+            try:
+                from api.openai_vertex_api_simple import openai_vertex_api
+                app.register_blueprint(openai_vertex_api)
+                logger.info("✅ OpenAI Vertex API registered")
+            except ImportError as e:
+                logger.warning(f"OpenAI Vertex API not available: {e}")
+            
             logger.info("✅ API blueprints registered successfully")
         except Exception as e:
             logger.error(f"❌ Failed to register API blueprints: {e}")

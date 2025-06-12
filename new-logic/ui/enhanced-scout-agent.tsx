@@ -85,6 +85,9 @@ const EnhancedScoutAgent = ({ theme }) => {
   const [showCreatePanel, setShowCreatePanel] = useState(false);
   const [showResourceMonitor, setShowResourceMonitor] = useState(true);
   const [animationPhase, setAnimationPhase] = useState<'idle' | 'creating' | 'deploying' | 'ready'>('idle');
+  const [aiGuidance, setAiGuidance] = useState<string>('');
+  const [showAiGuidance, setShowAiGuidance] = useState(false);
+  const [isLoadingGuidance, setIsLoadingGuidance] = useState(false);
 
   // Animation timer
   const animationRef = useRef<NodeJS.Timeout>();
@@ -245,6 +248,66 @@ const EnhancedScoutAgent = ({ theme }) => {
     }, 3000);
   };
 
+  // Get AI guidance for environment setup
+  const getAiGuidance = async (envType: 'e2b' | 'scrapybara' | 'cloud', projectDescription?: string) => {
+    setIsLoadingGuidance(true);
+    setShowAiGuidance(true);
+
+    try {
+      const prompt = `As an Environment Specialist AI, provide guidance for setting up a ${envType.toUpperCase()} environment${projectDescription ? ` for: ${projectDescription}` : ''}. 
+
+Environment Type: ${envType}
+${envType === 'e2b' ? 'E2B: Code execution sandbox for running any code securely' : ''}
+${envType === 'scrapybara' ? 'Scrapybara: Web scraping and browser automation platform' : ''}
+${envType === 'cloud' ? 'Cloud: High-performance cloud computing environment' : ''}
+
+Please provide:
+1. Recommended configuration settings
+2. Required dependencies and packages
+3. Performance optimization tips
+4. Security best practices
+5. Common pitfalls to avoid
+
+Keep the response practical and actionable.`;
+
+      const response = await fetch('http://127.0.0.1:5001/api/openai-vertex/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert Environment Specialist AI assistant helping developers set up optimal execution environments. Provide clear, actionable guidance with specific recommendations.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          max_tokens: 800,
+          temperature: 0.3
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const guidance = data.choices?.[0]?.message?.content || 'No guidance available at the moment.';
+      
+      setAiGuidance(guidance);
+    } catch (error) {
+      console.error('Error getting AI guidance:', error);
+      setAiGuidance('Unable to get AI guidance at the moment. Please check your connection and try again.');
+    } finally {
+      setIsLoadingGuidance(false);
+    }
+  };
+
   // Real-time resource updates
   useEffect(() => {
     const interval = setInterval(() => {
@@ -400,18 +463,101 @@ const EnhancedScoutAgent = ({ theme }) => {
               <h2 className={`text-lg font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Environment Creation
               </h2>
-              <div className="flex items-center space-x-2">
-                <span className={`text-sm ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`}>
-                  Status: {animationPhase}
-                </span>
-                <div className={`w-3 h-3 rounded-full ${
-                  animationPhase === 'idle' ? 'bg-gray-400' :
-                  animationPhase === 'creating' ? 'bg-yellow-400 animate-pulse' :
-                  animationPhase === 'deploying' ? 'bg-blue-400 animate-pulse' :
-                  'bg-green-400'
-                }`} />
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setShowAiGuidance(!showAiGuidance)}
+                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                    theme === 'custom' 
+                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  }`}
+                >
+                  <Brain size={16} />
+                  AI Guidance
+                </button>
+                <div className="flex items-center space-x-2">
+                  <span className={`text-sm ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Status: {animationPhase}
+                  </span>
+                  <div className={`w-3 h-3 rounded-full ${
+                    animationPhase === 'idle' ? 'bg-gray-400' :
+                    animationPhase === 'creating' ? 'bg-yellow-400 animate-pulse' :
+                    animationPhase === 'deploying' ? 'bg-blue-400 animate-pulse' :
+                    'bg-green-400'
+                  }`} />
+                </div>
               </div>
             </div>
+
+            {/* AI Guidance Panel */}
+            {showAiGuidance && (
+              <div className={`mb-6 p-4 rounded-xl ${
+                theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-blue-50 border-blue-200'
+              } border`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className={`font-semibold flex items-center gap-2 ${
+                    theme === 'custom' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    <Sparkles className="w-5 h-5 text-blue-500" />
+                    AI Environment Guidance
+                  </h3>
+                  <button
+                    onClick={() => setShowAiGuidance(false)}
+                    className={`p-1 rounded ${
+                      theme === 'custom' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    ×
+                  </button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                  {[
+                    { type: 'e2b' as const, name: 'E2B Guidance', icon: Container, color: 'blue' },
+                    { type: 'scrapybara' as const, name: 'Scrapybara Guidance', icon: Globe, color: 'green' },
+                    { type: 'cloud' as const, name: 'Cloud Guidance', icon: Server, color: 'purple' }
+                  ].map((env) => (
+                    <button
+                      key={env.type}
+                      onClick={() => getAiGuidance(env.type)}
+                      disabled={isLoadingGuidance}
+                      className={`p-3 rounded-lg transition-colors flex items-center gap-2 ${
+                        theme === 'custom' 
+                          ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                          : 'bg-white text-gray-700 hover:bg-gray-50 border'
+                      } ${isLoadingGuidance ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <env.icon size={16} className={`text-${env.color}-500`} />
+                      Get {env.name}
+                    </button>
+                  ))}
+                </div>
+
+                {isLoadingGuidance && (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                    <span className={`ml-3 ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
+                      Getting AI guidance...
+                    </span>
+                  </div>
+                )}
+
+                {aiGuidance && !isLoadingGuidance && (
+                  <div className={`p-4 rounded-lg ${
+                    theme === 'custom' ? 'bg-gray-900' : 'bg-white'
+                  } border`}>
+                    <h4 className={`font-semibold mb-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
+                      AI Recommendations:
+                    </h4>
+                    <div className={`prose prose-sm max-w-none ${
+                      theme === 'custom' ? 'prose-invert' : ''
+                    }`}>
+                      <pre className="whitespace-pre-wrap text-sm">{aiGuidance}</pre>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
