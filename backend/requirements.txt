@@ -21,3 +21,16 @@ rich>=13.0.0
 e2b-code-interpreter>=1.5.1
 google-cloud-aiplatform>=1.38.0
 google-auth>=2.22.0
+
+# New dependencies for Agentic Superpowers V3.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# New dependencies for Collaborative Workspaces V3.0  
+python-socketio[client]>=5.8.0
+eventlet>=0.33.0
+
+# Enhanced async and concurrency support
+asyncio>=3.4.3
+concurrent-futures>=3.1.1

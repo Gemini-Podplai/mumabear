@@ -93,6 +93,28 @@ except ImportError as e:
     MULTIMODAL_CHAT_AVAILABLE = False
     integrate_multimodal_chat_with_app = None
 
+# Import Agentic Superpowers V3.0
+try:
+    from api.agentic_superpowers_api import agentic_superpowers_bp, init_agentic_service
+    AGENTIC_SUPERPOWERS_AVAILABLE = True
+    logger.info("✅ 🐻 Mama Bear Agentic Superpowers V3.0 integration available!")
+except ImportError as e:
+    logger.warning(f"Agentic Superpowers integration not available: {e}")
+    AGENTIC_SUPERPOWERS_AVAILABLE = False
+    agentic_superpowers_bp = None
+    init_agentic_service = None
+
+# Import Supercharged Collaborative Workspaces V3.0
+try:
+    from api.collaborative_workspaces_api import collaborative_workspaces_bp, init_workspace_service
+    COLLABORATIVE_WORKSPACES_AVAILABLE = True
+    logger.info("✅ 🚀 Supercharged Collaborative Workspaces V3.0 integration available!")
+except ImportError as e:
+    logger.warning(f"Collaborative Workspaces integration not available: {e}")
+    COLLABORATIVE_WORKSPACES_AVAILABLE = False
+    collaborative_workspaces_bp = None
+    init_workspace_service = None
+
 # Try to import Mem0 for enhanced memory
 try:
     from mem0 import MemoryClient
@@ -218,6 +240,41 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Multimodal Chat API: {e}")
         else:
             logger.warning("Multimodal Chat API not available")
+        
+        # Initialize Agentic Superpowers V3.0
+        if AGENTIC_SUPERPOWERS_AVAILABLE and init_agentic_service:
+            logger.info("🐻💥 Initializing Mama Bear Agentic Superpowers V3.0...")
+            try:
+                agentic_config = {
+                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
+                    'express_mode_enabled': True,
+                    'autonomous_actions_enabled': True
+                }
+                init_agentic_service(agentic_config)
+                app.register_blueprint(agentic_superpowers_bp, url_prefix='/api/agentic')
+                logger.info("✅ 🐻💥 Mama Bear Agentic Superpowers V3.0 initialized! Autonomous AI agent ready!")
+            except Exception as e:
+                logger.error(f"Failed to initialize Agentic Superpowers: {e}")
+        else:
+            logger.warning("Agentic Superpowers not available")
+        
+        # Initialize Supercharged Collaborative Workspaces V3.0
+        if COLLABORATIVE_WORKSPACES_AVAILABLE and init_workspace_service:
+            logger.info("🚀✨ Initializing Supercharged Collaborative Workspaces V3.0...")
+            try:
+                workspace_config = {
+                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
+                    'express_mode_enabled': True,
+                    'real_time_collaboration': True,
+                    'agentic_control_enabled': True
+                }
+                init_workspace_service(workspace_config)
+                app.register_blueprint(collaborative_workspaces_bp, url_prefix='/api/workspaces')
+                logger.info("✅ 🚀✨ Supercharged Collaborative Workspaces V3.0 initialized! Real-time AI collaboration ready!")
+            except Exception as e:
+                logger.error(f"Failed to initialize Collaborative Workspaces: {e}")
+        else:
+            logger.warning("Supercharged Collaborative Workspaces not available")
         
         services_initialized = True
         
