@@ -115,6 +115,19 @@ except ImportError as e:
     collaborative_workspaces_bp = None
     init_workspace_service = None
 
+# Import Pipedream Integration Service
+try:
+    from api.pipedream_api import pipedream_bp, integrate_pipedream_api_with_app
+    from services.pipedream_integration_service import integrate_pipedream_with_app
+    PIPEDREAM_AVAILABLE = True
+    logger.info("✅ 🔗 Pipedream Integration Service available - Autonomous workflow automation ready!")
+except ImportError as e:
+    logger.warning(f"Pipedream Integration Service not available: {e}")
+    PIPEDREAM_AVAILABLE = False
+    pipedream_bp = None
+    integrate_pipedream_api_with_app = None
+    integrate_pipedream_with_app = None
+
 # Try to import Mem0 for enhanced memory
 try:
     from mem0 import MemoryClient
@@ -275,6 +288,33 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Collaborative Workspaces: {e}")
         else:
             logger.warning("Supercharged Collaborative Workspaces not available")
+
+        # Initialize Pipedream Integration Service
+        if PIPEDREAM_AVAILABLE and integrate_pipedream_api_with_app and integrate_pipedream_with_app:
+            logger.info("🔗 Initializing Pipedream Integration Service...")
+            try:
+                # Initialize service first
+                pipedream_config = {
+                    'PIPEDREAM_API_TOKEN': os.getenv('PIPEDREAM_API_TOKEN'),
+                    'PIPEDREAM_CLIENT_ID': os.getenv('PIPEDREAM_CLIENT_ID', 'podplay'),
+                    'PIPEDREAM_CLIENT_SECRET': os.getenv('PIPEDREAM_CLIENT_SECRET'),
+                    'PIPEDREAM_ENABLED': os.getenv('PIPEDREAM_ENABLED', 'true').lower() == 'true',
+                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
+                    'agentic_integration_enabled': True
+                }
+                
+                service_success = integrate_pipedream_with_app(app, pipedream_config)
+                api_success = integrate_pipedream_api_with_app(app)
+                
+                if service_success and api_success:
+                    logger.info("✅ 🔗 Pipedream Integration Service fully initialized! Autonomous workflow automation ready!")
+                    logger.info("✅ Available endpoints: /api/pipedream/workflows, /api/pipedream/natural-language")
+                else:
+                    logger.warning("❌ Pipedream Integration Service initialization failed")
+            except Exception as e:
+                logger.error(f"Failed to initialize Pipedream Integration Service: {e}")
+        else:
+            logger.warning("Pipedream Integration Service not available")
 
         services_initialized = True
 
