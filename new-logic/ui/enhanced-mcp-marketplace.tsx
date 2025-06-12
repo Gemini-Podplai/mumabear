@@ -1,11 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  Package, Download, Star, Github, Search, Filter, Grid,
-  List, Heart, Share2, Eye, CheckCircle, AlertCircle,
-  Clock, TrendingUp, Zap, Shield, Award, Code, Users,
-  GitBranch, Tag, ExternalLink, Play, Pause, Settings,
-  RefreshCw, Plus, X, ChevronDown, ChevronUp, Sparkles
+  AlertCircle,
+  CheckCircle,
+  Download,
+  ExternalLink,
+  Filter,
+  Github,
+  Grid,
+  List,
+  Package,
+  Search,
+  Shield,
+  Star,
+  X
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface MCPPackage {
   id: string;
@@ -47,7 +55,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
   const [filteredPackages, setFilteredPackages] = useState<MCPPackage[]>([]);
   const [selectedPackage, setSelectedPackage] = useState<MCPPackage | null>(null);
   const [installations, setInstallations] = useState<InstallationProgress[]>([]);
-  
+
   // UI state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -288,7 +296,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
 
     for (let i = 0; i < stages.length; i++) {
       const stage = stages[i];
-      
+
       setInstallations(prev => prev.map(inst =>
         inst.packageId === pkg.id
           ? { ...inst, stage: stage.stage, message: stage.message, progress: 0 }
@@ -341,34 +349,30 @@ const EnhancedMCPMarketplace = ({ theme }) => {
   };
 
   return (
-    <div className={`h-screen flex flex-col ${
-      theme === 'comfort' 
-        ? 'bg-gradient-to-br from-purple-50 to-pink-50' 
-        : theme === 'professional' 
-          ? 'bg-gray-50' 
+    <div className={`h-screen flex flex-col ${theme === 'comfort'
+        ? 'bg-gradient-to-br from-purple-50 to-pink-50'
+        : theme === 'professional'
+          ? 'bg-gray-50'
           : 'bg-gray-900'
-    }`}>
+      }`}>
 
       {/* Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${
-        theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
-      }`}>
-        
+      <div className={`flex items-center justify-between p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
+        }`}>
+
         <div className="flex items-center space-x-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            theme === 'comfort' 
-              ? 'bg-gradient-to-br from-pink-400 to-purple-400' 
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme === 'comfort'
+              ? 'bg-gradient-to-br from-pink-400 to-purple-400'
               : theme === 'professional'
                 ? 'bg-pink-600'
                 : 'bg-pink-600'
-          }`}>
+            }`}>
             <Package className="w-6 h-6 text-white" />
           </div>
-          
+
           <div>
-            <h1 className={`font-bold text-xl flex items-center gap-2 ${
-              theme === 'custom' ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h1 className={`font-bold text-xl flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+              }`}>
               MCP Marketplace
               <Github className="w-5 h-5 text-pink-500" />
             </h1>
@@ -381,23 +385,21 @@ const EnhancedMCPMarketplace = ({ theme }) => {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              theme === 'custom' 
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+              }`}
           >
             {viewMode === 'grid' ? <List size={16} /> : <Grid size={16} />}
             {viewMode === 'grid' ? 'List View' : 'Grid View'}
           </button>
-          
+
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              theme === 'custom' 
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+              }`}
           >
             <Filter size={16} />
             Filters
@@ -407,23 +409,21 @@ const EnhancedMCPMarketplace = ({ theme }) => {
 
       {/* Search and Filters */}
       <div className={`p-4 border-b ${theme === 'custom' ? 'border-gray-700' : 'border-gray-200'}`}>
-        
+
         {/* Search bar */}
         <div className="max-w-2xl mx-auto mb-4">
           <div className="relative">
-            <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
-              theme === 'custom' ? 'text-gray-400' : 'text-gray-500'
-            }`} size={20} />
+            <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'
+              }`} size={20} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search packages, tools, integrations..."
-              className={`w-full pl-12 pr-4 py-3 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent ${
-                theme === 'custom' 
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+              className={`w-full pl-12 pr-4 py-3 rounded-xl border focus:ring-2 focus:ring-pink-500 focus:border-transparent ${theme === 'custom'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                   : 'bg-white border-gray-300'
-              }`}
+                }`}
             />
           </div>
         </div>
@@ -431,7 +431,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
         {/* Filters */}
         {showFilters && (
           <div className="flex items-center justify-between">
-            
+
             {/* Categories */}
             <div className="flex items-center space-x-2">
               <span className={`text-sm font-medium ${theme === 'custom' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -442,13 +442,12 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                      selectedCategory === category.id
+                    className={`px-3 py-1 rounded-full text-sm transition-colors ${selectedCategory === category.id
                         ? 'bg-pink-100 text-pink-700'
                         : theme === 'custom'
                           ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     {category.name}
                   </button>
@@ -464,11 +463,10 @@ const EnhancedMCPMarketplace = ({ theme }) => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className={`px-3 py-1 rounded-lg border text-sm ${
-                  theme === 'custom'
+                className={`px-3 py-1 rounded-lg border text-sm ${theme === 'custom'
                     ? 'bg-gray-700 border-gray-600 text-white'
                     : 'bg-white border-gray-300'
-                }`}
+                  }`}
               >
                 <option value="popular">Most Popular</option>
                 <option value="recent">Recently Updated</option>
@@ -482,16 +480,15 @@ const EnhancedMCPMarketplace = ({ theme }) => {
 
       {/* Main Content */}
       <div className="flex-1 flex">
-        
+
         {/* Package List */}
         <div className="flex-1 p-6 overflow-y-auto">
-          
+
           {/* Featured packages */}
           {selectedCategory === 'all' && (
             <div className="mb-8">
-              <h2 className={`text-lg font-semibold mb-4 flex items-center gap-2 ${
-                theme === 'custom' ? 'text-white' : 'text-gray-900'
-              }`}>
+              <h2 className={`text-lg font-semibold mb-4 flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+                }`}>
                 <Star className="w-5 h-5 text-yellow-500" />
                 Featured Packages
               </h2>
@@ -499,9 +496,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                 {packages.filter(pkg => pkg.featured).map(pkg => (
                   <div
                     key={pkg.id}
-                    className={`p-6 rounded-xl cursor-pointer transition-all hover:scale-105 ${
-                      theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
-                    } border ring-2 ring-yellow-200`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all hover:scale-105 ${theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
+                      } border ring-2 ring-yellow-200`}
                     onClick={() => setSelectedPackage(pkg)}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -518,7 +514,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           </p>
                         </div>
                       </div>
-                      
+
                       {pkg.verified && (
                         <Shield className="w-5 h-5 text-blue-500" title="Verified Package" />
                       )}
@@ -543,7 +539,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           <span>{pkg.stars}</span>
                         </div>
                       </div>
-                      
+
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(pkg.status)}`}>
                         {pkg.status}
                       </span>
@@ -554,15 +550,14 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                         {pkg.tags.slice(0, 2).map(tag => (
                           <span
                             key={tag}
-                            className={`px-2 py-1 text-xs rounded-full ${
-                              theme === 'custom' ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-                            }`}
+                            className={`px-2 py-1 text-xs rounded-full ${theme === 'custom' ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                              }`}
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
-                      
+
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -571,18 +566,17 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           }
                         }}
                         disabled={pkg.status !== 'available'}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          pkg.status === 'available'
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${pkg.status === 'available'
                             ? 'bg-pink-600 text-white hover:bg-pink-700'
                             : pkg.status === 'installed'
                               ? 'bg-green-100 text-green-700 cursor-not-allowed'
                               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        }`}
+                          }`}
                       >
                         {pkg.status === 'available' ? 'Install' :
-                         pkg.status === 'installed' ? 'Installed' :
-                         pkg.status === 'updating' ? 'Updating...' :
-                         'Error'}
+                          pkg.status === 'installed' ? 'Installed' :
+                            pkg.status === 'updating' ? 'Updating...' :
+                              'Error'}
                       </button>
                     </div>
                   </div>
@@ -605,9 +599,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                 {filteredPackages.map(pkg => (
                   <div
                     key={pkg.id}
-                    className={`p-6 rounded-xl cursor-pointer transition-all hover:scale-105 ${
-                      theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
-                    } border`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all hover:scale-105 ${theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
+                      } border`}
                     onClick={() => setSelectedPackage(pkg)}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -624,7 +617,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-1">
                         {pkg.verified && (
                           <Shield className="w-4 h-4 text-blue-500" />
@@ -650,7 +643,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           <span>{(pkg.downloads / 1000).toFixed(1)}k</span>
                         </div>
                       </div>
-                      
+
                       <span className={`px-2 py-1 rounded-full text-xs ${getCategoryColor(pkg.category)}`}>
                         {pkg.category.replace('-', ' ')}
                       </span>
@@ -664,18 +657,17 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                         }
                       }}
                       disabled={pkg.status !== 'available'}
-                      className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${
-                        pkg.status === 'available'
+                      className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${pkg.status === 'available'
                           ? 'bg-pink-600 text-white hover:bg-pink-700'
                           : pkg.status === 'installed'
                             ? 'bg-green-100 text-green-700 cursor-not-allowed'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
+                        }`}
                     >
                       {pkg.status === 'available' ? 'Install Package' :
-                       pkg.status === 'installed' ? 'Installed ✓' :
-                       pkg.status === 'updating' ? 'Updating...' :
-                       'Installation Error'}
+                        pkg.status === 'installed' ? 'Installed ✓' :
+                          pkg.status === 'updating' ? 'Updating...' :
+                            'Installation Error'}
                     </button>
                   </div>
                 ))}
@@ -685,9 +677,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                 {filteredPackages.map(pkg => (
                   <div
                     key={pkg.id}
-                    className={`p-6 rounded-xl cursor-pointer transition-all ${
-                      theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
-                    } border hover:shadow-md`}
+                    className={`p-6 rounded-xl cursor-pointer transition-all ${theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
+                      } border hover:shadow-md`}
                     onClick={() => setSelectedPackage(pkg)}
                   >
                     <div className="flex items-start justify-between">
@@ -695,7 +686,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                         <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getCategoryColor(pkg.category)}`}>
                           <Package className="w-6 h-6" />
                         </div>
-                        
+
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className={`font-semibold text-lg ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -709,11 +700,11 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                               {pkg.featured && <Star className="w-4 h-4 text-yellow-500" />}
                             </div>
                           </div>
-                          
+
                           <p className={`text-sm mb-3 ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                             {pkg.description}
                           </p>
-                          
+
                           <div className="flex items-center space-x-6 text-sm">
                             <span className={`${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`}>
                               by {pkg.author}
@@ -736,12 +727,12 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-3">
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(pkg.status)}`}>
                           {pkg.status}
                         </span>
-                        
+
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -750,17 +741,16 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                             }
                           }}
                           disabled={pkg.status !== 'available'}
-                          className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
-                            pkg.status === 'available'
+                          className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${pkg.status === 'available'
                               ? 'bg-pink-600 text-white hover:bg-pink-700'
                               : pkg.status === 'installed'
                                 ? 'bg-green-100 text-green-700 cursor-not-allowed'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
+                            }`}
                         >
                           {pkg.status === 'available' ? 'Install' :
-                           pkg.status === 'installed' ? 'Installed' :
-                           'Error'}
+                            pkg.status === 'installed' ? 'Installed' :
+                              'Error'}
                         </button>
                       </div>
                     </div>
@@ -773,10 +763,9 @@ const EnhancedMCPMarketplace = ({ theme }) => {
 
         {/* Package Detail Panel */}
         {selectedPackage && (
-          <div className={`w-96 border-l ${
-            theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-          } p-6 overflow-y-auto`}>
-            
+          <div className={`w-96 border-l ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+            } p-6 overflow-y-auto`}>
+
             <div className="flex items-center justify-between mb-4">
               <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Package Details
@@ -789,9 +778,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
               </button>
             </div>
 
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <div className="flex items-center space-x-3 mb-3">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getCategoryColor(selectedPackage.category)}`}>
                   <Package className="w-6 h-6" />
@@ -805,7 +793,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                   </p>
                 </div>
               </div>
-              
+
               <p className={`text-sm mb-4 ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                 {selectedPackage.description}
               </p>
@@ -843,32 +831,29 @@ const EnhancedMCPMarketplace = ({ theme }) => {
               <button
                 onClick={() => installPackage(selectedPackage)}
                 disabled={selectedPackage.status !== 'available'}
-                className={`w-full py-3 rounded-lg font-medium transition-colors ${
-                  selectedPackage.status === 'available'
+                className={`w-full py-3 rounded-lg font-medium transition-colors ${selectedPackage.status === 'available'
                     ? 'bg-pink-600 text-white hover:bg-pink-700'
                     : selectedPackage.status === 'installed'
                       ? 'bg-green-100 text-green-700 cursor-not-allowed'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
+                  }`}
               >
                 {selectedPackage.status === 'available' ? '🚀 One-Click Install' :
-                 selectedPackage.status === 'installed' ? '✅ Installed' :
-                 selectedPackage.status === 'updating' ? '⏳ Updating...' :
-                 '❌ Installation Error'}
+                  selectedPackage.status === 'installed' ? '✅ Installed' :
+                    selectedPackage.status === 'updating' ? '⏳ Updating...' :
+                      '❌ Installation Error'}
               </button>
             </div>
 
             {/* GitHub Integration */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
-              <h5 className={`font-medium mb-3 flex items-center gap-2 ${
-                theme === 'custom' ? 'text-white' : 'text-gray-900'
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
               }`}>
+              <h5 className={`font-medium mb-3 flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+                }`}>
                 <Github className="w-4 h-4" />
                 GitHub Repository
               </h5>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className={theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}>
@@ -909,9 +894,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
             </div>
 
             {/* Capabilities */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <h5 className={`font-medium mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Capabilities
               </h5>
@@ -919,9 +903,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                 {selectedPackage.capabilities.map((capability, index) => (
                   <span
                     key={index}
-                    className={`px-3 py-1 text-xs rounded-full ${
-                      theme === 'custom' ? 'bg-gray-600 text-gray-300' : 'bg-gray-100 text-gray-600'
-                    }`}
+                    className={`px-3 py-1 text-xs rounded-full ${theme === 'custom' ? 'bg-gray-600 text-gray-300' : 'bg-gray-100 text-gray-600'
+                      }`}
                   >
                     {capability}
                   </span>
@@ -930,9 +913,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
             </div>
 
             {/* Dependencies */}
-            <div className={`p-4 rounded-lg ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <h5 className={`font-medium mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Dependencies
               </h5>
@@ -940,9 +922,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                 {selectedPackage.dependencies.map((dep, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-between p-2 rounded ${
-                      theme === 'custom' ? 'bg-gray-600' : 'bg-gray-50'
-                    }`}
+                    className={`flex items-center justify-between p-2 rounded ${theme === 'custom' ? 'bg-gray-600' : 'bg-gray-50'
+                      }`}
                   >
                     <span className={`text-sm font-mono ${theme === 'custom' ? 'text-gray-300' : 'text-gray-700'}`}>
                       {dep}
@@ -959,9 +940,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
       {/* Installation Modal */}
       {showInstallModal && installations.length > 0 && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`w-full max-w-lg mx-4 p-6 rounded-2xl ${
-            theme === 'custom' ? 'bg-gray-800' : 'bg-white'
-          }`}>
+          <div className={`w-full max-w-lg mx-4 p-6 rounded-2xl ${theme === 'custom' ? 'bg-gray-800' : 'bg-white'
+            }`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl font-bold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Package Installation
@@ -981,9 +961,8 @@ const EnhancedMCPMarketplace = ({ theme }) => {
               return (
                 <div
                   key={installation.packageId}
-                  className={`p-4 rounded-lg mb-4 ${
-                    theme === 'custom' ? 'bg-gray-700' : 'bg-gray-50'
-                  }`}
+                  className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-gray-50'
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
@@ -994,7 +973,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
                         {installation.message}
                       </p>
                     </div>
-                    
+
                     {installation.stage === 'complete' ? (
                       <CheckCircle className="w-6 h-6 text-green-500" />
                     ) : installation.stage === 'error' ? (
@@ -1043,7 +1022,7 @@ const EnhancedMCPMarketplace = ({ theme }) => {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        
+
         .line-clamp-3 {
           display: -webkit-box;
           -webkit-line-clamp: 3;

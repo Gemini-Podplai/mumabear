@@ -2,6 +2,8 @@
 
 This is a [Vite](https://vite.dev) project bootstrapped with React + TypeScript and configured with TailwindCSS v4 and ShadCN UI.
 
+**Repository**: https://github.com/Gemini-Podplai/mumabear
+
 ## Getting Started
 
 First, run the development server:

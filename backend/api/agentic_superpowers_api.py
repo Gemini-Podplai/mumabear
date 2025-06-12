@@ -32,10 +32,10 @@ def health_check():
     try:
         if agentic_service is None:
             return jsonify({
-                "status": "error", 
+                "status": "error",
                 "message": "Agentic service not initialized"
             }), 503
-        
+
         return jsonify({
             "status": "healthy",
             "service": "Mama Bear Agentic Superpowers V3.0",
@@ -53,7 +53,7 @@ def get_status():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         status = asyncio.run(agentic_service.get_status())
         return jsonify(status)
     except Exception as e:
@@ -64,11 +64,11 @@ def get_status():
 def process_interaction():
     """
     🧠 PROCESS USER INTERACTION WITH FULL AGENTIC CAPABILITIES
-    
+
     Expected payload:
     {
         "user_input": "string",
-        "user_id": "string", 
+        "user_id": "string",
         "context": {},
         "allow_autonomous_actions": true
     }
@@ -76,17 +76,17 @@ def process_interaction():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
-        
+
         if not data or 'user_input' not in data:
             return jsonify({"error": "user_input is required"}), 400
-        
+
         user_input = data['user_input']
         user_id = data.get('user_id', 'anonymous')
         context = data.get('context', {})
         allow_autonomous = data.get('allow_autonomous_actions', True)
-        
+
         # Process interaction asynchronously
         result = asyncio.run(
             agentic_service.process_user_interaction(
@@ -96,13 +96,13 @@ def process_interaction():
                 allow_autonomous_actions=allow_autonomous
             )
         )
-        
+
         return jsonify({
             "success": True,
             "result": result,
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except Exception as e:
         logger.error(f"Interaction processing failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -111,7 +111,7 @@ def process_interaction():
 def set_capability_level():
     """
     ⚙️ SET AGENTIC CAPABILITY LEVEL
-    
+
     Expected payload:
     {
         "level": "OBSERVER|ASSISTANT|COLLABORATOR|LEADER|AUTONOMOUS",
@@ -121,40 +121,40 @@ def set_capability_level():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
-        
+
         if not data or 'level' not in data:
             return jsonify({"error": "level is required"}), 400
-        
+
         level = data['level']
         user_id = data.get('user_id', 'anonymous')
-        
+
         # Update capability level (simplified for this example)
         from services.mama_bear_agentic_superpowers_v3 import AgenticCapabilityLevel
-        
+
         try:
             new_level = AgenticCapabilityLevel[level]
             agentic_service.capability_level = new_level
-            
+
             return jsonify({
                 "success": True,
                 "capability_level": new_level.name,
                 "description": {
                     "OBSERVER": "Just watches and suggests",
-                    "ASSISTANT": "Actively helps but asks permission", 
+                    "ASSISTANT": "Actively helps but asks permission",
                     "COLLABORATOR": "Works alongside user as equal partner",
                     "LEADER": "Takes initiative and leads tasks",
                     "AUTONOMOUS": "Fully autonomous operation"
                 }.get(level, "Unknown level"),
                 "timestamp": datetime.now().isoformat()
             })
-        
+
         except KeyError:
             return jsonify({
                 "error": f"Invalid capability level: {level}. Valid options: OBSERVER, ASSISTANT, COLLABORATOR, LEADER, AUTONOMOUS"
             }), 400
-    
+
     except Exception as e:
         logger.error(f"Capability level setting failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -167,7 +167,7 @@ def manage_personality():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         if request.method == 'GET':
             # Get current personality
             personality = agentic_service.personality
@@ -184,17 +184,17 @@ def manage_personality():
                     "user_trust_level": personality.user_trust_level
                 }
             })
-        
+
         elif request.method == 'POST':
             # Update personality
             data = request.get_json()
             personality = agentic_service.personality
-            
+
             # Update provided personality traits
             for trait, value in data.items():
                 if hasattr(personality, trait):
                     setattr(personality, trait, value)
-            
+
             return jsonify({
                 "success": True,
                 "message": "Personality updated successfully",
@@ -205,7 +205,7 @@ def manage_personality():
                     "user_trust_level": personality.user_trust_level
                 }
             })
-    
+
     except Exception as e:
         logger.error(f"Personality management failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -216,9 +216,9 @@ def get_metrics():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         metrics = agentic_service.metrics
-        
+
         return jsonify({
             "metrics": metrics,
             "performance_summary": {
@@ -233,7 +233,7 @@ def get_metrics():
             },
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except Exception as e:
         logger.error(f"Metrics retrieval failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -244,7 +244,7 @@ def get_memory_state():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         return jsonify({
             "working_memory_size": len(agentic_service.working_memory),
             "working_memory_recent": list(agentic_service.working_memory)[-5:],
@@ -254,7 +254,7 @@ def get_memory_state():
             "predictive_patterns_count": len(agentic_service.predictive_patterns),
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except Exception as e:
         logger.error(f"Memory state retrieval failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -263,7 +263,7 @@ def get_memory_state():
 def test_agentic_capabilities():
     """
     🧪 TEST AGENTIC CAPABILITIES
-    
+
     Expected payload:
     {
         "test_scenario": "string",
@@ -274,15 +274,15 @@ def test_agentic_capabilities():
     try:
         if agentic_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
         test_scenario = data.get('test_scenario', 'general_interaction')
         capability_level = data.get('capability_level', 'COLLABORATOR')
         user_id = data.get('user_id', 'test_user')
-        
+
         # Run test interaction
         test_input = f"Test scenario: {test_scenario}. Please demonstrate your agentic capabilities at {capability_level} level."
-        
+
         result = asyncio.run(
             agentic_service.process_user_interaction(
                 user_input=test_input,
@@ -291,7 +291,7 @@ def test_agentic_capabilities():
                 allow_autonomous_actions=True
             )
         )
-        
+
         return jsonify({
             "test_results": {
                 "scenario": test_scenario,
@@ -306,7 +306,7 @@ def test_agentic_capabilities():
             },
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except Exception as e:
         logger.error(f"Agentic capabilities test failed: {e}")
         return jsonify({"error": str(e)}), 500

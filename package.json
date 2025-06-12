@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/podplay/sanctuary"
+    "url": "https://github.com/Gemini-Podplai/mumabear"
   },
   "workspaces": [
     "frontend",

@@ -1,13 +1,27 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Link, Zap, Settings, Play, Pause, Edit, Trash2, Plus, 
-  Search, Filter, GitBranch, Database, Globe, Mail, Calendar,
-  Slack, Github, Twitter, AlertCircle, CheckCircle, Clock,
-  Eye, Code, FileText, BarChart3, RefreshCw, Download,
-  Upload, Copy, ExternalLink, Star, Heart, Award,
-  Workflow, Network, Cpu, Monitor, Activity, TrendingUp,
-  Box, Layers, ArrowRight, ArrowDown, MoreVertical
+  Activity,
+  ArrowRight,
+  BarChart3,
+  Box,
+  CheckCircle,
+  Edit,
+  ExternalLink,
+  FileText,
+  Globe,
+  Link,
+  MoreVertical,
+  Network,
+  Pause,
+  Play,
+  Plus,
+  RefreshCw,
+  Search,
+  Settings,
+  Star,
+  TrendingUp,
+  Workflow
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface PipedreamWorkflow {
   id: string;
@@ -386,8 +400,8 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
   }, []);
 
   const toggleWorkflowStatus = async (workflowId: string) => {
-    setWorkflows(prev => prev.map(wf => 
-      wf.id === workflowId 
+    setWorkflows(prev => prev.map(wf =>
+      wf.id === workflowId
         ? { ...wf, status: wf.status === 'active' ? 'paused' : 'active' }
         : wf
     ));
@@ -395,21 +409,21 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
 
   const runWorkflow = async (workflowId: string) => {
     // Simulate workflow execution
-    setWorkflows(prev => prev.map(wf => 
-      wf.id === workflowId 
-        ? { 
-            ...wf, 
-            lastRun: new Date(),
-            totalRuns: wf.totalRuns + 1,
-            steps: wf.steps.map(step => ({ ...step, status: 'success' as const }))
-          }
+    setWorkflows(prev => prev.map(wf =>
+      wf.id === workflowId
+        ? {
+          ...wf,
+          lastRun: new Date(),
+          totalRuns: wf.totalRuns + 1,
+          steps: wf.steps.map(step => ({ ...step, status: 'success' as const }))
+        }
         : wf
     ));
   };
 
   const connectIntegration = async (integrationId: string) => {
-    setIntegrations(prev => prev.map(int => 
-      int.id === integrationId 
+    setIntegrations(prev => prev.map(int =>
+      int.id === integrationId
         ? { ...int, status: 'connected', lastSync: new Date() }
         : int
     ));
@@ -417,8 +431,8 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
 
   const filteredWorkflows = workflows.filter(wf => {
     const matchesSearch = wf.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         wf.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         wf.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      wf.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      wf.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = filterCategory === 'all' || wf.category === filterCategory;
     return matchesSearch && matchesCategory;
   });
@@ -473,16 +487,16 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                 Build, deploy, and manage powerful workflow automations with 1000+ integrations
               </p>
             </div>
-            
+
             <div className="flex items-center space-x-4">
-              <button 
+              <button
                 onClick={() => setRealTimeUpdates(!realTimeUpdates)}
                 className={`px-4 py-2 rounded-lg border ${currentTheme.border} ${currentTheme.hover} transition-colors flex items-center space-x-2`}
               >
                 <Activity size={18} className={realTimeUpdates ? 'text-green-500' : 'text-gray-400'} />
                 <span>Live Updates</span>
               </button>
-              <button 
+              <button
                 onClick={() => setIsWorkflowBuilderOpen(true)}
                 className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
               >
@@ -503,11 +517,10 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  activeTab === tab.id
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${activeTab === tab.id
                     ? 'bg-white shadow-sm text-purple-600 font-medium'
                     : 'text-gray-600 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 <tab.icon size={18} />
                 <span>{tab.name}</span>
@@ -533,9 +546,9 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                       className={`w-full pl-10 pr-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${currentTheme.card}`}
                     />
                   </div>
-                  
-                  <select 
-                    value={filterCategory} 
+
+                  <select
+                    value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
                     className={`px-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 ${currentTheme.card}`}
                   >
@@ -548,8 +561,8 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <select 
-                    value={sortBy} 
+                  <select
+                    value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className={`px-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 ${currentTheme.card}`}
                   >
@@ -558,15 +571,15 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                     <option value="totalRuns">Total Runs</option>
                     <option value="successRate">Success Rate</option>
                   </select>
-                  
+
                   <div className="flex border border-gray-300 rounded-lg">
-                    <button 
+                    <button
                       onClick={() => setViewMode('grid')}
                       className={`p-2 ${viewMode === 'grid' ? 'bg-purple-500 text-white' : currentTheme.hover}`}
                     >
                       <BarChart3 size={18} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => setViewMode('list')}
                       className={`p-2 ${viewMode === 'list' ? 'bg-purple-500 text-white' : currentTheme.hover}`}
                     >
@@ -602,8 +615,8 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
             {/* Workflows Grid/List */}
             <div className={viewMode === 'grid' ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
               {filteredWorkflows.map((workflow) => (
-                <div 
-                  key={workflow.id} 
+                <div
+                  key={workflow.id}
                   className={`${currentTheme.card} rounded-xl border ${currentTheme.border} p-6 hover:shadow-lg transition-all duration-200 group`}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -615,14 +628,13 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                         {workflow.description}
                       </p>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2 ml-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        workflow.status === 'active' ? 'bg-green-100 text-green-800' :
-                        workflow.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
-                        workflow.status === 'error' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${workflow.status === 'active' ? 'bg-green-100 text-green-800' :
+                          workflow.status === 'paused' ? 'bg-yellow-100 text-yellow-800' :
+                            workflow.status === 'error' ? 'bg-red-100 text-red-800' :
+                              'bg-gray-100 text-gray-800'
+                        }`}>
                         {workflow.status}
                       </span>
                       <button className={`p-1 rounded ${currentTheme.hover}`}>
@@ -636,11 +648,10 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                     <div className="flex items-center space-x-2 overflow-x-auto pb-2">
                       {workflow.steps.map((step, idx) => (
                         <div key={step.id} className="flex items-center space-x-2 flex-shrink-0">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${
-                            step.status === 'success' ? 'bg-green-100 text-green-600' :
-                            step.status === 'error' ? 'bg-red-100 text-red-600' :
-                            'bg-gray-100 text-gray-600'
-                          }`}>
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm ${step.status === 'success' ? 'bg-green-100 text-green-600' :
+                              step.status === 'error' ? 'bg-red-100 text-red-600' :
+                                'bg-gray-100 text-gray-600'
+                            }`}>
                             {step.icon || <Box size={14} />}
                           </div>
                           {idx < workflow.steps.length - 1 && (
@@ -689,27 +700,26 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
 
                   {/* Actions */}
                   <div className="flex items-center space-x-2">
-                    <button 
+                    <button
                       onClick={() => toggleWorkflowStatus(workflow.id)}
-                      className={`flex-1 px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
-                        workflow.status === 'active' 
-                          ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
+                      className={`flex-1 px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${workflow.status === 'active'
+                          ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
                           : 'bg-green-100 text-green-700 hover:bg-green-200'
-                      }`}
+                        }`}
                     >
                       {workflow.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
                       <span>{workflow.status === 'active' ? 'Pause' : 'Activate'}</span>
                     </button>
-                    
-                    <button 
+
+                    <button
                       onClick={() => runWorkflow(workflow.id)}
                       className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
                     >
                       <RefreshCw size={16} />
                       <span>Run</span>
                     </button>
-                    
-                    <button 
+
+                    <button
                       onClick={() => setSelectedWorkflow(workflow.id)}
                       className={`px-4 py-2 border ${currentTheme.border} rounded-lg ${currentTheme.hover} transition-colors`}
                     >
@@ -727,8 +737,8 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
           <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {integrations.map((integration) => (
-                <div 
-                  key={integration.id} 
+                <div
+                  key={integration.id}
                   className={`${currentTheme.card} rounded-xl border ${currentTheme.border} p-6 hover:shadow-lg transition-all duration-200`}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -749,12 +759,11 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                         </span>
                       </div>
                     </div>
-                    
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      integration.status === 'connected' ? 'bg-green-100 text-green-800' :
-                      integration.status === 'error' ? 'bg-red-100 text-red-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${integration.status === 'connected' ? 'bg-green-100 text-green-800' :
+                        integration.status === 'error' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                      }`}>
                       {integration.status}
                     </span>
                   </div>
@@ -775,7 +784,7 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className={`text-xs ${currentTheme.textMuted}`}>Usage Count</p>
@@ -802,7 +811,7 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
                         </button>
                       </>
                     ) : (
-                      <button 
+                      <button
                         onClick={() => connectIntegration(integration.id)}
                         className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"
                       >
@@ -855,14 +864,14 @@ const EnhancedIntegrationHub: React.FC<EnhancedIntegrationHubProps> = ({ theme }
           <div className={`${currentTheme.card} rounded-xl p-6 w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto`}>
             <div className="flex items-center justify-between mb-6">
               <h2 className={`text-xl font-bold ${currentTheme.text}`}>Create New Workflow</h2>
-              <button 
+              <button
                 onClick={() => setIsWorkflowBuilderOpen(false)}
                 className={`p-2 rounded-lg ${currentTheme.hover}`}
               >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="text-center py-12">
               <Workflow size={64} className="mx-auto text-purple-500 mb-4" />
               <h3 className={`text-lg font-semibold ${currentTheme.text} mb-2`}>Visual Workflow Builder</h3>

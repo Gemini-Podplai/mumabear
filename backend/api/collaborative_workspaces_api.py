@@ -32,10 +32,10 @@ def health_check():
     try:
         if workspace_service is None:
             return jsonify({
-                "status": "error", 
+                "status": "error",
                 "message": "Collaborative workspaces service not initialized"
             }), 503
-        
+
         return jsonify({
             "status": "healthy",
             "service": "Supercharged Collaborative Workspaces V3.0",
@@ -57,35 +57,35 @@ def manage_sessions():
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         if request.method == 'GET':
             # Get all active sessions
             sessions = asyncio.run(workspace_service.get_active_sessions())
             return jsonify(sessions)
-        
+
         elif request.method == 'POST':
             # Create new session
             data = request.get_json()
-            
+
             if not data or 'session_name' not in data:
                 return jsonify({"error": "session_name is required"}), 400
-            
+
             session_name = data['session_name']
             mode = data.get('mode', 'pair_programming')
             creator_id = data.get('creator_id', 'anonymous')
             participants = data.get('participants', [])
             agentic_control_level = data.get('agentic_control_level', 0.5)
-            
+
             # Import enum for mode validation
             from services.supercharged_collaborative_workspaces_v3 import CollaborationMode
-            
+
             try:
                 collaboration_mode = CollaborationMode(mode)
             except ValueError:
                 return jsonify({
                     "error": f"Invalid mode: {mode}. Valid options: {[m.value for m in CollaborationMode]}"
                 }), 400
-            
+
             result = asyncio.run(
                 workspace_service.create_collaborative_session(
                     session_name=session_name,
@@ -95,13 +95,13 @@ def manage_sessions():
                     agentic_control_level=agentic_control_level
                 )
             )
-            
+
             return jsonify({
                 "success": True,
                 "session": result,
                 "timestamp": datetime.now().isoformat()
             })
-    
+
     except Exception as e:
         logger.error(f"Session management failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -110,7 +110,7 @@ def manage_sessions():
 def join_session(session_id: str):
     """
     🤝 JOIN COLLABORATIVE SESSION
-    
+
     Expected payload:
     {
         "user_id": "string",
@@ -120,15 +120,15 @@ def join_session(session_id: str):
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
-        
+
         if not data or 'user_id' not in data:
             return jsonify({"error": "user_id is required"}), 400
-        
+
         user_id = data['user_id']
         role = data.get('role', 'developer')
-        
+
         result = asyncio.run(
             workspace_service.join_collaborative_session(
                 session_id=session_id,
@@ -136,13 +136,13 @@ def join_session(session_id: str):
                 role=role
             )
         )
-        
+
         return jsonify({
             "success": True,
             "result": result,
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except Exception as e:
@@ -153,7 +153,7 @@ def join_session(session_id: str):
 def send_message(session_id: str):
     """
     💬 SEND MESSAGE TO COLLABORATIVE SESSION
-    
+
     Expected payload:
     {
         "user_id": "string",
@@ -167,15 +167,15 @@ def send_message(session_id: str):
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
-        
+
         if not data or 'user_id' not in data or 'message' not in data:
             return jsonify({"error": "user_id and message are required"}), 400
-        
+
         user_id = data['user_id']
         message = data['message']
-        
+
         result = asyncio.run(
             workspace_service.process_collaboration_message(
                 session_id=session_id,
@@ -183,13 +183,13 @@ def send_message(session_id: str):
                 message=message
             )
         )
-        
+
         return jsonify({
             "success": True,
             "result": result,
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except Exception as e:
@@ -200,7 +200,7 @@ def send_message(session_id: str):
 def initiate_agentic_takeover(session_id: str):
     """
     🤖 INITIATE AGENTIC TAKEOVER MODE
-    
+
     Expected payload:
     {
         "user_id": "string",
@@ -211,21 +211,21 @@ def initiate_agentic_takeover(session_id: str):
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
-        
+
         if not data or 'user_id' not in data or 'task_description' not in data:
             return jsonify({"error": "user_id and task_description are required"}), 400
-        
+
         user_id = data['user_id']
         task_description = data['task_description']
         takeover_level = data.get('takeover_level', 'collaborative')
-        
+
         if takeover_level not in ['collaborative', 'leadership', 'autonomous']:
             return jsonify({
                 "error": "Invalid takeover_level. Valid options: collaborative, leadership, autonomous"
             }), 400
-        
+
         result = asyncio.run(
             workspace_service.initiate_agentic_takeover(
                 session_id=session_id,
@@ -234,13 +234,13 @@ def initiate_agentic_takeover(session_id: str):
                 takeover_level=takeover_level
             )
         )
-        
+
         return jsonify({
             "success": True,
             "result": result,
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except Exception as e:
@@ -253,15 +253,15 @@ def get_session_metrics(session_id: str):
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         metrics = asyncio.run(workspace_service.get_session_metrics(session_id))
-        
+
         return jsonify({
             "success": True,
             "metrics": metrics,
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except Exception as e:
@@ -273,7 +273,7 @@ def get_collaboration_modes():
     """📋 GET AVAILABLE COLLABORATION MODES"""
     try:
         from services.supercharged_collaborative_workspaces_v3 import CollaborationMode
-        
+
         modes = []
         for mode in CollaborationMode:
             modes.append({
@@ -290,12 +290,12 @@ def get_collaboration_modes():
                     "agentic_takeover": "Full AI control for autonomous task completion"
                 }.get(mode.value, "Advanced collaboration mode")
             })
-        
+
         return jsonify({
             "collaboration_modes": modes,
             "default_mode": "pair_programming"
         })
-    
+
     except Exception as e:
         logger.error(f"Collaboration modes retrieval failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -305,7 +305,7 @@ def get_express_agents():
     """🤖 GET AVAILABLE EXPRESS AGENTS"""
     try:
         from services.supercharged_collaborative_workspaces_v3 import ExpressAgentType
-        
+
         agents = []
         for agent_type in ExpressAgentType:
             agents.append({
@@ -326,12 +326,12 @@ def get_express_agents():
                     "integration_master": ["system_integration", "api_design", "workflow_optimization"]
                 }.get(agent_type.value, ["general_assistance"])
             })
-        
+
         return jsonify({
             "express_agents": agents,
             "total_agents": len(agents)
         })
-    
+
     except Exception as e:
         logger.error(f"Express agents retrieval failed: {e}")
         return jsonify({"error": str(e)}), 500
@@ -340,7 +340,7 @@ def get_express_agents():
 def test_collaborative_features():
     """
     🧪 TEST COLLABORATIVE WORKSPACE FEATURES
-    
+
     Expected payload:
     {
         "test_scenario": "string",
@@ -351,20 +351,20 @@ def test_collaborative_features():
     try:
         if workspace_service is None:
             return jsonify({"error": "Service not initialized"}), 503
-        
+
         data = request.get_json()
         test_scenario = data.get('test_scenario', 'basic_collaboration')
         mode = data.get('mode', 'pair_programming')
         participants = data.get('participants', ['test_user_1', 'test_user_2'])
-        
+
         # Create test session
         from services.supercharged_collaborative_workspaces_v3 import CollaborationMode
-        
+
         try:
             collaboration_mode = CollaborationMode(mode)
         except ValueError:
             collaboration_mode = CollaborationMode.PAIR_PROGRAMMING
-        
+
         test_session = asyncio.run(
             workspace_service.create_collaborative_session(
                 session_name=f"Test Session - {test_scenario}",
@@ -374,14 +374,14 @@ def test_collaborative_features():
                 agentic_control_level=0.7
             )
         )
-        
+
         # Simulate test interaction
         test_message = {
             "type": "test",
             "content": f"Testing {test_scenario} in {mode} mode",
             "metadata": {"test": True}
         }
-        
+
         message_result = asyncio.run(
             workspace_service.process_collaboration_message(
                 session_id=test_session["session_id"],
@@ -389,7 +389,7 @@ def test_collaborative_features():
                 message=test_message
             )
         )
-        
+
         return jsonify({
             "test_results": {
                 "scenario": test_scenario,
@@ -399,7 +399,7 @@ def test_collaborative_features():
             },
             "timestamp": datetime.now().isoformat()
         })
-    
+
     except Exception as e:
         logger.error(f"Collaborative features test failed: {e}")
         return jsonify({"error": str(e)}), 500

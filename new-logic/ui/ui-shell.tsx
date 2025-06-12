@@ -44,7 +44,7 @@ const PodplaySanctuary = () => {
   ];
 
   const renderPage = () => {
-    switch(currentPage) {
+    switch (currentPage) {
       case 'main_chat': return <EnhancedMainChat theme={theme} />;
       case 'agent_hub': return <EnhancedScoutAgent theme={theme} />;
       case 'dev_workspaces': return <EnhancedDevWorkspaces theme={theme} />;
@@ -64,12 +64,12 @@ const PodplaySanctuary = () => {
 
   return (
     <div className={`min-h-screen ${theme === 'comfort' ? 'bg-gradient-to-br from-purple-50 to-pink-50' :
-                   theme === 'professional' ? 'bg-gray-50' : 'bg-gray-900'}`}>
+      theme === 'professional' ? 'bg-gray-50' : 'bg-gray-900'}`}>
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 ${sidebarCollapsed ? 'w-20' : 'w-80'}
                       transition-all duration-300 ease-in-out
                       ${theme === 'comfort' ? 'bg-white/80 backdrop-blur-md' :
-                        theme === 'professional' ? 'bg-white border-r' : 'bg-gray-800'}`}>
+          theme === 'professional' ? 'bg-white border-r' : 'bg-gray-800'}`}>
 
         {/* Sidebar Header */}
         <div className="flex items-center justify-between h-16 px-4">
@@ -104,11 +104,11 @@ const PodplaySanctuary = () => {
               onClick={() => setCurrentPage(item.id)}
               className={`w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition-all duration-200 group
                          ${currentPage === item.id
-                           ? (theme === 'comfort' ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700' :
-                              theme === 'professional' ? 'bg-blue-50 text-blue-700' :
-                              'bg-purple-600 text-white')
-                           : (theme === 'custom' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100')
-                         }`}
+                  ? (theme === 'comfort' ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700' :
+                    theme === 'professional' ? 'bg-blue-50 text-blue-700' :
+                      'bg-purple-600 text-white')
+                  : (theme === 'custom' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100')
+                }`}
             >
               <item.icon size={20} className="flex-shrink-0" />
               {!sidebarCollapsed && (
@@ -137,9 +137,9 @@ const PodplaySanctuary = () => {
                     onClick={() => setTheme(t)}
                     className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors
                                ${theme === t
-                                 ? 'bg-purple-500 text-white'
-                                 : (theme === 'custom' ? 'bg-gray-600 text-gray-300' : 'bg-white text-gray-600')
-                               }`}
+                        ? 'bg-purple-500 text-white'
+                        : (theme === 'custom' ? 'bg-gray-600 text-gray-300' : 'bg-white text-gray-600')
+                      }`}
                   >
                     {t}
                   </button>
@@ -251,13 +251,12 @@ const MainChatPage = ({ theme }) => {
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {messages.map(message => (
             <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-lg p-4 rounded-2xl ${
-                message.sender === 'user'
+              <div className={`max-w-lg p-4 rounded-2xl ${message.sender === 'user'
                   ? (theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' :
-                     theme === 'professional' ? 'bg-blue-500 text-white' : 'bg-purple-600 text-white')
+                    theme === 'professional' ? 'bg-blue-500 text-white' : 'bg-purple-600 text-white')
                   : (theme === 'comfort' ? 'bg-white shadow-md' :
-                     theme === 'professional' ? 'bg-gray-100' : 'bg-gray-700 text-white')
-              }`}>
+                    theme === 'professional' ? 'bg-gray-100' : 'bg-gray-700 text-white')
+                }`}>
                 {message.sender === 'mama_bear' && (
                   <div className="flex items-center space-x-2 mb-2">
                     <span>{variants.find(v => v.id === message.variant)?.emoji || '🐻'}</span>
@@ -285,15 +284,14 @@ const MainChatPage = ({ theme }) => {
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Type your message to Mama Bear..."
-              className={`flex-1 px-4 py-3 rounded-xl border ${
-                theme === 'custom' ? 'bg-gray-700 text-white border-gray-600 placeholder-gray-400' :
-                'bg-white border-gray-200 placeholder-gray-500'
-              } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+              className={`flex-1 px-4 py-3 rounded-xl border ${theme === 'custom' ? 'bg-gray-700 text-white border-gray-600 placeholder-gray-400' :
+                  'bg-white border-gray-200 placeholder-gray-500'
+                } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
             />
             <button
               onClick={sendMessage}
               className={`px-6 py-3 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                        theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                         text-white rounded-xl hover:opacity-90 transition-opacity`}
             >
               Send
@@ -320,10 +318,9 @@ const MainChatPage = ({ theme }) => {
                 <p className={`text-sm ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                   {activity.action}
                 </p>
-                <div className={`w-2 h-2 rounded-full ${
-                  activity.status === 'active' ? 'bg-green-400' :
-                  activity.status === 'completed' ? 'bg-blue-400' : 'bg-yellow-400'
-                }`} />
+                <div className={`w-2 h-2 rounded-full ${activity.status === 'active' ? 'bg-green-400' :
+                    activity.status === 'completed' ? 'bg-blue-400' : 'bg-yellow-400'
+                  }`} />
               </div>
               <p className={`text-xs ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'} mt-1`}>
                 {activity.time}
@@ -377,7 +374,7 @@ const IntegrationHubPage = ({ theme }) => {
       <div className="mb-8">
         <div className="flex items-center space-x-3 mb-4">
           <div className={`p-3 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-400 to-pink-400' :
-                          theme === 'professional' ? 'bg-blue-500' : 'bg-purple-600'} rounded-xl`}>
+            theme === 'professional' ? 'bg-blue-500' : 'bg-purple-600'} rounded-xl`}>
             <Link className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -431,11 +428,11 @@ const IntegrationHubPage = ({ theme }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all
                          ${activeTab === tab.id
-                           ? (theme === 'comfort' ? 'bg-white text-purple-600 shadow-md' :
-                              theme === 'professional' ? 'bg-white text-blue-600 shadow-sm' :
-                              'bg-gray-700 text-purple-400')
-                           : (theme === 'custom' ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900')
-                         }`}
+                  ? (theme === 'comfort' ? 'bg-white text-purple-600 shadow-md' :
+                    theme === 'professional' ? 'bg-white text-blue-600 shadow-sm' :
+                      'bg-gray-700 text-purple-400')
+                  : (theme === 'custom' ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900')
+                }`}
             >
               <tab.icon size={18} />
               <span>{tab.label}</span>
@@ -460,14 +457,13 @@ const IntegrationHubPage = ({ theme }) => {
                     placeholder="Search workflows..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`pl-10 pr-4 py-2 rounded-lg border ${
-                      theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
-                      'bg-white border-gray-300 placeholder-gray-500'
-                    } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                    className={`pl-10 pr-4 py-2 rounded-lg border ${theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
+                        'bg-white border-gray-300 placeholder-gray-500'
+                      } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
                   />
                 </div>
                 <button className={`px-4 py-2 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                                  theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                  theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                                   text-white rounded-lg hover:opacity-90 transition-opacity flex items-center space-x-2`}>
                   <Plus size={16} />
                   <span>Create Workflow</span>
@@ -478,7 +474,7 @@ const IntegrationHubPage = ({ theme }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {workflows.map(workflow => (
                 <div key={workflow.id}
-                     className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
+                  className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
                                 backdrop-blur-md rounded-xl p-6 border hover:shadow-lg transition-shadow`}>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -489,11 +485,10 @@ const IntegrationHubPage = ({ theme }) => {
                         {workflow.description}
                       </p>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      workflow.status === 'active'
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${workflow.status === 'active'
                         ? 'bg-green-100 text-green-700'
                         : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                      }`}>
                       {workflow.status}
                     </div>
                   </div>
@@ -526,23 +521,22 @@ const IntegrationHubPage = ({ theme }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
                       <button className={`px-3 py-1 ${theme === 'comfort' ? 'bg-purple-600' :
-                                        theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                        theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                                         text-white rounded-md text-sm hover:opacity-90 transition-opacity flex items-center space-x-1`}>
                         <Eye size={14} />
                         <span>View</span>
                       </button>
                       <button className={`px-3 py-1 border ${theme === 'custom' ? 'border-gray-600 text-gray-300 hover:bg-gray-700' :
-                                        'border-gray-300 text-gray-700 hover:bg-gray-50'}
+                        'border-gray-300 text-gray-700 hover:bg-gray-50'}
                                         rounded-md text-sm transition-colors flex items-center space-x-1`}>
                         <Settings size={14} />
                         <span>Edit</span>
                       </button>
                     </div>
-                    <button className={`p-2 rounded-md transition-colors ${
-                      workflow.status === 'active'
+                    <button className={`p-2 rounded-md transition-colors ${workflow.status === 'active'
                         ? 'text-red-600 hover:bg-red-50'
                         : 'text-green-600 hover:bg-green-50'
-                    }`}>
+                      }`}>
                       {workflow.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
                     </button>
                   </div>
@@ -559,7 +553,7 @@ const IntegrationHubPage = ({ theme }) => {
                 Connected Services
               </h2>
               <button className={`px-4 py-2 border ${theme === 'custom' ? 'border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white' :
-                                'border-purple-600 text-purple-600 hover:bg-purple-50'}
+                'border-purple-600 text-purple-600 hover:bg-purple-50'}
                                 rounded-lg transition-colors flex items-center space-x-2`}>
                 <Plus size={16} />
                 <span>Add Service</span>
@@ -569,7 +563,7 @@ const IntegrationHubPage = ({ theme }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {services.map(service => (
                 <div key={service.name}
-                     className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
+                  className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
                                 backdrop-blur-md rounded-xl p-4 border hover:shadow-md transition-shadow`}>
                   <div className="flex items-center space-x-3 mb-3">
                     <div className={`p-2 ${theme === 'comfort' ? 'bg-gray-100' : theme === 'professional' ? 'bg-gray-100' : 'bg-gray-700'}
@@ -584,21 +578,19 @@ const IntegrationHubPage = ({ theme }) => {
                         {service.category}
                       </p>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs ${
-                      service.status === 'connected'
+                    <div className={`px-2 py-1 rounded-full text-xs ${service.status === 'connected'
                         ? 'bg-green-100 text-green-700'
                         : 'bg-gray-100 text-gray-600'
-                    }`}>
+                      }`}>
                       {service.status}
                     </div>
                   </div>
 
-                  <button className={`w-full px-3 py-2 rounded-md text-sm transition-colors ${
-                    service.status === 'connected'
+                  <button className={`w-full px-3 py-2 rounded-md text-sm transition-colors ${service.status === 'connected'
                       ? (theme === 'custom' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200')
                       : (theme === 'comfort' ? 'bg-purple-600 text-white hover:bg-purple-700' :
-                         theme === 'professional' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-purple-600 text-white hover:bg-purple-700')
-                  }`}>
+                        theme === 'professional' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-purple-600 text-white hover:bg-purple-700')
+                    }`}>
                     {service.status === 'connected' ? 'Manage' : 'Connect'}
                   </button>
                 </div>
@@ -618,7 +610,7 @@ const IntegrationHubPage = ({ theme }) => {
           I can help optimize your workflow connections and suggest better automation patterns.
         </p>
         <button className={`w-full px-3 py-2 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                          theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+          theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                           text-white rounded-lg text-sm hover:opacity-90 transition-opacity`}>
           Ask Mama Bear
         </button>
@@ -714,7 +706,7 @@ const AgentHubPage = ({ theme }) => {
             key={agent.id}
             onClick={() => setSelectedAgent(agent)}
             className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
-                       backdrop-blur-md rounded-xl p-6 border cursor-pointer transform hover:scale-105 
+                       backdrop-blur-md rounded-xl p-6 border cursor-pointer transform hover:scale-105
                        transition-all duration-300 hover:shadow-lg group`}
           >
             <div className="text-center mb-4">
@@ -731,25 +723,23 @@ const AgentHubPage = ({ theme }) => {
 
             <div className="space-y-2 mb-4">
               {agent.capabilities.map((capability, index) => (
-                <div key={index} 
-                     className={`px-3 py-1 rounded-full text-xs text-center ${
-                       theme === 'comfort' ? 'bg-purple-100 text-purple-700' :
-                       theme === 'professional' ? 'bg-blue-100 text-blue-700' :
-                       'bg-gray-700 text-gray-300'
-                     }`}>
+                <div key={index}
+                  className={`px-3 py-1 rounded-full text-xs text-center ${theme === 'comfort' ? 'bg-purple-100 text-purple-700' :
+                      theme === 'professional' ? 'bg-blue-100 text-blue-700' :
+                        'bg-gray-700 text-gray-300'
+                    }`}>
                   {capability}
                 </div>
               ))}
             </div>
 
             <div className="flex items-center justify-between">
-              <div className={`px-2 py-1 rounded-full text-xs ${
-                agent.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
-              }`}>
+              <div className={`px-2 py-1 rounded-full text-xs ${agent.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                }`}>
                 {agent.status}
               </div>
               <button className={`px-4 py-2 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                                theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                                 text-white rounded-lg text-sm hover:opacity-90 transition-opacity`}>
                 Chat
               </button>
@@ -775,7 +765,7 @@ const AgentHubPage = ({ theme }) => {
                   </p>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setSelectedAgent(null)}
                 className={`p-2 rounded-lg ${theme === 'custom' ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`}
               >
@@ -790,8 +780,8 @@ const AgentHubPage = ({ theme }) => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedAgent.capabilities.map((capability, index) => (
-                    <div key={index} 
-                         className={`p-3 rounded-lg ${theme === 'comfort' ? 'bg-purple-50' : theme === 'professional' ? 'bg-blue-50' : 'bg-gray-700'}`}>
+                    <div key={index}
+                      className={`p-3 rounded-lg ${theme === 'comfort' ? 'bg-purple-50' : theme === 'professional' ? 'bg-blue-50' : 'bg-gray-700'}`}>
                       <p className={`font-medium ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                         {capability}
                       </p>
@@ -802,12 +792,12 @@ const AgentHubPage = ({ theme }) => {
 
               <div className="flex space-x-4">
                 <button className={`flex-1 px-6 py-3 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                                  theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                  theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                                   text-white rounded-xl hover:opacity-90 transition-opacity`}>
                   Start Conversation
                 </button>
                 <button className={`px-6 py-3 border ${theme === 'custom' ? 'border-gray-600 text-gray-300 hover:bg-gray-700' :
-                                  'border-gray-300 text-gray-700 hover:bg-gray-50'}
+                  'border-gray-300 text-gray-700 hover:bg-gray-50'}
                                   rounded-xl transition-colors`}>
                   Learn More
                 </button>
@@ -870,11 +860,11 @@ const DevWorkspacesPage = ({ theme }) => {
               onClick={() => setActiveWorkspace(workspace.id)}
               className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all text-center
                          ${activeWorkspace === workspace.id
-                           ? (theme === 'comfort' ? 'bg-white text-purple-600 shadow-md' :
-                              theme === 'professional' ? 'bg-white text-blue-600 shadow-sm' :
-                              'bg-gray-700 text-purple-400')
-                           : (theme === 'custom' ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900')
-                         }`}
+                  ? (theme === 'comfort' ? 'bg-white text-purple-600 shadow-md' :
+                    theme === 'professional' ? 'bg-white text-blue-600 shadow-sm' :
+                      'bg-gray-700 text-purple-400')
+                  : (theme === 'custom' ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900')
+                }`}
             >
               {workspace.name}
             </button>
@@ -895,11 +885,10 @@ const DevWorkspacesPage = ({ theme }) => {
                 {workspaces.find(w => w.id === activeWorkspace)?.description}
               </p>
             </div>
-            <div className={`px-3 py-1 rounded-full text-sm ${
-              workspaces.find(w => w.id === activeWorkspace)?.status === 'active'
+            <div className={`px-3 py-1 rounded-full text-sm ${workspaces.find(w => w.id === activeWorkspace)?.status === 'active'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-yellow-100 text-yellow-700'
-            }`}>
+              }`}>
               {workspaces.find(w => w.id === activeWorkspace)?.status}
             </div>
           </div>
@@ -948,7 +937,7 @@ const DevWorkspacesPage = ({ theme }) => {
                     </span>
                   </div>
                   <div className={`w-full bg-gray-200 rounded-full h-2 ${theme === 'custom' ? 'bg-gray-700' : ''}`}>
-                    <div 
+                    <div
                       className={`h-2 rounded-full bg-${resource.color}-500`}
                       style={{ width: `${resource.value}%` }}
                     ></div>
@@ -965,11 +954,11 @@ const DevWorkspacesPage = ({ theme }) => {
               Quick Actions
             </h3>
             <div className="space-y-3">
-              <button 
+              <button
                 onClick={spinUpEnvironment}
                 disabled={isSpinningUp}
                 className={`w-full px-4 py-3 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                          theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                  theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                           text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center space-x-2`}
               >
                 {isSpinningUp ? (
@@ -984,16 +973,16 @@ const DevWorkspacesPage = ({ theme }) => {
                   </>
                 )}
               </button>
-              
+
               <button className={`w-full px-4 py-3 border ${theme === 'custom' ? 'border-gray-600 text-gray-300 hover:bg-gray-700' :
-                                'border-gray-300 text-gray-700 hover:bg-gray-50'}
+                'border-gray-300 text-gray-700 hover:bg-gray-50'}
                                 rounded-lg transition-colors flex items-center justify-center space-x-2`}>
                 <Monitor size={16} />
                 <span>Open IDE</span>
               </button>
-              
+
               <button className={`w-full px-4 py-3 border ${theme === 'custom' ? 'border-gray-600 text-gray-300 hover:bg-gray-700' :
-                                'border-gray-300 text-gray-700 hover:bg-gray-50'}
+                'border-gray-300 text-gray-700 hover:bg-gray-50'}
                                 rounded-lg transition-colors flex items-center justify-center space-x-2`}>
                 <Globe size={16} />
                 <span>View Preview</span>
@@ -1023,9 +1012,8 @@ const DevWorkspacesPage = ({ theme }) => {
                 'Ready for development!'
               ].map((step, index) => (
                 <div key={index} className="flex items-center space-x-3">
-                  <div className={`w-2 h-2 rounded-full ${
-                    index < 2 ? 'bg-green-500' : index === 2 ? 'bg-yellow-500 animate-pulse' : 'bg-gray-300'
-                  }`}></div>
+                  <div className={`w-2 h-2 rounded-full ${index < 2 ? 'bg-green-500' : index === 2 ? 'bg-yellow-500 animate-pulse' : 'bg-gray-300'
+                    }`}></div>
                   <span className={`text-sm ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                     {step}
                   </span>
@@ -1072,26 +1060,23 @@ const ResearchCenterPage = ({ theme }) => {
             <button
               key={mode.id}
               onClick={() => setResearchMode(mode.id)}
-              className={`p-4 rounded-xl border text-left transition-all ${
-                researchMode === mode.id
+              className={`p-4 rounded-xl border text-left transition-all ${researchMode === mode.id
                   ? (theme === 'comfort' ? 'bg-gradient-to-r from-purple-100 to-pink-100 border-purple-300' :
-                     theme === 'professional' ? 'bg-blue-50 border-blue-300' :
-                     'bg-purple-600 border-purple-400')
+                    theme === 'professional' ? 'bg-blue-50 border-blue-300' :
+                      'bg-purple-600 border-purple-400')
                   : (theme === 'comfort' ? 'bg-white/50 border-gray-200 hover:bg-white/80' :
-                     theme === 'professional' ? 'bg-white border-gray-200 hover:bg-gray-50' :
-                     'bg-gray-800 border-gray-700 hover:bg-gray-700')
-              }`}
+                    theme === 'professional' ? 'bg-white border-gray-200 hover:bg-gray-50' :
+                      'bg-gray-800 border-gray-700 hover:bg-gray-700')
+                }`}
             >
-              <h3 className={`font-semibold mb-2 ${
-                researchMode === mode.id && theme === 'custom' ? 'text-white' :
-                theme === 'custom' ? 'text-white' : 'text-gray-900'
-              }`}>
+              <h3 className={`font-semibold mb-2 ${researchMode === mode.id && theme === 'custom' ? 'text-white' :
+                  theme === 'custom' ? 'text-white' : 'text-gray-900'
+                }`}>
                 {mode.name}
               </h3>
-              <p className={`text-sm ${
-                researchMode === mode.id && theme === 'custom' ? 'text-gray-200' :
-                theme === 'custom' ? 'text-gray-300' : 'text-gray-600'
-              }`}>
+              <p className={`text-sm ${researchMode === mode.id && theme === 'custom' ? 'text-gray-200' :
+                  theme === 'custom' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                 {mode.description}
               </p>
             </button>
@@ -1110,10 +1095,9 @@ const ResearchCenterPage = ({ theme }) => {
             </h3>
             <textarea
               placeholder="What would you like me to research? I'll use multiple AI models to provide comprehensive insights..."
-              className={`w-full h-32 p-4 rounded-lg border ${
-                theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
-                'bg-white border-gray-300 placeholder-gray-500'
-              } focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none`}
+              className={`w-full h-32 p-4 rounded-lg border ${theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
+                  'bg-white border-gray-300 placeholder-gray-500'
+                } focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none`}
             />
           </div>
 
@@ -1130,11 +1114,10 @@ const ResearchCenterPage = ({ theme }) => {
               ].map(option => (
                 <button
                   key={option.level}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    theme === 'comfort' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' :
-                    theme === 'professional' ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' :
-                    'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${theme === 'comfort' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' :
+                      theme === 'professional' ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' :
+                        'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    }`}
                 >
                   {option.label}
                 </button>
@@ -1142,10 +1125,10 @@ const ResearchCenterPage = ({ theme }) => {
             </div>
           </div>
 
-          <button 
+          <button
             onClick={() => setIsResearching(true)}
             className={`w-full px-6 py-4 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                      theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+              theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                       text-white rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center space-x-2`}
           >
             <Search size={20} />
@@ -1235,10 +1218,9 @@ const ResearchCenterPage = ({ theme }) => {
               {['PDF Report', 'Markdown', 'Notion Page', 'Google Docs'].map(format => (
                 <button
                   key={format}
-                  className={`w-full px-4 py-2 rounded-lg text-sm transition-colors ${
-                    theme === 'custom' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' :
-                    'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  className={`w-full px-4 py-2 rounded-lg text-sm transition-colors ${theme === 'custom' ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' :
+                      'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                 >
                   {format}
                 </button>
@@ -1251,7 +1233,7 @@ const ResearchCenterPage = ({ theme }) => {
   );
 };
 
-// Multi-Modal Chat Page  
+// Multi-Modal Chat Page
 const MultiModalChatPage = ({ theme }) => {
   const [selectedModel, setSelectedModel] = useState('claude');
   const [compareMode, setCompareMode] = useState(false);
@@ -1314,10 +1296,9 @@ const MultiModalChatPage = ({ theme }) => {
             <input
               type="text"
               placeholder="Search models..."
-              className={`w-full px-3 py-2 rounded-lg border text-sm ${
-                theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
-                'bg-white border-gray-300 placeholder-gray-500'
-              } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+              className={`w-full px-3 py-2 rounded-lg border text-sm ${theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
+                  'bg-white border-gray-300 placeholder-gray-500'
+                } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
             />
           </div>
 
@@ -1326,33 +1307,29 @@ const MultiModalChatPage = ({ theme }) => {
               <button
                 key={model.id}
                 onClick={() => setSelectedModel(model.id)}
-                className={`w-full p-3 rounded-lg text-left transition-all ${
-                  selectedModel === model.id
+                className={`w-full p-3 rounded-lg text-left transition-all ${selectedModel === model.id
                     ? (theme === 'comfort' ? 'bg-purple-100 border-purple-300' :
-                       theme === 'professional' ? 'bg-blue-100 border-blue-300' :
-                       'bg-purple-600 border-purple-400')
+                      theme === 'professional' ? 'bg-blue-100 border-blue-300' :
+                        'bg-purple-600 border-purple-400')
                     : (theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-50')
-                } border`}
+                  } border`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
-                    selectedModel === model.id
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedModel === model.id
                       ? 'bg-white text-purple-600'
                       : (theme === 'custom' ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600')
-                  }`}>
+                    }`}>
                     {model.name.charAt(0)}
                   </div>
                   <div className="flex-1">
-                    <p className={`font-medium text-sm ${
-                      selectedModel === model.id && theme === 'custom' ? 'text-white' :
-                      theme === 'custom' ? 'text-white' : 'text-gray-900'
-                    }`}>
+                    <p className={`font-medium text-sm ${selectedModel === model.id && theme === 'custom' ? 'text-white' :
+                        theme === 'custom' ? 'text-white' : 'text-gray-900'
+                      }`}>
                       {model.name}
                     </p>
-                    <p className={`text-xs ${
-                      selectedModel === model.id && theme === 'custom' ? 'text-gray-200' :
-                      theme === 'custom' ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
+                    <p className={`text-xs ${selectedModel === model.id && theme === 'custom' ? 'text-gray-200' :
+                        theme === 'custom' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                       {model.provider}
                     </p>
                   </div>
@@ -1370,11 +1347,10 @@ const MultiModalChatPage = ({ theme }) => {
           <div className="p-4 border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  theme === 'comfort' ? 'bg-purple-100 text-purple-600' :
-                  theme === 'professional' ? 'bg-blue-100 text-blue-600' :
-                  'bg-purple-600 text-white'
-                }`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${theme === 'comfort' ? 'bg-purple-100 text-purple-600' :
+                    theme === 'professional' ? 'bg-blue-100 text-blue-600' :
+                      'bg-purple-600 text-white'
+                  }`}>
                   {models.find(m => m.id === selectedModel)?.name.charAt(0)}
                 </div>
                 <div>
@@ -1388,14 +1364,13 @@ const MultiModalChatPage = ({ theme }) => {
               </div>
               <button
                 onClick={() => setCompareMode(!compareMode)}
-                className={`px-3 py-1 rounded-lg text-sm transition-colors ${
-                  compareMode
+                className={`px-3 py-1 rounded-lg text-sm transition-colors ${compareMode
                     ? (theme === 'comfort' ? 'bg-purple-600 text-white' :
-                       theme === 'professional' ? 'bg-blue-600 text-white' :
-                       'bg-purple-600 text-white')
+                      theme === 'professional' ? 'bg-blue-600 text-white' :
+                        'bg-purple-600 text-white')
                     : (theme === 'custom' ? 'border border-gray-600 text-gray-300 hover:bg-gray-700' :
-                       'border border-gray-300 text-gray-700 hover:bg-gray-50')
-                }`}
+                      'border border-gray-300 text-gray-700 hover:bg-gray-50')
+                  }`}
               >
                 ⚖️ Compare
               </button>
@@ -1418,13 +1393,12 @@ const MultiModalChatPage = ({ theme }) => {
               <input
                 type="text"
                 placeholder={`Message ${models.find(m => m.id === selectedModel)?.name}...`}
-                className={`flex-1 px-4 py-2 rounded-lg border ${
-                  theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
-                  'bg-white border-gray-300 placeholder-gray-500'
-                } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                className={`flex-1 px-4 py-2 rounded-lg border ${theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' :
+                    'bg-white border-gray-300 placeholder-gray-500'
+                  } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
               />
               <button className={`px-4 py-2 ${theme === 'comfort' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
-                                theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
+                theme === 'professional' ? 'bg-blue-600' : 'bg-purple-600'}
                                 text-white rounded-lg hover:opacity-90 transition-opacity`}>
                 Send
               </button>
@@ -1457,7 +1431,7 @@ const MultiModalChatPage = ({ theme }) => {
                   <span>Creative</span>
                 </div>
               </div>
-              
+
               <div>
                 <label className={`text-sm ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                   Max Tokens
@@ -1465,10 +1439,9 @@ const MultiModalChatPage = ({ theme }) => {
                 <input
                   type="number"
                   defaultValue="2048"
-                  className={`w-full mt-1 px-3 py-2 rounded border text-sm ${
-                    theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white' :
-                    'bg-white border-gray-300'
-                  }`}
+                  className={`w-full mt-1 px-3 py-2 rounded border text-sm ${theme === 'custom' ? 'bg-gray-700 border-gray-600 text-white' :
+                      'bg-white border-gray-300'
+                    }`}
                 />
               </div>
             </div>
@@ -1513,24 +1486,24 @@ const MultiModalChatPage = ({ theme }) => {
 };
 
 // Continue with more page implementations...
-const h4 className={`font-semibold mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
+const h4 className = {`font-semibold mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
           🐻 Mama Bear Assistant
-        </h4>
-        <div className="space-y-2">
-          {[
-            "Create a GitHub to Slack workflow",
-            "Monitor API health automatically",
-            "Set up customer auto-responder"
-          ].map((suggestion, index) => (
-            <button key={index}
-                    className={`w-full text-left px-3 py-2 text-sm ${theme === 'custom' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}
+        </h4 >
+  <div className="space-y-2">
+    {[
+      "Create a GitHub to Slack workflow",
+      "Monitor API health automatically",
+      "Set up customer auto-responder"
+    ].map((suggestion, index) => (
+      <button key={index}
+        className={`w-full text-left px-3 py-2 text-sm ${theme === 'custom' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}
                               rounded-md transition-colors`}>
-              "{suggestion}"
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
+        "{suggestion}"
+      </button>
+    ))}
+  </div>
+      </div >
+    </div >
   );
 };
 
@@ -1560,7 +1533,7 @@ const AgentHubPage = ({ theme }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {agents.map(agent => (
           <div key={agent.id}
-               className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
+            className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
                           backdrop-blur-md rounded-xl p-6 border hover:shadow-lg transition-all duration-300 group cursor-pointer
                           hover:scale-105`}>
             <div className="text-center mb-4">
@@ -1582,7 +1555,7 @@ const AgentHubPage = ({ theme }) => {
                 Chat with {agent.name}
               </button>
               <button className={`w-full px-4 py-2 border ${theme === 'custom' ? 'border-gray-600 text-gray-300 hover:bg-gray-700' :
-                                'border-gray-300 text-gray-700 hover:bg-gray-50'}
+                'border-gray-300 text-gray-700 hover:bg-gray-50'}
                                 rounded-lg transition-colors`}>
                 View Capabilities
               </button>
@@ -1720,10 +1693,9 @@ const ResearchCenterPage = ({ theme }) => {
             <input
               type="text"
               placeholder="What would you like to research?"
-              className={`w-full px-4 py-3 rounded-xl border ${
-                theme === 'custom' ? 'bg-gray-700 text-white border-gray-600 placeholder-gray-400' :
-                'bg-white border-gray-200 placeholder-gray-500'
-              } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+              className={`w-full px-4 py-3 rounded-xl border ${theme === 'custom' ? 'bg-gray-700 text-white border-gray-600 placeholder-gray-400' :
+                  'bg-white border-gray-200 placeholder-gray-500'
+                } focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
             />
 
             <div className="grid grid-cols-2 gap-4">
@@ -1766,16 +1738,15 @@ const MultiModalChatPage = ({ theme }) => {
         <div className="space-y-2">
           {aiFriends.map(friend => (
             <div key={friend.id}
-                 className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
+              className={`${theme === 'comfort' ? 'bg-white/50' : theme === 'professional' ? 'bg-white' : 'bg-gray-800'}
                             backdrop-blur-md rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer`}>
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-10 h-10 text-2xl flex items-center justify-center">
                     {friend.avatar}
                   </div>
-                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${
-                    friend.status === 'online' ? 'bg-green-400' : 'bg-yellow-400'
-                  }`} />
+                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${friend.status === 'online' ? 'bg-green-400' : 'bg-yellow-400'
+                    }`} />
                 </div>
                 <div className="flex-1">
                   <p className={`font-medium ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>

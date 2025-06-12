@@ -1,12 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  Bot, Play, Pause, Square, RotateCcw, Zap, Target, Brain,
-  Code, Database, Globe, Monitor, Activity, CheckCircle,
-  AlertCircle, Clock, ArrowRight, ChevronDown, ChevronUp,
-  Settings, Eye, Download, Share2, Sparkles, Heart,
-  Container, Server, Terminal, FileCode, GitBranch,
-  Cpu, MemoryStick, HardDrive, Network, Shield, Coffee
+  Activity,
+  AlertCircle,
+  ArrowRight,
+  Bot,
+  Brain,
+  CheckCircle,
+  Clock,
+  Container,
+  Cpu,
+  Eye,
+  Globe,
+  HardDrive,
+  MemoryStick,
+  Monitor,
+  Network,
+  Pause,
+  Play,
+  Server,
+  Settings,
+  Sparkles,
+  Square,
+  Target
 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface EnvironmentStep {
   id: string;
@@ -186,11 +202,11 @@ const EnhancedScoutAgent = ({ theme }) => {
     // Simulate step-by-step execution
     for (let i = 0; i < createEnvironmentSteps.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       setCurrentTask(prev => {
         if (!prev) return prev;
         const updatedSteps = [...prev.steps];
-        
+
         // Mark current step as completed
         updatedSteps[i] = {
           ...updatedSteps[i],
@@ -198,7 +214,7 @@ const EnhancedScoutAgent = ({ theme }) => {
           duration: Math.random() * 3 + 1,
           progress: 100
         };
-        
+
         // Mark next step as running
         if (i < createEnvironmentSteps.length - 1) {
           updatedSteps[i + 1] = {
@@ -207,7 +223,7 @@ const EnhancedScoutAgent = ({ theme }) => {
             progress: 0
           };
         }
-        
+
         return {
           ...prev,
           steps: updatedSteps
@@ -225,13 +241,13 @@ const EnhancedScoutAgent = ({ theme }) => {
       name: `${envType.toUpperCase()} Environment`,
       type: envType,
       status: 'ready',
-      resources: { 
-        cpu: Math.random() * 50 + 20, 
-        memory: Math.random() * 60 + 20, 
-        storage: Math.random() * 30 + 10, 
-        network: Math.random() * 40 + 60 
+      resources: {
+        cpu: Math.random() * 50 + 20,
+        memory: Math.random() * 60 + 20,
+        storage: Math.random() * 30 + 10,
+        network: Math.random() * 40 + 60
       },
-      capabilities: envType === 'e2b' 
+      capabilities: envType === 'e2b'
         ? ['Code Execution', 'File System', 'Network Access', 'Package Management']
         : envType === 'scrapybara'
           ? ['Web Scraping', 'Browser Automation', 'Data Collection', 'API Testing']
@@ -241,7 +257,7 @@ const EnhancedScoutAgent = ({ theme }) => {
     };
 
     setEnvironments(prev => [...prev, newEnv]);
-    
+
     setTimeout(() => {
       setShowCreatePanel(false);
       setAnimationPhase('idle');
@@ -254,7 +270,7 @@ const EnhancedScoutAgent = ({ theme }) => {
     setShowAiGuidance(true);
 
     try {
-      const prompt = `As an Environment Specialist AI, provide guidance for setting up a ${envType.toUpperCase()} environment${projectDescription ? ` for: ${projectDescription}` : ''}. 
+      const prompt = `As an Environment Specialist AI, provide guidance for setting up a ${envType.toUpperCase()} environment${projectDescription ? ` for: ${projectDescription}` : ''}.
 
 Environment Type: ${envType}
 ${envType === 'e2b' ? 'E2B: Code execution sandbox for running any code securely' : ''}
@@ -298,7 +314,7 @@ Keep the response practical and actionable.`;
 
       const data = await response.json();
       const guidance = data.choices?.[0]?.message?.content || 'No guidance available at the moment.';
-      
+
       setAiGuidance(guidance);
     } catch (error) {
       console.error('Error getting AI guidance:', error);
@@ -345,34 +361,30 @@ Keep the response practical and actionable.`;
   };
 
   return (
-    <div className={`h-screen flex flex-col ${
-      theme === 'comfort' 
-        ? 'bg-gradient-to-br from-purple-50 to-pink-50' 
-        : theme === 'professional' 
-          ? 'bg-gray-50' 
+    <div className={`h-screen flex flex-col ${theme === 'comfort'
+        ? 'bg-gradient-to-br from-purple-50 to-pink-50'
+        : theme === 'professional'
+          ? 'bg-gray-50'
           : 'bg-gray-900'
-    }`}>
+      }`}>
 
       {/* Enhanced Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${
-        theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
-      }`}>
-        
+      <div className={`flex items-center justify-between p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
+        }`}>
+
         <div className="flex items-center space-x-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            theme === 'comfort' 
-              ? 'bg-gradient-to-br from-blue-400 to-purple-400' 
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme === 'comfort'
+              ? 'bg-gradient-to-br from-blue-400 to-purple-400'
               : theme === 'professional'
                 ? 'bg-blue-600'
                 : 'bg-blue-600'
-          }`}>
+            }`}>
             <Bot className="w-6 h-6 text-white" />
           </div>
-          
+
           <div>
-            <h1 className={`font-bold text-xl flex items-center gap-2 ${
-              theme === 'custom' ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h1 className={`font-bold text-xl flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+              }`}>
               Enhanced Scout Agent
               <Target className="w-5 h-5 text-blue-500" />
             </h1>
@@ -385,22 +397,20 @@ Keep the response practical and actionable.`;
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowResourceMonitor(!showResourceMonitor)}
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              theme === 'custom' 
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+              }`}
           >
             <Monitor size={16} />
             {showResourceMonitor ? 'Hide' : 'Show'} Monitor
           </button>
-          
+
           <button
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              theme === 'custom' 
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+              }`}
           >
             <Settings size={16} />
             Configure
@@ -411,7 +421,7 @@ Keep the response practical and actionable.`;
       <div className="flex-1 flex">
         {/* Main Content */}
         <div className="flex-1 p-6">
-          
+
           {/* Scout Variant Selector */}
           <div className="mb-6">
             <h2 className={`text-lg font-semibold mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -421,11 +431,10 @@ Keep the response practical and actionable.`;
               {scoutVariants.map((variant) => (
                 <div
                   key={variant.id}
-                  className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${
-                    theme === 'custom' 
-                      ? 'bg-gray-800 hover:bg-gray-700 border-gray-700' 
+                  className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${theme === 'custom'
+                      ? 'bg-gray-800 hover:bg-gray-700 border-gray-700'
                       : 'bg-white hover:shadow-md border'
-                  } border hover:scale-105`}
+                    } border hover:scale-105`}
                 >
                   <div className="flex items-center space-x-3 mb-2">
                     <span className="text-2xl">{variant.emoji}</span>
@@ -442,11 +451,10 @@ Keep the response practical and actionable.`;
                     {variant.expertise.map((skill, index) => (
                       <span
                         key={index}
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          theme === 'custom' 
-                            ? `bg-${variant.color}-900 text-${variant.color}-300` 
+                        className={`px-2 py-1 text-xs rounded-full ${theme === 'custom'
+                            ? `bg-${variant.color}-900 text-${variant.color}-300`
                             : `bg-${variant.color}-100 text-${variant.color}-700`
-                        }`}
+                          }`}
                       >
                         {skill}
                       </span>
@@ -466,11 +474,10 @@ Keep the response practical and actionable.`;
               <div className="flex items-center space-x-4">
                 <button
                   onClick={() => setShowAiGuidance(!showAiGuidance)}
-                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-                    theme === 'custom' 
-                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                  }`}
+                    }`}
                 >
                   <Brain size={16} />
                   AI Guidance
@@ -479,38 +486,34 @@ Keep the response practical and actionable.`;
                   <span className={`text-sm ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`}>
                     Status: {animationPhase}
                   </span>
-                  <div className={`w-3 h-3 rounded-full ${
-                    animationPhase === 'idle' ? 'bg-gray-400' :
-                    animationPhase === 'creating' ? 'bg-yellow-400 animate-pulse' :
-                    animationPhase === 'deploying' ? 'bg-blue-400 animate-pulse' :
-                    'bg-green-400'
-                  }`} />
+                  <div className={`w-3 h-3 rounded-full ${animationPhase === 'idle' ? 'bg-gray-400' :
+                      animationPhase === 'creating' ? 'bg-yellow-400 animate-pulse' :
+                        animationPhase === 'deploying' ? 'bg-blue-400 animate-pulse' :
+                          'bg-green-400'
+                    }`} />
                 </div>
               </div>
             </div>
 
             {/* AI Guidance Panel */}
             {showAiGuidance && (
-              <div className={`mb-6 p-4 rounded-xl ${
-                theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-blue-50 border-blue-200'
-              } border`}>
+              <div className={`mb-6 p-4 rounded-xl ${theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-blue-50 border-blue-200'
+                } border`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className={`font-semibold flex items-center gap-2 ${
-                    theme === 'custom' ? 'text-white' : 'text-gray-900'
-                  }`}>
+                  <h3 className={`font-semibold flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+                    }`}>
                     <Sparkles className="w-5 h-5 text-blue-500" />
                     AI Environment Guidance
                   </h3>
                   <button
                     onClick={() => setShowAiGuidance(false)}
-                    className={`p-1 rounded ${
-                      theme === 'custom' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
-                    }`}
+                    className={`p-1 rounded ${theme === 'custom' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+                      }`}
                   >
                     ×
                   </button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                   {[
                     { type: 'e2b' as const, name: 'E2B Guidance', icon: Container, color: 'blue' },
@@ -521,11 +524,10 @@ Keep the response practical and actionable.`;
                       key={env.type}
                       onClick={() => getAiGuidance(env.type)}
                       disabled={isLoadingGuidance}
-                      className={`p-3 rounded-lg transition-colors flex items-center gap-2 ${
-                        theme === 'custom' 
-                          ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      className={`p-3 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                          ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                           : 'bg-white text-gray-700 hover:bg-gray-50 border'
-                      } ${isLoadingGuidance ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        } ${isLoadingGuidance ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <env.icon size={16} className={`text-${env.color}-500`} />
                       Get {env.name}
@@ -543,15 +545,13 @@ Keep the response practical and actionable.`;
                 )}
 
                 {aiGuidance && !isLoadingGuidance && (
-                  <div className={`p-4 rounded-lg ${
-                    theme === 'custom' ? 'bg-gray-900' : 'bg-white'
-                  } border`}>
+                  <div className={`p-4 rounded-lg ${theme === 'custom' ? 'bg-gray-900' : 'bg-white'
+                    } border`}>
                     <h4 className={`font-semibold mb-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                       AI Recommendations:
                     </h4>
-                    <div className={`prose prose-sm max-w-none ${
-                      theme === 'custom' ? 'prose-invert' : ''
-                    }`}>
+                    <div className={`prose prose-sm max-w-none ${theme === 'custom' ? 'prose-invert' : ''
+                      }`}>
                       <pre className="whitespace-pre-wrap text-sm">{aiGuidance}</pre>
                     </div>
                   </div>
@@ -569,11 +569,10 @@ Keep the response practical and actionable.`;
                   key={env.type}
                   onClick={() => createEnvironment(env.type)}
                   disabled={animationPhase !== 'idle'}
-                  className={`p-6 rounded-xl text-left transition-all duration-200 border-2 border-dashed ${
-                    animationPhase === 'idle'
+                  className={`p-6 rounded-xl text-left transition-all duration-200 border-2 border-dashed ${animationPhase === 'idle'
                       ? `border-${env.color}-300 hover:border-${env.color}-500 hover:scale-105`
                       : 'border-gray-300 opacity-50 cursor-not-allowed'
-                  } ${theme === 'custom' ? 'bg-gray-800' : 'bg-white hover:shadow-lg'}`}
+                    } ${theme === 'custom' ? 'bg-gray-800' : 'bg-white hover:shadow-lg'}`}
                 >
                   <div className="flex items-center space-x-3 mb-3">
                     <env.icon className={`w-8 h-8 text-${env.color}-500`} />
@@ -586,13 +585,12 @@ Keep the response practical and actionable.`;
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between">
-                    <span className={`text-xs px-3 py-1 rounded-full ${
-                      theme === 'custom' 
-                        ? `bg-${env.color}-900 text-${env.color}-300` 
+                    <span className={`text-xs px-3 py-1 rounded-full ${theme === 'custom'
+                        ? `bg-${env.color}-900 text-${env.color}-300`
                         : `bg-${env.color}-100 text-${env.color}-700`
-                    }`}>
+                      }`}>
                       {animationPhase === 'idle' ? 'Ready to deploy' : 'Deploying...'}
                     </span>
                     <ArrowRight className={`w-4 h-4 ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -611,20 +609,18 @@ Keep the response practical and actionable.`;
               {environments.map((env) => (
                 <div
                   key={env.id}
-                  className={`p-6 rounded-xl ${
-                    theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
-                  } border`}
+                  className={`p-6 rounded-xl ${theme === 'custom' ? 'bg-gray-800 border-gray-700' : 'bg-white border shadow-sm'
+                    } border`}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                        env.type === 'e2b' ? 'bg-blue-100' :
-                        env.type === 'scrapybara' ? 'bg-green-100' :
-                        'bg-purple-100'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${env.type === 'e2b' ? 'bg-blue-100' :
+                          env.type === 'scrapybara' ? 'bg-green-100' :
+                            'bg-purple-100'
+                        }`}>
                         {env.type === 'e2b' ? <Container className="w-5 h-5 text-blue-600" /> :
-                         env.type === 'scrapybara' ? <Globe className="w-5 h-5 text-green-600" /> :
-                         <Server className="w-5 h-5 text-purple-600" />}
+                          env.type === 'scrapybara' ? <Globe className="w-5 h-5 text-green-600" /> :
+                            <Server className="w-5 h-5 text-purple-600" />}
                       </div>
                       <div>
                         <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -635,7 +631,7 @@ Keep the response practical and actionable.`;
                         </p>
                       </div>
                     </div>
-                    
+
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(env.status)}`}>
                       {env.status}
                     </span>
@@ -656,11 +652,10 @@ Keep the response practical and actionable.`;
                         </span>
                         <div className="flex-1 bg-gray-200 rounded-full h-2">
                           <div
-                            className={`h-2 rounded-full transition-all duration-500 ${
-                              resource.value < 30 ? 'bg-green-500' :
-                              resource.value < 70 ? 'bg-yellow-500' :
-                              'bg-red-500'
-                            }`}
+                            className={`h-2 rounded-full transition-all duration-500 ${resource.value < 30 ? 'bg-green-500' :
+                                resource.value < 70 ? 'bg-yellow-500' :
+                                  'bg-red-500'
+                              }`}
                             style={{ width: `${resource.value}%` }}
                           />
                         </div>
@@ -680,11 +675,10 @@ Keep the response practical and actionable.`;
                       {env.capabilities.map((capability, index) => (
                         <span
                           key={index}
-                          className={`px-3 py-1 text-xs rounded-full ${
-                            theme === 'custom' 
-                              ? 'bg-gray-700 text-gray-300' 
+                          className={`px-3 py-1 text-xs rounded-full ${theme === 'custom'
+                              ? 'bg-gray-700 text-gray-300'
                               : 'bg-gray-100 text-gray-600'
-                          }`}
+                            }`}
                         >
                           {capability}
                         </span>
@@ -705,16 +699,14 @@ Keep the response practical and actionable.`;
                         <Square size={16} />
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
-                      <button className={`p-2 rounded-lg transition-colors ${
-                        theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                      }`}>
+                      <button className={`p-2 rounded-lg transition-colors ${theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                        }`}>
                         <Eye size={16} />
                       </button>
-                      <button className={`p-2 rounded-lg transition-colors ${
-                        theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                      }`}>
+                      <button className={`p-2 rounded-lg transition-colors ${theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                        }`}>
                         <Settings size={16} />
                       </button>
                     </div>
@@ -727,17 +719,15 @@ Keep the response practical and actionable.`;
 
         {/* Resource Monitor Sidebar */}
         {showResourceMonitor && (
-          <div className={`w-80 border-l p-6 ${
-            theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-          }`}>
+          <div className={`w-80 border-l p-6 ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+            }`}>
             <h3 className={`font-semibold mb-4 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
               Resource Monitor
             </h3>
-            
+
             {/* Live Ticker */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <div className="flex items-center justify-between mb-2">
                 <span className={`text-sm font-medium ${theme === 'custom' ? 'text-gray-300' : 'text-gray-700'}`}>
                   System Load
@@ -757,20 +747,18 @@ Keep the response practical and actionable.`;
               {environments.map((env) => (
                 <div
                   key={env.id}
-                  className={`p-3 rounded-lg ${
-                    theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-                  }`}
+                  className={`p-3 rounded-lg ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className={`text-sm font-medium ${theme === 'custom' ? 'text-gray-300' : 'text-gray-700'}`}>
                       {env.name}
                     </span>
-                    <span className={`w-2 h-2 rounded-full ${
-                      env.status === 'ready' ? 'bg-green-400' :
-                      env.status === 'running' ? 'bg-blue-400' :
-                      env.status === 'initializing' ? 'bg-yellow-400' :
-                      'bg-red-400'
-                    }`} />
+                    <span className={`w-2 h-2 rounded-full ${env.status === 'ready' ? 'bg-green-400' :
+                        env.status === 'running' ? 'bg-blue-400' :
+                          env.status === 'initializing' ? 'bg-yellow-400' :
+                            'bg-red-400'
+                      }`} />
                   </div>
                   <div className="text-xs space-y-1">
                     <div className="flex justify-between">
@@ -792,18 +780,16 @@ Keep the response practical and actionable.`;
       {/* Environment Creation Modal */}
       {showCreatePanel && currentTask && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`w-full max-w-2xl mx-4 p-6 rounded-2xl ${
-            theme === 'custom' ? 'bg-gray-800' : 'bg-white'
-          }`}>
+          <div className={`w-full max-w-2xl mx-4 p-6 rounded-2xl ${theme === 'custom' ? 'bg-gray-800' : 'bg-white'
+            }`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl font-bold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 {currentTask.title}
               </h3>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                currentTask.status === 'running' ? 'bg-blue-100 text-blue-700' :
-                currentTask.status === 'completed' ? 'bg-green-100 text-green-700' :
-                'bg-gray-100 text-gray-700'
-              }`}>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${currentTask.status === 'running' ? 'bg-blue-100 text-blue-700' :
+                  currentTask.status === 'completed' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-700'
+                }`}>
                 {currentTask.status}
               </span>
             </div>
@@ -812,12 +798,11 @@ Keep the response practical and actionable.`;
               {currentTask.steps.map((step, index) => (
                 <div
                   key={step.id}
-                  className={`p-4 rounded-lg border-l-4 ${
-                    step.status === 'completed' ? 'border-green-500 bg-green-50' :
-                    step.status === 'running' ? 'border-blue-500 bg-blue-50' :
-                    step.status === 'error' ? 'border-red-500 bg-red-50' :
-                    'border-gray-300 bg-gray-50'
-                  } ${theme === 'custom' ? 'bg-gray-700 border-opacity-50' : ''}`}
+                  className={`p-4 rounded-lg border-l-4 ${step.status === 'completed' ? 'border-green-500 bg-green-50' :
+                      step.status === 'running' ? 'border-blue-500 bg-blue-50' :
+                        step.status === 'error' ? 'border-red-500 bg-red-50' :
+                          'border-gray-300 bg-gray-50'
+                    } ${theme === 'custom' ? 'bg-gray-700 border-opacity-50' : ''}`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-3">
@@ -839,7 +824,7 @@ Keep the response practical and actionable.`;
                         </p>
                       </div>
                     </div>
-                    
+
                     {step.duration && (
                       <span className={`text-sm ${theme === 'custom' ? 'text-gray-400' : 'text-gray-500'}`}>
                         {step.duration.toFixed(1)}s
@@ -852,9 +837,8 @@ Keep the response practical and actionable.`;
                       {step.details.map((detail, idx) => (
                         <div
                           key={idx}
-                          className={`text-sm flex items-center space-x-2 ${
-                            theme === 'custom' ? 'text-gray-400' : 'text-gray-600'
-                          }`}
+                          className={`text-sm flex items-center space-x-2 ${theme === 'custom' ? 'text-gray-400' : 'text-gray-600'
+                            }`}
                         >
                           <div className="w-1 h-1 bg-current rounded-full" />
                           <span>{detail}</span>

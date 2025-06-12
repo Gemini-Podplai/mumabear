@@ -1,13 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  Code, Terminal, FolderOpen, FileText, Play, Pause, Square,
-  Monitor, Cpu, MemoryStick, HardDrive, Network, Activity,
-  GitBranch, Package, Settings, Download, Upload, Share2,
-  Eye, EyeOff, Maximize2, Minimize2, RefreshCw, Zap, 
-  CheckCircle, AlertCircle, Clock, TrendingUp, Globe,
-  Container, Server, Database, Cloud, Shield, Coffee,
-  ArrowRight, Plus, X, ChevronDown, ChevronUp, Search
+  Activity,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Code,
+  Container,
+  Cpu,
+  Download,
+  FileText,
+  FolderOpen,
+  Globe,
+  HardDrive,
+  MemoryStick,
+  Monitor,
+  Network,
+  Pause,
+  Play,
+  RefreshCw,
+  Square,
+  Terminal,
+  X
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface WorkspaceEnvironment {
   id: string;
@@ -69,13 +83,13 @@ const EnhancedDevWorkspaces = ({ theme }) => {
   const [activeWorkspace, setActiveWorkspace] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<FileNode | null>(null);
   const [codeExecutions, setCodeExecutions] = useState<CodeExecution[]>([]);
-  
+
   // UI state
   const [leftPanelExpanded, setLeftPanelExpanded] = useState(true);
   const [rightPanelExpanded, setRightPanelExpanded] = useState(true);
   const [showResourceMonitor, setShowResourceMonitor] = useState(true);
   const [activeTab, setActiveTab] = useState<'files' | 'terminal' | 'processes' | 'monitoring'>('files');
-  
+
   // Terminal state
   const [terminalOutput, setTerminalOutput] = useState<string[]>([]);
   const [terminalInput, setTerminalInput] = useState('');
@@ -198,10 +212,10 @@ from bs4 import BeautifulSoup
 
 class MainScraper(scrapy.Spider):
     name = 'main_scraper'
-    
+
     def __init__(self):
         self.driver = webdriver.Chrome()
-        
+
     def parse(self, response):
         # Scraping logic here
         yield {
@@ -266,14 +280,14 @@ class MainScraper(scrapy.Spider):
 
     // Simulate execution
     setTimeout(() => {
-      setCodeExecutions(prev => prev.map(exec => 
-        exec.id === execution.id 
+      setCodeExecutions(prev => prev.map(exec =>
+        exec.id === execution.id
           ? {
-              ...exec,
-              status: 'completed',
-              output: `// Execution completed\n// Language: ${language}\n// Code executed successfully\n\nOutput: Hello from ${language}!\nExecution time: ${Math.random() * 2 + 0.5}s`,
-              duration: Math.random() * 2000 + 500
-            }
+            ...exec,
+            status: 'completed',
+            output: `// Execution completed\n// Language: ${language}\n// Code executed successfully\n\nOutput: Hello from ${language}!\nExecution time: ${Math.random() * 2 + 0.5}s`,
+            duration: Math.random() * 2000 + 500
+          }
           : exec
       ));
     }, 1500);
@@ -283,7 +297,7 @@ class MainScraper(scrapy.Spider):
   const executeTerminalCommand = (command: string) => {
     const newOutput = `${currentDirectory}$ ${command}`;
     setTerminalOutput(prev => [...prev, newOutput]);
-    
+
     // Simulate command output
     setTimeout(() => {
       let response = '';
@@ -300,12 +314,12 @@ class MainScraper(scrapy.Spider):
       } else {
         response = `Command executed: ${command}`;
       }
-      
+
       if (response) {
         setTerminalOutput(prev => [...prev, response]);
       }
     }, 300);
-    
+
     setTerminalInput('');
   };
 
@@ -326,9 +340,8 @@ class MainScraper(scrapy.Spider):
     return files.map(file => (
       <div key={file.id} style={{ marginLeft: level * 16 }}>
         <div
-          className={`flex items-center space-x-2 p-2 rounded cursor-pointer hover:bg-gray-100 ${
-            selectedFile?.id === file.id ? 'bg-blue-100' : ''
-          }`}
+          className={`flex items-center space-x-2 p-2 rounded cursor-pointer hover:bg-gray-100 ${selectedFile?.id === file.id ? 'bg-blue-100' : ''
+            }`}
           onClick={() => setSelectedFile(file)}
         >
           {file.type === 'directory' ? (
@@ -351,34 +364,30 @@ class MainScraper(scrapy.Spider):
   };
 
   return (
-    <div className={`h-screen flex flex-col ${
-      theme === 'comfort' 
-        ? 'bg-gradient-to-br from-purple-50 to-pink-50' 
-        : theme === 'professional' 
-          ? 'bg-gray-50' 
+    <div className={`h-screen flex flex-col ${theme === 'comfort'
+        ? 'bg-gradient-to-br from-purple-50 to-pink-50'
+        : theme === 'professional'
+          ? 'bg-gray-50'
           : 'bg-gray-900'
-    }`}>
+      }`}>
 
       {/* Header */}
-      <div className={`flex items-center justify-between p-4 border-b ${
-        theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
-      }`}>
-        
+      <div className={`flex items-center justify-between p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
+        }`}>
+
         <div className="flex items-center space-x-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            theme === 'comfort' 
-              ? 'bg-gradient-to-br from-green-400 to-blue-400' 
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme === 'comfort'
+              ? 'bg-gradient-to-br from-green-400 to-blue-400'
               : theme === 'professional'
                 ? 'bg-green-600'
                 : 'bg-green-600'
-          }`}>
+            }`}>
             <Code className="w-6 h-6 text-white" />
           </div>
-          
+
           <div>
-            <h1 className={`font-bold text-xl flex items-center gap-2 ${
-              theme === 'custom' ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h1 className={`font-bold text-xl flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+              }`}>
               Enhanced Dev Workspaces
               <Container className="w-5 h-5 text-green-500" />
             </h1>
@@ -393,11 +402,10 @@ class MainScraper(scrapy.Spider):
           <select
             value={activeWorkspace || ''}
             onChange={(e) => setActiveWorkspace(e.target.value)}
-            className={`px-4 py-2 rounded-lg border ${
-              theme === 'custom'
+            className={`px-4 py-2 rounded-lg border ${theme === 'custom'
                 ? 'bg-gray-700 border-gray-600 text-white'
                 : 'bg-white border-gray-300'
-            }`}
+              }`}
           >
             {workspaces.map(workspace => (
               <option key={workspace.id} value={workspace.id}>
@@ -405,14 +413,13 @@ class MainScraper(scrapy.Spider):
               </option>
             ))}
           </select>
-          
+
           <button
             onClick={() => setShowResourceMonitor(!showResourceMonitor)}
-            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-              theme === 'custom' 
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${theme === 'custom'
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+              }`}
           >
             <Monitor size={16} />
             Monitor
@@ -422,13 +429,12 @@ class MainScraper(scrapy.Spider):
 
       {/* Main Layout */}
       <div className="flex-1 flex">
-        
+
         {/* Left Panel - File Explorer & Navigation */}
         {leftPanelExpanded && (
-          <div className={`w-80 border-r ${
-            theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-          } flex flex-col`}>
-            
+          <div className={`w-80 border-r ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+            } flex flex-col`}>
+
             {/* Panel tabs */}
             <div className={`flex border-b ${theme === 'custom' ? 'border-gray-700' : 'border-gray-200'}`}>
               {[
@@ -439,15 +445,14 @@ class MainScraper(scrapy.Spider):
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex-1 flex items-center justify-center space-x-2 p-3 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? theme === 'custom' 
+                  className={`flex-1 flex items-center justify-center space-x-2 p-3 text-sm font-medium transition-colors ${activeTab === tab.id
+                      ? theme === 'custom'
                         ? 'bg-gray-700 text-white border-b-2 border-green-500'
                         : 'bg-white text-gray-900 border-b-2 border-green-500'
                       : theme === 'custom'
                         ? 'text-gray-400 hover:text-gray-300'
                         : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                    }`}
                 >
                   <tab.icon size={16} />
                   <span>{tab.label}</span>
@@ -463,9 +468,8 @@ class MainScraper(scrapy.Spider):
                     <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                       File Explorer
                     </h3>
-                    <button className={`p-1 rounded hover:bg-gray-200 ${
-                      theme === 'custom' ? 'hover:bg-gray-700' : ''
-                    }`}>
+                    <button className={`p-1 rounded hover:bg-gray-200 ${theme === 'custom' ? 'hover:bg-gray-700' : ''
+                      }`}>
                       <RefreshCw size={16} />
                     </button>
                   </div>
@@ -485,10 +489,9 @@ class MainScraper(scrapy.Spider):
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                     </div>
                   </div>
-                  
-                  <div className={`flex-1 p-3 rounded-lg font-mono text-sm overflow-y-auto ${
-                    theme === 'custom' ? 'bg-gray-900 text-green-400' : 'bg-black text-green-400'
-                  }`}>
+
+                  <div className={`flex-1 p-3 rounded-lg font-mono text-sm overflow-y-auto ${theme === 'custom' ? 'bg-gray-900 text-green-400' : 'bg-black text-green-400'
+                    }`}>
                     {terminalOutput.map((line, index) => (
                       <div key={index} className="mb-1">{line}</div>
                     ))}
@@ -520,9 +523,8 @@ class MainScraper(scrapy.Spider):
                     {currentWorkspace.processes.map(process => (
                       <div
                         key={process.id}
-                        className={`p-3 rounded-lg ${
-                          theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-                        }`}
+                        className={`p-3 rounded-lg ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+                          }`}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className={`font-medium ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -532,7 +534,7 @@ class MainScraper(scrapy.Spider):
                             {process.status}
                           </span>
                         </div>
-                        
+
                         <div className={`text-sm space-y-1 ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                           <div className="flex justify-between">
                             <span>PID: {process.pid}</span>
@@ -543,7 +545,7 @@ class MainScraper(scrapy.Spider):
                             <span>Memory: {process.memory}MB</span>
                           </div>
                         </div>
-                        
+
                         <div className="flex space-x-2 mt-3">
                           <button className="p-1 rounded bg-green-100 text-green-600 hover:bg-green-200">
                             <Play size={14} />
@@ -566,15 +568,14 @@ class MainScraper(scrapy.Spider):
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
-          
+
           {/* Code Editor */}
           <div className="flex-1 flex flex-col">
             {selectedFile ? (
               <>
                 {/* File header */}
-                <div className={`flex items-center justify-between p-4 border-b ${
-                  theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-                }`}>
+                <div className={`flex items-center justify-between p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+                  }`}>
                   <div className="flex items-center space-x-3">
                     <FileText className={`w-5 h-5 ${theme === 'custom' ? 'text-gray-400' : 'text-gray-600'}`} />
                     <div>
@@ -586,7 +587,7 @@ class MainScraper(scrapy.Spider):
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => executeCode(selectedFile.content || '', editorLanguage)}
@@ -595,9 +596,8 @@ class MainScraper(scrapy.Spider):
                       <Play size={16} />
                       Run
                     </button>
-                    <button className={`p-2 rounded-lg transition-colors ${
-                      theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                    }`}>
+                    <button className={`p-2 rounded-lg transition-colors ${theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                      }`}>
                       <Download size={16} />
                     </button>
                   </div>
@@ -608,11 +608,10 @@ class MainScraper(scrapy.Spider):
                   <textarea
                     value={selectedFile.content || editorContent}
                     onChange={(e) => setEditorContent(e.target.value)}
-                    className={`w-full h-full font-mono text-sm p-4 rounded-lg border resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                      theme === 'custom'
+                    className={`w-full h-full font-mono text-sm p-4 rounded-lg border resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${theme === 'custom'
                         ? 'bg-gray-900 border-gray-700 text-gray-100'
                         : 'bg-white border-gray-300'
-                    }`}
+                      }`}
                     placeholder="Select a file to edit or write code here..."
                   />
                 </div>
@@ -620,9 +619,8 @@ class MainScraper(scrapy.Spider):
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
-                  <FileText className={`w-16 h-16 mx-auto mb-4 ${
-                    theme === 'custom' ? 'text-gray-600' : 'text-gray-400'
-                  }`} />
+                  <FileText className={`w-16 h-16 mx-auto mb-4 ${theme === 'custom' ? 'text-gray-600' : 'text-gray-400'
+                    }`} />
                   <p className={`text-lg font-medium ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                     Select a file to edit
                   </p>
@@ -636,9 +634,8 @@ class MainScraper(scrapy.Spider):
 
           {/* Execution Results */}
           {codeExecutions.length > 0 && (
-            <div className={`h-64 border-t ${
-              theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-            } p-4 overflow-y-auto`}>
+            <div className={`h-64 border-t ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+              } p-4 overflow-y-auto`}>
               <h3 className={`font-semibold mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Execution Results
               </h3>
@@ -646,9 +643,8 @@ class MainScraper(scrapy.Spider):
                 {codeExecutions.map(execution => (
                   <div
                     key={execution.id}
-                    className={`p-3 rounded-lg ${
-                      theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-                    }`}
+                    className={`p-3 rounded-lg ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+                      }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
@@ -670,10 +666,9 @@ class MainScraper(scrapy.Spider):
                         {execution.duration && ` • ${(execution.duration / 1000).toFixed(2)}s`}
                       </span>
                     </div>
-                    
-                    <pre className={`text-sm font-mono p-3 rounded ${
-                      theme === 'custom' ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'
-                    } whitespace-pre-wrap`}>
+
+                    <pre className={`text-sm font-mono p-3 rounded ${theme === 'custom' ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-900'
+                      } whitespace-pre-wrap`}>
                       {execution.output || 'Running...'}
                     </pre>
                   </div>
@@ -685,10 +680,9 @@ class MainScraper(scrapy.Spider):
 
         {/* Right Panel - Resource Monitor */}
         {rightPanelExpanded && showResourceMonitor && currentWorkspace && (
-          <div className={`w-80 border-l ${
-            theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
-          } p-4 overflow-y-auto`}>
-            
+          <div className={`w-80 border-l ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'
+            } p-4 overflow-y-auto`}>
+
             <div className="flex items-center justify-between mb-4">
               <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Resource Monitor
@@ -702,9 +696,8 @@ class MainScraper(scrapy.Spider):
             </div>
 
             {/* Environment Status */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <div className="flex items-center justify-between mb-3">
                 <h4 className={`font-medium ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                   {currentWorkspace.name}
@@ -713,7 +706,7 @@ class MainScraper(scrapy.Spider):
                   {currentWorkspace.status}
                 </span>
               </div>
-              
+
               <div className={`text-sm space-y-2 ${theme === 'custom' ? 'text-gray-300' : 'text-gray-600'}`}>
                 <div className="flex justify-between">
                   <span>Type:</span>
@@ -733,13 +726,12 @@ class MainScraper(scrapy.Spider):
             </div>
 
             {/* Resource Usage */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <h4 className={`font-medium mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Resource Usage
               </h4>
-              
+
               <div className="space-y-3">
                 {[
                   { name: 'CPU', value: currentWorkspace.resources.cpu, icon: Cpu, unit: '%' },
@@ -755,21 +747,19 @@ class MainScraper(scrapy.Spider):
                           {resource.name}
                         </span>
                       </div>
-                      <span className={`text-sm font-mono ${
-                        resource.value > 80 ? 'text-red-500' :
-                        resource.value > 60 ? 'text-yellow-500' :
-                        'text-green-500'
-                      }`}>
+                      <span className={`text-sm font-mono ${resource.value > 80 ? 'text-red-500' :
+                          resource.value > 60 ? 'text-yellow-500' :
+                            'text-green-500'
+                        }`}>
                         {Math.round(resource.value)}{resource.unit}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className={`h-2 rounded-full transition-all duration-500 ${
-                          resource.value > 80 ? 'bg-red-500' :
-                          resource.value > 60 ? 'bg-yellow-500' :
-                          'bg-green-500'
-                        }`}
+                        className={`h-2 rounded-full transition-all duration-500 ${resource.value > 80 ? 'bg-red-500' :
+                            resource.value > 60 ? 'bg-yellow-500' :
+                              'bg-green-500'
+                          }`}
                         style={{ width: `${resource.value}%` }}
                       />
                     </div>
@@ -779,9 +769,8 @@ class MainScraper(scrapy.Spider):
             </div>
 
             {/* Active Ports */}
-            <div className={`p-4 rounded-lg mb-4 ${
-              theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
-            }`}>
+            <div className={`p-4 rounded-lg mb-4 ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border'
+              }`}>
               <h4 className={`font-medium mb-3 ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
                 Active Ports
               </h4>
@@ -828,7 +817,7 @@ class MainScraper(scrapy.Spider):
           <ChevronRight size={16} />
         </button>
       )}
-      
+
       {!rightPanelExpanded && showResourceMonitor && (
         <button
           onClick={() => setRightPanelExpanded(true)}

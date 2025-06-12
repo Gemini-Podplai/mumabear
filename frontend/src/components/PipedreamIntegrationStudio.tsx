@@ -1,33 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Zap, 
-  Plus, 
-  Play, 
-  Pause, 
-  Settings, 
-  Eye, 
-  BarChart3, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  AlertCircle,
-  Link,
-  Database,
-  Globe,
+import {
+  BarChart3,
   Bot,
-  Workflow,
+  CheckCircle,
+  Clock,
   Code,
-  Filter,
-  ArrowRight,
-  RefreshCw,
-  Bell,
-  Calendar,
-  Mail,
-  Github,
-  MonitorSpeaker,
+  Pause,
+  Play,
+  Plus,
   Search,
-  Star
+  Settings,
+  Star,
+  Workflow,
+  XCircle,
+  Zap
 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface Workflow {
   id: string;
@@ -76,7 +63,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
       tags: ['deployment', 'notifications', 'github', 'slack']
     },
     {
-      id: 'wf_002', 
+      id: 'wf_002',
       name: 'Customer Support Auto-Responder',
       description: 'AI-powered first response to customer inquiries',
       status: 'active',
@@ -96,7 +83,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
       triggers: ['Scheduled Check', 'API Response'],
       actions: ['Health Check', 'Send Alert', 'Update Dashboard'],
       executions: 2156,
-      lastRun: '30 seconds ago', 
+      lastRun: '30 seconds ago',
       success_rate: 99.9,
       created_by: 'mama_bear_monitor',
       tags: ['monitoring', 'apis', 'health', 'alerts']
@@ -159,13 +146,13 @@ const PipedreamIntegrationStudio: React.FC = () => {
       }
       return wf;
     }));
-    
+
     if (action === 'delete') {
       setWorkflows(prev => prev.filter(wf => wf.id !== workflowId));
     }
   };
 
-  const filteredWorkflows = workflows.filter(wf => 
+  const filteredWorkflows = workflows.filter(wf =>
     wf.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     wf.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -199,7 +186,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
             <p className="text-gray-600">Autonomous workflow creation with Mama Bear intelligence</p>
           </div>
         </div>
-        
+
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
@@ -245,11 +232,10 @@ const PipedreamIntegrationStudio: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${
-              activeTab === tab.id 
-                ? 'bg-white text-blue-600 shadow-sm' 
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all ${activeTab === tab.id
+                ? 'bg-white text-blue-600 shadow-sm'
                 : 'text-gray-600 hover:text-gray-800'
-            }`}
+              }`}
           >
             <tab.icon className="w-4 h-4" />
             {tab.label}
@@ -301,8 +287,8 @@ const PipedreamIntegrationStudio: React.FC = () => {
                     }}
                     className="p-1 hover:bg-gray-100 rounded"
                   >
-                    {workflow.status === 'active' ? 
-                      <Pause className="w-4 h-4 text-gray-600" /> : 
+                    {workflow.status === 'active' ?
+                      <Pause className="w-4 h-4 text-gray-600" /> :
                       <Play className="w-4 h-4 text-gray-600" />
                     }
                   </button>
@@ -445,10 +431,10 @@ const PipedreamIntegrationStudio: React.FC = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="p-6">
               <p className="text-gray-600 mb-6">{selectedWorkflow.description}</p>
-              
+
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-gray-800 mb-2">Triggers</h4>
@@ -460,7 +446,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium text-gray-800 mb-2">Actions</h4>
                   <div className="flex flex-wrap gap-2">
@@ -471,7 +457,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4 pt-4">
                   <div>
                     <span className="text-sm text-gray-500">Total Executions</span>
@@ -483,7 +469,7 @@ const PipedreamIntegrationStudio: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex gap-3 mt-6">
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                   Edit Workflow

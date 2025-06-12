@@ -142,7 +142,7 @@ CORS(app, origins=["http://localhost:3000", "http://localhost:5173", "http://loc
 
 # Initialize SocketIO
 socketio = SocketIO(
-    app, 
+    app,
     cors_allowed_origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:5001"],
     async_mode='threading'
 )
@@ -154,13 +154,13 @@ gemini_orchestra_initialized = False
 async def initialize_sanctuary_services():
     """Initialize all sanctuary services using the service manager"""
     global services_initialized, gemini_orchestra_initialized
-    
+
     try:
         logger.info("🚀 Initializing Podplay Sanctuary services...")
-        
+
         # Initialize basic services through the service manager
         await initialize_all_services()
-        
+
         # Initialize Gemini Orchestra
         if GEMINI_ORCHESTRA_AVAILABLE and init_gemini_orchestra:
             logger.info("🎭 Initializing Gemini Orchestra...")
@@ -181,7 +181,7 @@ async def initialize_sanctuary_services():
                 gemini_orchestra_initialized = False
         else:
             logger.warning("Gemini Orchestra not available")
-        
+
         # Initialize Deep Research Center (Library)
         if LIBRARY_AVAILABLE and integrate_library_api:
             logger.info("🏛️ Initializing Deep Research Center (Library)...")
@@ -196,7 +196,7 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Deep Research Center: {e}")
         else:
             logger.warning("Deep Research Center not available")
-        
+
         # Initialize Enhanced Scout Workflow
         if SCOUT_WORKFLOW_AVAILABLE and integrate_scout_workflow_api:
             logger.info("🎯 Initializing Enhanced Scout Workflow...")
@@ -210,7 +210,7 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Scout Workflow: {e}")
         else:
             logger.warning("Enhanced Scout Workflow not available")
-        
+
         # Initialize Express Mode + Vertex AI Supercharger
         if EXPRESS_MODE_AVAILABLE and integrate_express_mode_with_app:
             logger.info("🐻⚡ Initializing Express Mode + Vertex AI Supercharger...")
@@ -226,7 +226,7 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Express Mode + Vertex AI Supercharger: {e}")
         else:
             logger.warning("Express Mode + Vertex AI Supercharger not available")
-        
+
         # Initialize Multimodal Chat API
         if MULTIMODAL_CHAT_AVAILABLE and integrate_multimodal_chat_with_app:
             logger.info("🎨🧠 Initializing Multimodal Chat API...")
@@ -240,7 +240,7 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Multimodal Chat API: {e}")
         else:
             logger.warning("Multimodal Chat API not available")
-        
+
         # Initialize Agentic Superpowers V3.0
         if AGENTIC_SUPERPOWERS_AVAILABLE and init_agentic_service:
             logger.info("🐻💥 Initializing Mama Bear Agentic Superpowers V3.0...")
@@ -257,7 +257,7 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Agentic Superpowers: {e}")
         else:
             logger.warning("Agentic Superpowers not available")
-        
+
         # Initialize Supercharged Collaborative Workspaces V3.0
         if COLLABORATIVE_WORKSPACES_AVAILABLE and init_workspace_service:
             logger.info("🚀✨ Initializing Supercharged Collaborative Workspaces V3.0...")
@@ -275,16 +275,16 @@ async def initialize_sanctuary_services():
                 logger.error(f"Failed to initialize Collaborative Workspaces: {e}")
         else:
             logger.warning("Supercharged Collaborative Workspaces not available")
-        
+
         services_initialized = True
-        
+
         # Register API blueprints
         try:
             logger.info("🔗 Registering API blueprints...")
             integrate_orchestration_with_app(app, socketio)
             integrate_mama_bear_scrapybara_api(app)
             register_multi_model_api(app)
-            
+
             # Register new Intelligent Execution Router API (commented out - using routes version)
             # try:
             #     from api.execution_router_api import execution_router_bp
@@ -292,7 +292,7 @@ async def initialize_sanctuary_services():
             #     logger.info("✅ Intelligent Execution Router API registered")
             # except ImportError as e:
             #     logger.warning(f"Execution Router API not available: {e}")
-            
+
             # Register new Agent Creation Workbench API (commented out - using routes version)
             # try:
             #     from api.agent_workbench_api import agent_workbench_bp
@@ -300,13 +300,13 @@ async def initialize_sanctuary_services():
             #     logger.info("✅ Agent Creation Workbench API registered")
             # except ImportError as e:
             #     logger.warning(f"Agent Workbench API not available: {e}")
-            
+
             # Register Live API Studio routes
             app.register_blueprint(memory_bp, url_prefix='/api/memory')
             app.register_blueprint(chat_bp, url_prefix='/api/chat')
             app.register_blueprint(scrape_bp, url_prefix='/api/scrape')
             logger.info("✅ Live API Studio routes registered")
-            
+
             # Register Enhanced Frontend API routes
             try:
                 from routes.agent_workbench import agent_workbench_bp
@@ -314,28 +314,28 @@ async def initialize_sanctuary_services():
                 logger.info("✅ Agent Workbench API registered")
             except ImportError as e:
                 logger.warning(f"Agent Workbench API not available: {e}")
-            
+
             try:
                 from routes.execution_router import execution_router_bp
                 app.register_blueprint(execution_router_bp, url_prefix='/api/execution-router')
                 logger.info("✅ Execution Router API registered")
             except ImportError as e:
                 logger.warning(f"Execution Router API not available: {e}")
-            
+
             try:
                 from routes.scout import scout_bp
                 app.register_blueprint(scout_bp, url_prefix='/api/scout')
                 logger.info("✅ Scout API registered")
             except ImportError as e:
                 logger.warning(f"Scout API not available: {e}")
-            
+
             try:
                 from routes.themes import themes_bp
                 app.register_blueprint(themes_bp, url_prefix='/api/themes')
                 logger.info("✅ Themes API registered")
             except ImportError as e:
                 logger.warning(f"Themes API not available: {e}")
-            
+
             # Register OpenAI Vertex API
             try:
                 from api.openai_vertex_api_simple import openai_vertex_api
@@ -343,25 +343,25 @@ async def initialize_sanctuary_services():
                 logger.info("✅ OpenAI Vertex API registered")
             except ImportError as e:
                 logger.warning(f"OpenAI Vertex API not available: {e}")
-            
+
             logger.info("✅ API blueprints registered successfully")
         except Exception as e:
             logger.error(f"❌ Failed to register API blueprints: {e}")
-        
+
         logger.info("✅ All sanctuary services initialized successfully")
-        
+
     except Exception as e:
         logger.error(f"❌ Failed to initialize services: {str(e)}")
         services_initialized = True
         logger.info("⚠️ Running with basic services only")
-    
+
     logger.info("🐻 Podplay Sanctuary initialization complete!")
 
 def get_service_instances():
     """Get all service instances"""
     if not services_initialized:
         raise RuntimeError("Services not initialized. Call initialize_sanctuary_services() first.")
-    
+
     return {
         'mama_bear': get_mama_bear_agent(),
         'memory': get_memory_manager(),
@@ -378,7 +378,7 @@ def health_check():
     """Health check endpoint"""
     try:
         status = get_service_status()
-        
+
         return jsonify({
             'success': True,
             'status': 'healthy',
@@ -396,7 +396,7 @@ def health_check():
             },
             'timestamp': datetime.now().isoformat()
         })
-        
+
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
         return jsonify({
@@ -455,22 +455,22 @@ def create_app():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(initialize_sanctuary_services())
-    
+
     return app
 
 if __name__ == '__main__':
     # Initialize services
     import asyncio
-    
+
     async def startup():
         """Async startup function"""
         logger.info("🚀 Starting Podplay Sanctuary...")
         await initialize_sanctuary_services()
         logger.info("🐻 Mama Bear is ready to help!")
-    
+
     # Run startup
     asyncio.run(startup())
-    
+
     # Start the Sanctuary
     socketio.run(
         app,

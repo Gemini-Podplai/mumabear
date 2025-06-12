@@ -1,10 +1,17 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
-  MessageCircle, Send, Mic, Image, Paperclip, Download, Upload, 
-  Settings, Brain, Sparkles, Heart, Coffee, Archive, Search,
-  FileText, CheckCircle, AlertCircle, X, ChevronDown, ChevronUp,
-  Loader2, Volume2, Eye, RotateCcw, Star, Share2
+  Download,
+  Image,
+  Loader2,
+  Mic,
+  Paperclip,
+  Search,
+  Send,
+  Settings,
+  Sparkles,
+  Upload,
+  X
 } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Message {
   id: string;
@@ -49,7 +56,7 @@ const EnhancedMainChat = ({ theme }) => {
       variant: 'scout_commander'
     }
   ]);
-  
+
   const [inputMessage, setInputMessage] = useState('');
   const [currentVariant, setCurrentVariant] = useState('scout_commander');
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +64,7 @@ const EnhancedMainChat = ({ theme }) => {
   const [showImportPanel, setShowImportPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
-  
+
   // File handling
   const fileInputRef = useRef<HTMLInputElement>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
@@ -65,58 +72,58 @@ const EnhancedMainChat = ({ theme }) => {
 
   // Mama Bear variants with enhanced descriptions
   const variants = [
-    { 
-      id: 'scout_commander', 
-      name: 'Scout Commander', 
-      emoji: '🎯', 
+    {
+      id: 'scout_commander',
+      name: 'Scout Commander',
+      emoji: '🎯',
       color: 'blue',
       description: 'Strategic planning & execution',
       capabilities: ['Project Management', 'Code Architecture', 'System Design']
     },
-    { 
-      id: 'research_specialist', 
-      name: 'Research Specialist', 
-      emoji: '🔍', 
+    {
+      id: 'research_specialist',
+      name: 'Research Specialist',
+      emoji: '🔍',
       color: 'purple',
       description: 'Deep research & analysis',
       capabilities: ['Information Synthesis', 'Data Analysis', 'Academic Research']
     },
-    { 
-      id: 'code_review_bear', 
-      name: 'Code Review Bear', 
-      emoji: '👩‍💻', 
+    {
+      id: 'code_review_bear',
+      name: 'Code Review Bear',
+      emoji: '👩‍💻',
       color: 'green',
       description: 'Code quality & optimization',
       capabilities: ['Code Review', 'Bug Detection', 'Performance Optimization']
     },
-    { 
-      id: 'creative_bear', 
-      name: 'Creative Bear', 
-      emoji: '🎨', 
+    {
+      id: 'creative_bear',
+      name: 'Creative Bear',
+      emoji: '🎨',
       color: 'orange',
       description: 'Creative problem solving',
       capabilities: ['UI/UX Design', 'Creative Writing', 'Innovation']
     },
-    { 
-      id: 'learning_bear', 
-      name: 'Learning Bear', 
-      emoji: '📚', 
+    {
+      id: 'learning_bear',
+      name: 'Learning Bear',
+      emoji: '📚',
       color: 'teal',
       description: 'Educational support',
       capabilities: ['Skill Development', 'Explanations', 'Learning Paths']
     },
-    { 
-      id: 'efficiency_bear', 
-      name: 'Efficiency Bear', 
-      emoji: '⚡', 
+    {
+      id: 'efficiency_bear',
+      name: 'Efficiency Bear',
+      emoji: '⚡',
       color: 'yellow',
       description: 'Optimization & automation',
       capabilities: ['Process Automation', 'Workflow Optimization', 'Time Management']
     },
-    { 
-      id: 'debugging_detective', 
-      name: 'Debugging Detective', 
-      emoji: '🔍', 
+    {
+      id: 'debugging_detective',
+      name: 'Debugging Detective',
+      emoji: '🔍',
       color: 'red',
       description: 'Problem diagnosis & resolution',
       capabilities: ['Error Analysis', 'System Debugging', 'Root Cause Analysis']
@@ -150,12 +157,12 @@ const EnhancedMainChat = ({ theme }) => {
 
     const dataStr = JSON.stringify(conversationData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    
+
     const link = document.createElement('a');
     link.href = URL.createObjectURL(dataBlob);
     link.download = `podplay-conversation-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    
+
     setShowExportPanel(false);
   }, [messages, currentVariant, variants]);
 
@@ -168,12 +175,12 @@ const EnhancedMainChat = ({ theme }) => {
     reader.onload = (e) => {
       try {
         const imported = JSON.parse(e.target?.result as string) as ConversationExport;
-        
+
         // Validate import structure
         if (!imported.sanctuary || imported.sanctuary !== 'podplay') {
           throw new Error('Invalid Podplay conversation file');
         }
-        
+
         if (!imported.conversation?.messages) {
           throw new Error('No messages found in conversation file');
         }
@@ -182,7 +189,7 @@ const EnhancedMainChat = ({ theme }) => {
         setMessages(imported.conversation.messages);
         setCurrentVariant(imported.conversation.variant || 'scout_commander');
         setShowImportPanel(false);
-        
+
         // Show success notification
         const successMessage: Message = {
           id: `import_${Date.now()}`,
@@ -191,20 +198,44 @@ const EnhancedMainChat = ({ theme }) => {
           timestamp: new Date().toLocaleTimeString(),
           variant: imported.conversation.variant
         };
-        
+
         setMessages(prev => [...imported.conversation.messages, successMessage]);
-        
+
       } catch (error) {
         console.error('Import error:', error);
         alert('Failed to import conversation. Please check the file format.');
       }
     };
-    
+
     reader.readAsText(file);
     event.target.value = ''; // Reset input
   }, []);
 
-  // Send message with backend integration
+  // Memory storage function
+  const storeConversationMemory = async (message: Message, memoryType: string) => {
+    try {
+      await fetch('http://127.0.0.1:5001/api/openai-vertex/store-memory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'nathan_sanctuary',
+          content: `${memoryType}: ${message.content}`,
+          memory_type: memoryType,
+          metadata: {
+            variant: message.variant || currentVariant,
+            timestamp: message.timestamp,
+            conversation_context: 'enhanced_main_chat'
+          }
+        })
+      });
+    } catch (error) {
+      console.log('Memory storage failed (non-critical):', error);
+    }
+  };
+
+  // Send message with backend integration and memory storage
   const sendMessage = useCallback(async () => {
     if (!inputMessage.trim()) return;
 
@@ -218,6 +249,9 @@ const EnhancedMainChat = ({ theme }) => {
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
+
+    // Store user message in memory
+    await storeConversationMemory(userMessage, 'user_message');
 
     try {
       // Call OpenAI Vertex API
@@ -242,7 +276,7 @@ const EnhancedMainChat = ({ theme }) => {
       }
 
       const data = await response.json();
-      
+
       const aiResponse: Message = {
         id: `resp_${Date.now()}`,
         type: 'mama-bear',
@@ -257,9 +291,13 @@ const EnhancedMainChat = ({ theme }) => {
       };
 
       setMessages(prev => [...prev, aiResponse]);
+
+      // Store AI response in memory
+      await storeConversationMemory(aiResponse, 'ai_response');
+
     } catch (error) {
       console.error('Error sending message:', error);
-      
+
       const errorResponse: Message = {
         id: `error_${Date.now()}`,
         type: 'mama-bear',
@@ -267,7 +305,7 @@ const EnhancedMainChat = ({ theme }) => {
         timestamp: new Date().toLocaleTimeString(),
         variant: currentVariant
       };
-      
+
       setMessages(prev => [...prev, errorResponse]);
     } finally {
       setIsLoading(false);
@@ -293,34 +331,30 @@ const EnhancedMainChat = ({ theme }) => {
   };
 
   return (
-    <div className={`h-screen flex flex-col ${
-      theme === 'comfort' 
-        ? 'bg-gradient-to-br from-purple-50 to-pink-50' 
-        : theme === 'professional' 
-          ? 'bg-gray-50' 
+    <div className={`h-screen flex flex-col ${theme === 'comfort'
+        ? 'bg-gradient-to-br from-purple-50 to-pink-50'
+        : theme === 'professional'
+          ? 'bg-gray-50'
           : 'bg-gray-900'
-    }`}>
-      
-      {/* Enhanced Header with Export/Import */}
-      <div className={`flex items-center justify-between p-4 border-b ${
-        theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
       }`}>
-        
+
+      {/* Enhanced Header with Export/Import */}
+      <div className={`flex items-center justify-between p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
+        }`}>
+
         <div className="flex items-center space-x-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            theme === 'comfort' 
-              ? 'bg-gradient-to-br from-purple-400 to-pink-400' 
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${theme === 'comfort'
+              ? 'bg-gradient-to-br from-purple-400 to-pink-400'
               : theme === 'professional'
                 ? 'bg-blue-600'
                 : 'bg-purple-600'
-          }`}>
+            }`}>
             <span className="text-xl">🐻</span>
           </div>
-          
+
           <div>
-            <h1 className={`font-bold text-xl flex items-center gap-2 ${
-              theme === 'custom' ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h1 className={`font-bold text-xl flex items-center gap-2 ${theme === 'custom' ? 'text-white' : 'text-gray-900'
+              }`}>
               Enhanced Chat Sanctuary
               <Sparkles className="w-5 h-5 text-purple-500" />
             </h1>
@@ -334,46 +368,42 @@ const EnhancedMainChat = ({ theme }) => {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowSearch(!showSearch)}
-            className={`p-2 rounded-lg transition-colors ${
-              theme === 'custom' 
-                ? 'text-gray-300 hover:bg-gray-700' 
+            className={`p-2 rounded-lg transition-colors ${theme === 'custom'
+                ? 'text-gray-300 hover:bg-gray-700'
                 : 'text-gray-600 hover:bg-gray-100'
-            }`}
+              }`}
             title="Search conversation"
           >
             <Search size={20} />
           </button>
-          
+
           <button
             onClick={() => setShowExportPanel(!showExportPanel)}
-            className={`p-2 rounded-lg transition-colors ${
-              theme === 'custom' 
-                ? 'text-gray-300 hover:bg-gray-700' 
+            className={`p-2 rounded-lg transition-colors ${theme === 'custom'
+                ? 'text-gray-300 hover:bg-gray-700'
                 : 'text-gray-600 hover:bg-gray-100'
-            }`}
+              }`}
             title="Export conversation"
           >
             <Download size={20} />
           </button>
-          
+
           <button
             onClick={() => setShowImportPanel(!showImportPanel)}
-            className={`p-2 rounded-lg transition-colors ${
-              theme === 'custom' 
-                ? 'text-gray-300 hover:bg-gray-700' 
+            className={`p-2 rounded-lg transition-colors ${theme === 'custom'
+                ? 'text-gray-300 hover:bg-gray-700'
                 : 'text-gray-600 hover:bg-gray-100'
-            }`}
+              }`}
             title="Import conversation"
           >
             <Upload size={20} />
           </button>
-          
+
           <button
-            className={`p-2 rounded-lg transition-colors ${
-              theme === 'custom' 
-                ? 'text-gray-300 hover:bg-gray-700' 
+            className={`p-2 rounded-lg transition-colors ${theme === 'custom'
+                ? 'text-gray-300 hover:bg-gray-700'
                 : 'text-gray-600 hover:bg-gray-100'
-            }`}
+              }`}
             title="Settings"
           >
             <Settings size={20} />
@@ -391,11 +421,10 @@ const EnhancedMainChat = ({ theme }) => {
               placeholder="Search messages..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                theme === 'custom' 
-                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+              className={`w-full pl-10 pr-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 focus:border-transparent ${theme === 'custom'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                   : 'bg-white border-gray-300'
-              }`}
+                }`}
             />
           </div>
         </div>
@@ -403,9 +432,8 @@ const EnhancedMainChat = ({ theme }) => {
 
       {/* Export Panel */}
       {showExportPanel && (
-        <div className={`p-4 border-b ${
-          theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-blue-50'
-        }`}>
+        <div className={`p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-blue-50'
+          }`}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -425,9 +453,8 @@ const EnhancedMainChat = ({ theme }) => {
               </button>
               <button
                 onClick={() => setShowExportPanel(false)}
-                className={`p-2 rounded-lg ${
-                  theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-                }`}
+                className={`p-2 rounded-lg ${theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                  }`}
               >
                 <X size={16} />
               </button>
@@ -438,9 +465,8 @@ const EnhancedMainChat = ({ theme }) => {
 
       {/* Import Panel */}
       {showImportPanel && (
-        <div className={`p-4 border-b ${
-          theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-green-50'
-        }`}>
+        <div className={`p-4 border-b ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-green-50'
+          }`}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className={`font-semibold ${theme === 'custom' ? 'text-white' : 'text-gray-900'}`}>
@@ -467,9 +493,8 @@ const EnhancedMainChat = ({ theme }) => {
               </button>
               <button
                 onClick={() => setShowImportPanel(false)}
-                className={`p-2 rounded-lg ${
-                  theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-                }`}
+                className={`p-2 rounded-lg ${theme === 'custom' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                  }`}
               >
                 <X size={16} />
               </button>
@@ -485,13 +510,12 @@ const EnhancedMainChat = ({ theme }) => {
             <button
               key={variant.id}
               onClick={() => setCurrentVariant(variant.id)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap ${
-                currentVariant === variant.id
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 whitespace-nowrap ${currentVariant === variant.id
                   ? `bg-${variant.color}-100 text-${variant.color}-700 ring-2 ring-${variant.color}-300`
                   : theme === 'custom'
                     ? 'text-gray-300 hover:bg-gray-700'
                     : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
               title={variant.description}
             >
               <span className="text-lg">{variant.emoji}</span>
@@ -512,8 +536,7 @@ const EnhancedMainChat = ({ theme }) => {
               key={message.id}
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[80%] ${
-                message.type === 'user'
+              <div className={`max-w-[80%] ${message.type === 'user'
                   ? theme === 'comfort'
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
                     : theme === 'professional'
@@ -522,8 +545,8 @@ const EnhancedMainChat = ({ theme }) => {
                   : theme === 'custom'
                     ? 'bg-gray-700 text-white'
                     : 'bg-white border shadow-sm'
-              } rounded-2xl p-4`}>
-                
+                } rounded-2xl p-4`}>
+
                 {/* Message header for Mama Bear */}
                 {message.type === 'mama-bear' && (
                   <div className="flex items-center space-x-2 mb-2">
@@ -544,9 +567,8 @@ const EnhancedMainChat = ({ theme }) => {
 
                 {/* Metadata for AI responses */}
                 {message.metadata && (
-                  <div className={`mt-2 pt-2 border-t border-opacity-20 text-xs ${
-                    theme === 'custom' ? 'border-gray-600 text-gray-400' : 'border-gray-200 text-gray-500'
-                  }`}>
+                  <div className={`mt-2 pt-2 border-t border-opacity-20 text-xs ${theme === 'custom' ? 'border-gray-600 text-gray-400' : 'border-gray-200 text-gray-500'
+                    }`}>
                     <div className="flex items-center space-x-4">
                       {message.metadata.model && (
                         <span>Model: {message.metadata.model}</span>
@@ -570,13 +592,12 @@ const EnhancedMainChat = ({ theme }) => {
               </div>
             </div>
           ))}
-          
+
           {/* Loading indicator */}
           {isLoading && (
             <div className="flex justify-start">
-              <div className={`max-w-[80%] ${
-                theme === 'custom' ? 'bg-gray-700' : 'bg-white border shadow-sm'
-              } rounded-2xl p-4`}>
+              <div className={`max-w-[80%] ${theme === 'custom' ? 'bg-gray-700' : 'bg-white border shadow-sm'
+                } rounded-2xl p-4`}>
                 <div className="flex items-center space-x-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span className="text-sm">Mama Bear is thinking...</span>
@@ -584,48 +605,44 @@ const EnhancedMainChat = ({ theme }) => {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
       </div>
 
       {/* Enhanced Input Area */}
-      <div className={`p-4 border-t ${
-        theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
-      }`}>
+      <div className={`p-4 border-t ${theme === 'custom' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white/80 backdrop-blur-md'
+        }`}>
         <div className="max-w-4xl mx-auto">
-          
+
           {/* Quick actions */}
           <div className="flex items-center space-x-2 mb-3">
             <button
               onClick={handleFileAttach}
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${
-                theme === 'custom' 
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${theme === 'custom'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               <Paperclip size={14} />
               Attach
             </button>
-            
+
             <button
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${
-                theme === 'custom' 
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${theme === 'custom'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               <Mic size={14} />
               Voice
             </button>
-            
+
             <button
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${
-                theme === 'custom' 
-                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+              className={`px-3 py-1.5 rounded-lg text-sm transition-colors flex items-center gap-2 ${theme === 'custom'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               <Image size={14} />
               Image
@@ -646,23 +663,21 @@ const EnhancedMainChat = ({ theme }) => {
                 }}
                 placeholder="Share your thoughts with Mama Bear..."
                 rows={1}
-                className={`w-full px-4 py-3 rounded-2xl border resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                  theme === 'custom'
+                className={`w-full px-4 py-3 rounded-2xl border resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${theme === 'custom'
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                     : 'bg-white border-gray-300'
-                }`}
+                  }`}
                 disabled={isLoading}
               />
             </div>
-            
+
             <button
               onClick={sendMessage}
               disabled={!inputMessage.trim() || isLoading}
-              className={`p-3 rounded-2xl transition-all duration-200 ${
-                inputMessage.trim() && !isLoading
+              className={`p-3 rounded-2xl transition-all duration-200 ${inputMessage.trim() && !isLoading
                   ? 'bg-purple-600 text-white hover:bg-purple-700 hover:scale-105'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
+                }`}
             >
               {isLoading ? (
                 <Loader2 size={20} className="animate-spin" />

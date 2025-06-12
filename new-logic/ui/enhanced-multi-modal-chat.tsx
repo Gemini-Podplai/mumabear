@@ -1,12 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
-  MessageCircle, Users, Video, Mic, Camera, FileText, Image, 
-  Settings, Heart, Star, Sparkles, Zap, Brain, Coffee, Music,
-  Send, Paperclip, Smile, MoreVertical, Search, Filter,
-  Play, Pause, Volume2, VolumeX, Maximize, Minimize,
-  User, Bot, Eye, EyeOff, Headphones, Gamepad2, Palette,
-  Clock, Calendar, Bell, Gift, Trophy, Shield, Crown
+  Camera,
+  Crown,
+  FileText,
+  Filter,
+  Headphones,
+  Heart,
+  Image,
+  Maximize,
+  MessageCircle,
+  Mic,
+  Minimize,
+  MoreVertical,
+  Music,
+  Paperclip,
+  Search,
+  Send,
+  Smile,
+  Sparkles,
+  Star,
+  Users, Video,
+  Volume2, VolumeX
 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface AIFriend {
   id: string;
@@ -385,8 +400,8 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
         if (existingReaction) {
           return {
             ...msg,
-            reactions: msg.reactions?.map(r => 
-              r.emoji === emoji 
+            reactions: msg.reactions?.map(r =>
+              r.emoji === emoji
                 ? { ...r, count: r.count + 1, users: [...r.users, 'user'] }
                 : r
             )
@@ -464,11 +479,11 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
               className={`w-full pl-10 pr-4 py-2 ${currentTheme.card} border ${currentTheme.border} rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
             />
           </div>
-          
+
           {/* Mood Selector */}
           <div className="flex space-x-2">
-            <select 
-              value={mood} 
+            <select
+              value={mood}
               onChange={(e) => setMood(e.target.value)}
               className={`flex-1 px-3 py-2 ${currentTheme.card} border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500`}
             >
@@ -492,7 +507,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                 <Users size={18} />
                 <span>AI Friends ({aiFriends.filter(f => f.status === 'online').length} online)</span>
               </h3>
-              <button 
+              <button
                 onClick={() => setFriendsListExpanded(!friendsListExpanded)}
                 className={`p-1 rounded ${currentTheme.hover}`}
               >
@@ -503,25 +518,23 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
             {friendsListExpanded && (
               <div className="space-y-2 animate-fadeIn">
                 {aiFriends.map((friend) => (
-                  <div 
+                  <div
                     key={friend.id}
                     onClick={() => setSelectedFriend(selectedFriend === friend.id ? null : friend.id)}
-                    className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${
-                      selectedFriend === friend.id ? 'bg-purple-100 border-purple-300' : `${currentTheme.hover} border-transparent`
-                    } border-2`}
+                    className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${selectedFriend === friend.id ? 'bg-purple-100 border-purple-300' : `${currentTheme.hover} border-transparent`
+                      } border-2`}
                   >
                     <div className="flex items-center space-x-3">
                       <div className="relative">
                         <div className="w-10 h-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-lg">
                           {friend.avatar}
                         </div>
-                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-                          friend.status === 'online' ? 'bg-green-400' :
-                          friend.status === 'busy' ? 'bg-red-400' :
-                          friend.status === 'away' ? 'bg-yellow-400' : 'bg-gray-400'
-                        }`} />
+                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${friend.status === 'online' ? 'bg-green-400' :
+                            friend.status === 'busy' ? 'bg-red-400' :
+                              friend.status === 'away' ? 'bg-yellow-400' : 'bg-gray-400'
+                          }`} />
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2">
                           <span className={`font-medium ${currentTheme.text} truncate`}>{friend.name}</span>
@@ -530,23 +543,23 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                         </div>
                         <div className="flex items-center space-x-2 mt-1">
                           <div className={`text-xs ${currentTheme.textMuted}`}>
-                            {friend.mood === 'happy' && '😊'} 
-                            {friend.mood === 'excited' && '🤩'} 
-                            {friend.mood === 'calm' && '😌'} 
-                            {friend.mood === 'focused' && '🤔'} 
+                            {friend.mood === 'happy' && '😊'}
+                            {friend.mood === 'excited' && '🤩'}
+                            {friend.mood === 'calm' && '😌'}
+                            {friend.mood === 'focused' && '🤔'}
                             {friend.mood === 'playful' && '😄'}
                           </div>
                           <span className={`text-xs ${currentTheme.textMuted} truncate`}>
                             {friend.personality.split(',')[0]}
                           </span>
                         </div>
-                        
+
                         {/* Relationship bar */}
                         <div className="mt-2">
                           <div className="flex items-center space-x-2">
                             <Heart size={12} className="text-red-400" />
                             <div className="flex-1 bg-gray-200 rounded-full h-1.5">
-                              <div 
+                              <div
                                 className="bg-gradient-to-r from-red-400 to-pink-400 h-1.5 rounded-full transition-all duration-300"
                                 style={{ width: `${friend.relationship}%` }}
                               />
@@ -567,7 +580,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                               </span>
                             ))}
                           </div>
-                          
+
                           <div className="flex items-center justify-between">
                             <span className={`text-xs ${currentTheme.textMuted}`}>Last seen: {friend.lastSeen}</span>
                             <div className="flex space-x-1">
@@ -600,7 +613,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                 <MessageCircle size={18} />
                 <span>Rooms</span>
               </h3>
-              <button 
+              <button
                 onClick={() => setRoomsListExpanded(!roomsListExpanded)}
                 className={`p-1 rounded ${currentTheme.hover}`}
               >
@@ -611,27 +624,25 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
             {roomsListExpanded && (
               <div className="space-y-2 animate-fadeIn">
                 {conversationRooms.map((room) => (
-                  <div 
+                  <div
                     key={room.id}
                     onClick={() => setSelectedRoom(room.id)}
-                    className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${
-                      selectedRoom === room.id ? 'bg-purple-100 border-purple-300' : `${currentTheme.hover} border-transparent`
-                    } border-2 relative`}
+                    className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${selectedRoom === room.id ? 'bg-purple-100 border-purple-300' : `${currentTheme.hover} border-transparent`
+                      } border-2 relative`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                          room.type === 'ai_council' ? 'bg-gradient-to-r from-yellow-400 to-orange-400' :
-                          room.type === 'study_session' ? 'bg-gradient-to-r from-blue-400 to-indigo-400' :
-                          room.type === 'group' ? 'bg-gradient-to-r from-green-400 to-teal-400' :
-                          'bg-gradient-to-r from-purple-400 to-pink-400'
-                        }`}>
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${room.type === 'ai_council' ? 'bg-gradient-to-r from-yellow-400 to-orange-400' :
+                            room.type === 'study_session' ? 'bg-gradient-to-r from-blue-400 to-indigo-400' :
+                              room.type === 'group' ? 'bg-gradient-to-r from-green-400 to-teal-400' :
+                                'bg-gradient-to-r from-purple-400 to-pink-400'
+                          }`}>
                           {room.type === 'ai_council' && '👑'}
                           {room.type === 'study_session' && '📚'}
                           {room.type === 'group' && '👥'}
                           {room.type === 'private' && '💬'}
                         </div>
-                        
+
                         <div className="flex-1">
                           <span className={`font-medium ${currentTheme.text} text-sm`}>{room.name}</span>
                           <div className={`text-xs ${currentTheme.textMuted} flex items-center space-x-2`}>
@@ -641,7 +652,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                           </div>
                         </div>
                       </div>
-                      
+
                       {room.unreadCount > 0 && (
                         <div className="w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                           {room.unreadCount}
@@ -650,7 +661,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                     </div>
                   </div>
                 ))}
-                
+
                 {/* Add Room Button */}
                 <button className={`w-full p-3 border-2 border-dashed ${currentTheme.border} rounded-xl ${currentTheme.hover} transition-colors flex items-center justify-center space-x-2`}>
                   <Plus size={18} />
@@ -677,21 +688,21 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-2">
-              <button 
+              <button
                 onClick={startVoiceChat}
                 className={`p-2 rounded-lg transition-colors ${isVoiceMode ? 'bg-green-500 text-white' : currentTheme.hover}`}
               >
                 {isVoiceMode ? <VolumeX size={20} /> : <Volume2 size={20} />}
               </button>
-              <button 
+              <button
                 onClick={startVideoChat}
                 className={`p-2 rounded-lg transition-colors ${isVideoMode ? 'bg-blue-500 text-white' : currentTheme.hover}`}
               >
                 <Video size={20} />
               </button>
-              <button 
+              <button
                 onClick={() => setAiCouncilMode(!aiCouncilMode)}
                 className={`p-2 rounded-lg transition-colors ${aiCouncilMode ? 'bg-yellow-500 text-white' : currentTheme.hover}`}
               >
@@ -738,7 +749,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
           {messages.map((message) => {
             const sender = message.senderId === 'user' ? null : aiFriends.find(f => f.id === message.senderId);
             const isUser = message.senderId === 'user';
-            
+
             return (
               <div key={message.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-fadeInUp`}>
                 <div className={`max-w-xs lg:max-w-md xl:max-w-lg ${isUser ? 'order-2' : 'order-1'} flex items-end space-x-2`}>
@@ -747,13 +758,12 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                       {sender.avatar}
                     </div>
                   )}
-                  
+
                   <div>
-                    <div className={`px-4 py-3 rounded-2xl ${
-                      isUser 
-                        ? 'bg-purple-500 text-white rounded-br-lg' 
+                    <div className={`px-4 py-3 rounded-2xl ${isUser
+                        ? 'bg-purple-500 text-white rounded-br-lg'
                         : `${currentTheme.card} ${currentTheme.text} rounded-bl-lg shadow-sm border ${currentTheme.border}`
-                    }`}>
+                      }`}>
                       {!isUser && sender && (
                         <div className="flex items-center space-x-2 mb-1">
                           <span className="font-medium text-sm">{sender.name}</span>
@@ -761,11 +771,11 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                         </div>
                       )}
                       <p className="text-sm">{message.content}</p>
-                      
+
                       {message.reactions && message.reactions.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
                           {message.reactions.map((reaction, idx) => (
-                            <span 
+                            <span
                               key={idx}
                               className="px-2 py-1 bg-gray-100 rounded-full text-xs flex items-center space-x-1 cursor-pointer hover:bg-gray-200"
                               onClick={() => addReaction(message.id, reaction.emoji)}
@@ -777,26 +787,26 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center justify-between mt-1 px-1">
                       <span className={`text-xs ${currentTheme.textMuted}`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
-                      
+
                       <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
+                        <button
                           onClick={() => addReaction(message.id, '❤️')}
                           className={`p-1 rounded ${currentTheme.hover}`}
                         >
                           <Heart size={12} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => addReaction(message.id, '😊')}
                           className={`p-1 rounded ${currentTheme.hover}`}
                         >
                           <Smile size={12} />
                         </button>
-                        <button 
+                        <button
                           onClick={() => addReaction(message.id, '⭐')}
                           className={`p-1 rounded ${currentTheme.hover}`}
                         >
@@ -805,7 +815,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                       </div>
                     </div>
                   </div>
-                  
+
                   {isUser && (
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-sm mb-1">
                       👤
@@ -823,13 +833,13 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
           <div className="flex items-end space-x-3">
             <div className="flex-1">
               <div className={`flex items-center space-x-2 p-3 border ${currentTheme.border} rounded-2xl focus-within:ring-2 focus-within:ring-purple-500 ${currentTheme.card}`}>
-                <button 
+                <button
                   onClick={() => setAttachmentMode(attachmentMode === 'file' ? null : 'file')}
                   className={`p-2 rounded-lg transition-colors ${currentTheme.hover}`}
                 >
                   <Paperclip size={18} />
                 </button>
-                
+
                 <input
                   type="text"
                   value={inputMessage}
@@ -838,22 +848,22 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                   placeholder="Share your thoughts with your AI friends..."
                   className={`flex-1 bg-transparent focus:outline-none ${currentTheme.text}`}
                 />
-                
-                <button 
+
+                <button
                   onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                   className={`p-2 rounded-lg transition-colors ${currentTheme.hover}`}
                 >
                   <Smile size={18} />
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => setAttachmentMode(attachmentMode === 'mic' ? null : 'mic')}
                   className={`p-2 rounded-lg transition-colors ${isVoiceMode ? 'bg-green-500 text-white' : currentTheme.hover}`}
                 >
                   <Mic size={18} />
                 </button>
               </div>
-              
+
               {/* Attachment Mode Options */}
               {attachmentMode && (
                 <div className="mt-2 p-3 bg-purple-50 rounded-lg border border-purple-200 animate-fadeIn">
@@ -883,7 +893,7 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                 <div className="mt-2 p-3 bg-white rounded-lg border shadow-lg animate-fadeIn">
                   <div className="grid grid-cols-8 gap-2">
                     {['😊', '😄', '😍', '🤔', '👍', '❤️', '🎉', '⭐', '💡', '🔥', '✨', '🚀', '💪', '🎯', '🌟', '💯'].map((emoji) => (
-                      <button 
+                      <button
                         key={emoji}
                         onClick={() => {
                           setInputMessage(prev => prev + emoji);
@@ -898,13 +908,12 @@ Respond as ${friend.name} would, maintaining your unique personality and speakin
                 </div>
               )}
             </div>
-            
-            <button 
+
+            <button
               onClick={sendMessage}
               disabled={!inputMessage.trim()}
-              className={`px-6 py-3 bg-purple-500 text-white rounded-2xl hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${
-                inputMessage.trim() ? 'transform hover:scale-105' : ''
-              }`}
+              className={`px-6 py-3 bg-purple-500 text-white rounded-2xl hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 ${inputMessage.trim() ? 'transform hover:scale-105' : ''
+                }`}
             >
               <Send size={18} />
             </button>

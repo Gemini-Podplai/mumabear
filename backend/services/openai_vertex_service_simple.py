@@ -76,6 +76,30 @@ class OpenAIVertexService:
         self.vertex_enabled = False
         self.initialize_vertex()
 
+        # Initialize Mama Bear Agentic Superpowers V3.0
+        self.agentic_superpowers = self._initialize_agentic_superpowers()
+
+    def _initialize_agentic_superpowers(self):
+        """Initialize Mama Bear Agentic Superpowers V3.0"""
+        try:
+            from .mama_bear_agentic_superpowers_v3 import MamaBearAgenticSuperpowersV3
+
+            config = {
+                'vertex_config': {
+                    'project_id': self.project_id,
+                    'location': self.location,
+                    'service_account_path': self.service_account_path
+                }
+            }
+
+            agentic_superpowers = MamaBearAgenticSuperpowersV3(config)
+            logger.info("🐻💥 Mama Bear Agentic Superpowers V3.0 integrated!")
+            return agentic_superpowers
+
+        except Exception as e:
+            logger.warning(f"Could not initialize agentic superpowers: {e}")
+            return None
+
     def initialize_vertex(self):
         """Initialize Vertex AI with service account"""
         try:

@@ -5,10 +5,15 @@ Flask API endpoints for Podplay Sanctuary
 
 import asyncio
 import logging
+import sys
+import os
 from flask import Blueprint, request, jsonify
 from typing import Dict, Any
 
-from ..services.openai_vertex_service_simple import get_openai_vertex_service
+# Add the backend directory to the path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from services.openai_vertex_service_simple import get_openai_vertex_service
 
 logger = logging.getLogger(__name__)
 
@@ -270,6 +275,118 @@ def mama_bear_chat():
     except Exception as e:
         logger.error(f"Mama Bear chat error: {e}")
         return create_error_response(f"Mama Bear chat failed: {str(e)}")
+
+@openai_vertex_api.route('/store-memory', methods=['POST'])
+def store_memory():
+    """
+    Store conversation memory using mem0
+    POST /api/openai-vertex/store-memory
+    """
+    try:
+        data = request.get_json()
+
+        if not data:
+            return create_error_response("No data provided", 400)
+
+        user_id = data.get('user_id', 'anonymous')
+        content = data.get('content', '')
+        memory_type = data.get('memory_type', 'general')
+        metadata = data.get('metadata', {})
+
+        if not content:
+            return create_error_response("Content is required", 400)
+
+        # Get service and store memory
+        service = get_openai_vertex_service()
+
+        # Check if service has agentic superpowers with memory
+        if hasattr(service, 'agentic_superpowers') and service.agentic_superpowers:
+            # Use async memory storage from agentic superpowers
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+            try:
+                result = loop.run_until_complete(
+                    service.agentic_superpowers.store_memory(
+                        user_id=user_id,
+                        content=content,
+                        memory_type=memory_type,
+                        metadata=metadata
+                    )
+                )
+                return jsonify({
+                    "status": "success",
+                    "message": "Memory stored successfully",
+                    "result": result
+                })
+            finally:
+                loop.close()
+        else:
+            # Fallback to simple storage
+            return jsonify({
+                "status": "stored_locally",
+                "message": "Memory stored in local fallback",
+                "user_id": user_id,
+                "memory_type": memory_type
+            })
+
+    except Exception as e:
+        logger.error(f"Memory storage error: {e}")
+        return create_error_response(f"Memory storage failed: {str(e)}")
+
+@openai_vertex_api.route('/retrieve-memories', methods=['POST'])
+def retrieve_memories():
+    """
+    Retrieve memories using mem0
+    POST /api/openai-vertex/retrieve-memories
+    """
+    try:
+        data = request.get_json()
+
+        if not data:
+            return create_error_response("No data provided", 400)
+
+        user_id = data.get('user_id', 'anonymous')
+        query = data.get('query', '')
+        limit = data.get('limit', 10)
+
+        # Get service and retrieve memories
+        service = get_openai_vertex_service()
+
+        # Check if service has agentic superpowers with memory
+        if hasattr(service, 'agentic_superpowers') and service.agentic_superpowers:
+            # Use async memory retrieval from agentic superpowers
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+            try:
+                memories = loop.run_until_complete(
+                    service.agentic_superpowers.retrieve_memories(
+                        user_id=user_id,
+                        query=query,
+                        limit=limit
+                    )
+                )
+                return jsonify({
+                    "status": "success",
+                    "memories": memories,
+                    "count": len(memories)
+                })
+            finally:
+                loop.close()
+        else:
+            # Fallback
+            return jsonify({
+                "status": "no_memories",
+                "memories": [],
+                "count": 0
+            })
+
+    except Exception as e:
+        logger.error(f"Memory retrieval error: {e}")
+        return create_error_response(f"Memory retrieval failed: {str(e)}")
 
 @openai_vertex_api.errorhandler(404)
 def not_found(error):

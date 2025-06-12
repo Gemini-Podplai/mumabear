@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from 'react';
 import {
-  BarChart3, Activity, Monitor, Cpu, HardDrive, Wifi, Zap,
-  AlertTriangle, CheckCircle, XCircle, Clock, TrendingUp,
-  TrendingDown, DollarSign, Settings, RefreshCw, Eye,
-  EyeOff, Maximize, Minimize, Filter, Search, Download,
-  Server, Database, Cloud, Globe, Smartphone, Laptop,
-  Memory, Network, Shield, Warning, Info, Bell,
-  Play, Pause, Square, RotateCcw, Trash2, Edit,
-  ArrowUp, ArrowDown, Calendar, Timer, Target,
-  PieChart, LineChart, Users, MapPin, Coffee
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  Bell,
+  CheckCircle,
+  Cpu,
+  Download,
+  Eye,
+  EyeOff,
+  HardDrive,
+  Memory,
+  Monitor,
+  Pause,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Search,
+  Settings,
+  Square,
+  TrendingUp,
+  Wifi,
+  XCircle
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface SystemMetrics {
   cpu: {
@@ -377,9 +390,8 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsLiveMode(!isLiveMode)}
-                  className={`px-4 py-2 rounded-lg border ${currentTheme.border} ${currentTheme.hover} transition-colors flex items-center space-x-2 ${
-                    isLiveMode ? 'bg-green-100 text-green-700 border-green-300' : ''
-                  }`}
+                  className={`px-4 py-2 rounded-lg border ${currentTheme.border} ${currentTheme.hover} transition-colors flex items-center space-x-2 ${isLiveMode ? 'bg-green-100 text-green-700 border-green-300' : ''
+                    }`}
                 >
                   {isLiveMode ? <Activity size={18} className="text-green-500" /> : <Pause size={18} />}
                   <span>{isLiveMode ? 'Live' : 'Paused'}</span>
@@ -416,11 +428,10 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
-                  activeTab === tab.id
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${activeTab === tab.id
                     ? 'bg-white shadow-sm text-purple-600 font-medium'
                     : 'text-gray-600 hover:text-gray-900'
-                }`}
+                  }`}
               >
                 <tab.icon size={18} />
                 <span>{tab.name}</span>
@@ -458,10 +469,9 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      systemMetrics.cpu.usage > 80 ? 'bg-red-500' :
-                      systemMetrics.cpu.usage > 60 ? 'bg-yellow-500' : 'bg-blue-500'
-                    }`}
+                    className={`h-2 rounded-full transition-all duration-300 ${systemMetrics.cpu.usage > 80 ? 'bg-red-500' :
+                        systemMetrics.cpu.usage > 60 ? 'bg-yellow-500' : 'bg-blue-500'
+                      }`}
                     style={{ width: `${systemMetrics.cpu.usage}%` }}
                   />
                 </div>
@@ -573,11 +583,10 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
                   <div key={process.id} className={`p-4 border ${currentTheme.border} rounded-lg ${currentTheme.hover} transition-colors`}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-3">
-                        <div className={`w-3 h-3 rounded-full ${
-                          process.status === 'running' ? 'bg-green-500' :
-                          process.status === 'error' ? 'bg-red-500' :
-                          'bg-yellow-500'
-                        }`} />
+                        <div className={`w-3 h-3 rounded-full ${process.status === 'running' ? 'bg-green-500' :
+                            process.status === 'error' ? 'bg-red-500' :
+                              'bg-yellow-500'
+                          }`} />
                         <span className={`font-medium ${currentTheme.text}`}>{process.name}</span>
                       </div>
                       <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(process.status)}`}>
@@ -705,11 +714,10 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
                   <div key={process.id} className={`border ${currentTheme.border} rounded-lg p-4 ${currentTheme.hover} transition-all duration-200`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-4 h-4 rounded-full ${
-                          process.status === 'running' ? 'bg-green-500 animate-pulse' :
-                          process.status === 'error' ? 'bg-red-500' :
-                          'bg-yellow-500'
-                        }`} />
+                        <div className={`w-4 h-4 rounded-full ${process.status === 'running' ? 'bg-green-500 animate-pulse' :
+                            process.status === 'error' ? 'bg-red-500' :
+                              'bg-yellow-500'
+                          }`} />
 
                         <div>
                           <h3 className={`font-semibold ${currentTheme.text}`}>{process.name}</h3>
@@ -851,11 +859,10 @@ const EnhancedResourcesMonitor: React.FC<EnhancedResourcesMonitorProps> = ({ the
 
               <div className="space-y-4">
                 {alerts.map((alert) => (
-                  <div key={alert.id} className={`border-l-4 ${
-                    alert.severity === 'critical' ? 'border-red-500' :
-                    alert.severity === 'high' ? 'border-orange-500' :
-                    alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500'
-                  } bg-white rounded-lg p-4 shadow-sm`}>
+                  <div key={alert.id} className={`border-l-4 ${alert.severity === 'critical' ? 'border-red-500' :
+                      alert.severity === 'high' ? 'border-orange-500' :
+                        alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500'
+                    } bg-white rounded-lg p-4 shadow-sm`}>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">

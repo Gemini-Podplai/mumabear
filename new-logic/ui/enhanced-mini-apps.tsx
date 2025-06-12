@@ -1,14 +1,26 @@
-import React, { useState, useEffect } from 'react';
 import {
-  Palette, Plus, Play, Pause, Settings, Edit, Trash2, Download,
-  Upload, Search, Filter, Star, Heart, Eye, Code, Box,
-  Smartphone, Monitor, Tablet, Globe, Database, FileText,
-  Image, Music, Video, Calculator, Calendar, Clock,
-  Map, Weather, ShoppingCart, Camera, Gamepad2, Coffee,
-  Zap, Activity, TrendingUp, Award, Shield, Crown,
-  ArrowRight, ExternalLink, MoreVertical, Maximize,
-  Minimize, RefreshCw, Share, Copy, Bookmark
+  ArrowRight,
+  Box,
+  Code,
+  Download,
+  Eye,
+  FileText,
+  Gamepad2,
+  Globe,
+  Heart,
+  Maximize,
+  Minimize,
+  Monitor,
+  Palette,
+  Pause,
+  Play,
+  Plus,
+  Search,
+  Settings,
+  Star,
+  TrendingUp
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface MiniApp {
   id: string;
@@ -303,39 +315,39 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
 
   const filteredApps = miniApps.filter(app => {
     const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         app.description.toLowerCase().includes(searchQuery.toLowerCase());
+      app.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || app.category === selectedCategory;
-    const matchesTab = 
+    const matchesTab =
       (activeTab === 'installed' && app.isInstalled) ||
       (activeTab === 'store' && !app.isInstalled) ||
       (activeTab === 'development' && app.status === 'development') ||
       activeTab === 'widgets';
-    
+
     return matchesSearch && matchesCategory && matchesTab;
   });
 
   const installApp = async (appId: string) => {
-    setMiniApps(prev => prev.map(app => 
+    setMiniApps(prev => prev.map(app =>
       app.id === appId ? { ...app, isInstalled: true } : app
     ));
   };
 
   const uninstallApp = async (appId: string) => {
-    setMiniApps(prev => prev.map(app => 
+    setMiniApps(prev => prev.map(app =>
       app.id === appId ? { ...app, isInstalled: false } : app
     ));
     setActiveWidgets(prev => prev.filter(widget => widget.appId !== appId));
   };
 
   const toggleFavorite = (appId: string) => {
-    setMiniApps(prev => prev.map(app => 
+    setMiniApps(prev => prev.map(app =>
       app.id === appId ? { ...app, isFavorite: !app.isFavorite } : app
     ));
   };
 
   const toggleAppStatus = (appId: string) => {
-    setMiniApps(prev => prev.map(app => 
-      app.id === appId 
+    setMiniApps(prev => prev.map(app =>
+      app.id === appId
         ? { ...app, status: app.status === 'active' ? 'inactive' : 'active' }
         : app
     ));
@@ -349,7 +361,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
       id: `widget-${Date.now()}`,
       appId,
       position: { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 },
-      size: { 
+      size: {
         width: app.size === 'small' ? 250 : app.size === 'medium' ? 350 : 500,
         height: app.size === 'small' ? 200 : app.size === 'medium' ? 300 : 400
       },
@@ -422,15 +434,15 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                     <span className="font-medium text-sm">{app.name}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <button 
-                      onClick={() => setActiveWidgets(prev => prev.map(w => 
+                    <button
+                      onClick={() => setActiveWidgets(prev => prev.map(w =>
                         w.id === widget.id ? { ...w, isMinimized: !w.isMinimized } : w
                       ))}
                       className="p-1 rounded hover:bg-white/20"
                     >
                       {widget.isMinimized ? <Maximize size={14} /> : <Minimize size={14} />}
                     </button>
-                    <button 
+                    <button
                       onClick={() => closeWidget(widget.id)}
                       className="p-1 rounded hover:bg-white/20"
                     >
@@ -481,8 +493,8 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                             { text: 'Team meeting at 3pm', done: false }
                           ].map((task, idx) => (
                             <div key={idx} className="flex items-center space-x-2">
-                              <input 
-                                type="checkbox" 
+                              <input
+                                type="checkbox"
                                 checked={task.done}
                                 className="rounded"
                                 readOnly
@@ -527,7 +539,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
 
           {/* Widget Mode Overlay Controls */}
           <div className="absolute top-4 right-4 z-20">
-            <button 
+            <button
               onClick={() => setActiveTab('installed')}
               className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
             >
@@ -555,16 +567,16 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                     Discover, install, and manage lightweight applications and widgets for your workspace
                   </p>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
-                  <button 
+                  <button
                     onClick={() => setActiveTab('widgets')}
                     className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
                   >
                     <Monitor size={18} />
                     <span>Widget Mode</span>
                   </button>
-                  <button 
+                  <button
                     onClick={() => setIsAppBuilderOpen(true)}
                     className="px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2"
                   >
@@ -585,11 +597,10 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${
-                      activeTab === tab.id
+                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg transition-all duration-200 ${activeTab === tab.id
                         ? 'bg-white shadow-sm text-purple-600 font-medium'
                         : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                      }`}
                   >
                     <tab.icon size={18} />
                     <span>{tab.name}</span>
@@ -612,9 +623,9 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                       className={`w-full pl-10 pr-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${currentTheme.card}`}
                     />
                   </div>
-                  
-                  <select 
-                    value={selectedCategory} 
+
+                  <select
+                    value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className={`px-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 ${currentTheme.card}`}
                   >
@@ -627,8 +638,8 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <select 
-                    value={sortBy} 
+                  <select
+                    value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     className={`px-4 py-3 border ${currentTheme.border} rounded-lg focus:ring-2 focus:ring-purple-500 ${currentTheme.card}`}
                   >
@@ -637,15 +648,15 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                     <option value="downloads">Downloads</option>
                     <option value="lastUpdated">Last Updated</option>
                   </select>
-                  
+
                   <div className="flex border border-gray-300 rounded-lg">
-                    <button 
+                    <button
                       onClick={() => setViewMode('grid')}
                       className={`p-2 ${viewMode === 'grid' ? 'bg-purple-500 text-white' : currentTheme.hover}`}
                     >
                       <Box size={18} />
                     </button>
-                    <button 
+                    <button
                       onClick={() => setViewMode('list')}
                       className={`p-2 ${viewMode === 'list' ? 'bg-purple-500 text-white' : currentTheme.hover}`}
                     >
@@ -663,17 +674,15 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${
-                      selectedCategory === category.id
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${selectedCategory === category.id
                         ? 'bg-purple-500 text-white border-purple-500'
                         : `${currentTheme.card} ${currentTheme.border} ${currentTheme.hover}`
-                    }`}
+                      }`}
                   >
                     <category.icon size={16} />
                     <span>{category.name}</span>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      selectedCategory === category.id ? 'bg-white/20' : 'bg-gray-100 text-gray-600'
-                    }`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${selectedCategory === category.id ? 'bg-white/20' : 'bg-gray-100 text-gray-600'
+                      }`}>
                       {category.count}
                     </span>
                   </button>
@@ -684,8 +693,8 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
             {/* Apps Grid/List */}
             <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'space-y-4'}>
               {filteredApps.map((app) => (
-                <div 
-                  key={app.id} 
+                <div
+                  key={app.id}
                   className={`${currentTheme.card} rounded-xl border ${currentTheme.border} p-6 hover:shadow-lg transition-all duration-200 group relative`}
                 >
                   {/* App Header */}
@@ -711,17 +720,16 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-col items-end space-y-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        app.status === 'active' ? 'bg-green-100 text-green-800' :
-                        app.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
-                        app.status === 'development' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${app.status === 'active' ? 'bg-green-100 text-green-800' :
+                          app.status === 'inactive' ? 'bg-gray-100 text-gray-800' :
+                            app.status === 'development' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                        }`}>
                         {app.status}
                       </span>
-                      <button 
+                      <button
                         onClick={() => toggleFavorite(app.id)}
                         className={`p-1 rounded transition-colors ${app.isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
                       >
@@ -766,24 +774,23 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                   <div className="flex items-center space-x-2">
                     {app.isInstalled ? (
                       <>
-                        <button 
+                        <button
                           onClick={() => launchWidget(app.id)}
                           className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
                         >
                           <Play size={16} />
                           <span>Launch</span>
                         </button>
-                        <button 
+                        <button
                           onClick={() => toggleAppStatus(app.id)}
-                          className={`px-3 py-2 rounded-lg transition-colors ${
-                            app.status === 'active' 
-                              ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' 
+                          className={`px-3 py-2 rounded-lg transition-colors ${app.status === 'active'
+                              ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
                               : 'bg-green-100 text-green-700 hover:bg-green-200'
-                          }`}
+                            }`}
                         >
                           {app.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
                         </button>
-                        <button 
+                        <button
                           onClick={() => setShowAppDetails(app.id)}
                           className={`px-3 py-2 border ${currentTheme.border} rounded-lg ${currentTheme.hover} transition-colors`}
                         >
@@ -792,14 +799,14 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                       </>
                     ) : (
                       <>
-                        <button 
+                        <button
                           onClick={() => installApp(app.id)}
                           className="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"
                         >
                           <Download size={16} />
                           <span>Install</span>
                         </button>
-                        <button 
+                        <button
                           onClick={() => setShowAppDetails(app.id)}
                           className={`px-3 py-2 border ${currentTheme.border} rounded-lg ${currentTheme.hover} transition-colors`}
                         >
@@ -820,7 +827,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                 <p className={`${currentTheme.textMuted} mb-6`}>
                   Try adjusting your search criteria or explore different categories
                 </p>
-                <button 
+                <button
                   onClick={() => {
                     setSearchQuery('');
                     setSelectedCategory('all');
@@ -841,14 +848,14 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
           <div className={`${currentTheme.card} rounded-xl p-6 w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto`}>
             <div className="flex items-center justify-between mb-6">
               <h2 className={`text-xl font-bold ${currentTheme.text}`}>Create New Mini App</h2>
-              <button 
+              <button
                 onClick={() => setIsAppBuilderOpen(false)}
                 className={`p-2 rounded-lg ${currentTheme.hover}`}
               >
                 <X size={20} />
               </button>
             </div>
-            
+
             <div className="text-center py-12">
               <Code size={64} className="mx-auto text-purple-500 mb-4" />
               <h3 className={`text-lg font-semibold ${currentTheme.text} mb-2`}>App Builder Studio</h3>
@@ -880,14 +887,14 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                 <>
                   <div className="flex items-center justify-between mb-6">
                     <h2 className={`text-xl font-bold ${currentTheme.text}`}>{app.name}</h2>
-                    <button 
+                    <button
                       onClick={() => setShowAppDetails(null)}
                       className={`p-2 rounded-lg ${currentTheme.hover}`}
                     >
                       <X size={20} />
                     </button>
                   </div>
-                  
+
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
                       <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-400 rounded-xl flex items-center justify-center text-3xl">
@@ -943,7 +950,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                     <div className="flex space-x-3">
                       {app.isInstalled ? (
                         <>
-                          <button 
+                          <button
                             onClick={() => {
                               launchWidget(app.id);
                               setShowAppDetails(null);
@@ -952,7 +959,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                           >
                             Launch App
                           </button>
-                          <button 
+                          <button
                             onClick={() => uninstallApp(app.id)}
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
                           >
@@ -960,7 +967,7 @@ const EnhancedMiniApps: React.FC<EnhancedMiniAppsProps> = ({ theme }) => {
                           </button>
                         </>
                       ) : (
-                        <button 
+                        <button
                           onClick={() => {
                             installApp(app.id);
                             setShowAppDetails(null);

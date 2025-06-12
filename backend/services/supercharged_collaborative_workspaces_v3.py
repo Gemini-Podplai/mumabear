@@ -68,7 +68,7 @@ class CollaborativeSession:
 class SuperchargedCollaborativeWorkspacesV3:
     """
     🚀 SUPERCHARGED COLLABORATIVE WORKSPACES WITH AGENTIC CONTROL
-    
+
     DEVASTATING NEW FEATURES:
     ⚡ Express Mode collaboration (6x faster responses)
     🤖 Agentic takeover capabilities
@@ -79,19 +79,19 @@ class SuperchargedCollaborativeWorkspacesV3:
     💡 Creative problem-solving sessions
     🛠️ Intelligent tool routing (E2B vs Scrapybara)
     """
-    
+
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        
+
         # Core AI capabilities
         self.express_mode = ExpressModeVertexIntegration(config.get('vertex_config', {}))
         # Note: agentic_superpowers will be injected later to avoid circular dependency
         self.agentic_superpowers = None
-        
+
         # Enhanced capabilities
         self.scrapybara_manager = EnhancedScrapybaraManager(config)
         self.code_execution = EnhancedMamaBearCodeExecution()
-        
+
         # Intelligent routing for optimal execution paths (needs other components first)
         try:
             from .enhanced_gemini_scout_orchestration import EnhancedGeminiScoutOrchestrator
@@ -104,15 +104,15 @@ class SuperchargedCollaborativeWorkspacesV3:
         except Exception as e:
             logger.warning(f"Could not initialize execution router: {e}")
             self.execution_router = None
-        
+
         # Session management
         self.active_sessions: Dict[str, CollaborativeSession] = {}
         self.session_metrics: Dict[str, Dict[str, Any]] = defaultdict(dict)
-        
+
         # Real-time collaboration features
         self.websocket_connections: Dict[str, List] = defaultdict(list)
         self.collaboration_insights: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
-        
+
         # Express agents for specialized collaboration
         self.express_agents = {
             ExpressAgentType.CODING_PAIR: self._create_coding_pair_agent(),
@@ -121,7 +121,7 @@ class SuperchargedCollaborativeWorkspacesV3:
             ExpressAgentType.DESIGN_GENIUS: self._create_design_genius_agent(),
             ExpressAgentType.INTEGRATION_MASTER: self._create_integration_master_agent()
         }
-        
+
         logger.info("🚀 Supercharged Collaborative Workspaces V3.0 initialized!")
 
     async def create_collaborative_session(
@@ -135,22 +135,22 @@ class SuperchargedCollaborativeWorkspacesV3:
         """
         🎯 CREATE NEW COLLABORATIVE SESSION WITH AGENTIC SUPERPOWERS
         """
-        
+
         session_id = str(uuid.uuid4())
-        
+
         # Initialize participants
         participants = {creator_id: ParticipantRole.DEVELOPER}
         if initial_participants:
             for participant in initial_participants:
                 participants[participant["user_id"]] = ParticipantRole(participant.get("role", "developer"))
-        
+
         # Add Mama Bear as agentic participant
         participants["mama_bear_ai"] = (
-            ParticipantRole.AGENTIC_CONTROLLER 
-            if agentic_control_level > 0.7 
+            ParticipantRole.AGENTIC_CONTROLLER
+            if agentic_control_level > 0.7
             else ParticipantRole.MAMA_BEAR
         )
-        
+
         # Create session
         session = CollaborativeSession(
             session_id=session_id,
@@ -161,17 +161,17 @@ class SuperchargedCollaborativeWorkspacesV3:
             last_activity=datetime.now(),
             agentic_control_level=agentic_control_level
         )
-        
+
         # Auto-assign express agents based on mode
         session.express_agents = self._select_optimal_express_agents(mode)
-        
+
         self.active_sessions[session_id] = session
-        
+
         # Initialize session with AI context analysis
         await self._initialize_session_context(session)
-        
+
         logger.info(f"🚀 Created collaborative session: {session_name} (ID: {session_id})")
-        
+
         return {
             "session_id": session_id,
             "session": {
@@ -193,14 +193,14 @@ class SuperchargedCollaborativeWorkspacesV3:
         role: str = "developer"
     ) -> Dict[str, Any]:
         """Join an existing collaborative session"""
-        
+
         if session_id not in self.active_sessions:
             raise ValueError(f"Session {session_id} not found")
-        
+
         session = self.active_sessions[session_id]
         session.participants[user_id] = ParticipantRole(role)
         session.last_activity = datetime.now()
-        
+
         # Notify all participants
         await self._broadcast_to_session(session_id, {
             "type": "participant_joined",
@@ -208,10 +208,10 @@ class SuperchargedCollaborativeWorkspacesV3:
             "role": role,
             "timestamp": datetime.now().isoformat()
         })
-        
+
         # Generate AI welcome and context summary
         welcome_message = await self._generate_ai_welcome(session, user_id)
-        
+
         return {
             "status": "joined",
             "session": await self._get_session_state(session_id),
@@ -227,33 +227,33 @@ class SuperchargedCollaborativeWorkspacesV3:
     ) -> Dict[str, Any]:
         """
         🧠 PROCESS COLLABORATION MESSAGE WITH AGENTIC INTELLIGENCE
-        
+
         Features:
         - Express Mode real-time analysis
         - Agentic assistance and suggestions
         - Automatic code optimization
         - Predictive collaboration insights
         """
-        
+
         if session_id not in self.active_sessions:
             raise ValueError(f"Session {session_id} not found")
-        
+
         session = self.active_sessions[session_id]
         session.last_activity = datetime.now()
-        
+
         # Express Mode analysis of the message
         analysis = await self._analyze_collaboration_message_express(message, session)
-        
+
         # Generate agentic response if appropriate
         agentic_response = None
         if session.agentic_control_level > 0.5:
             agentic_response = await self._generate_agentic_collaboration_response(
                 message, session, analysis
             )
-        
+
         # Update session insights
         await self._update_session_insights(session, message, analysis)
-        
+
         # Broadcast to all participants
         broadcast_data = {
             "type": "collaboration_message",
@@ -263,9 +263,9 @@ class SuperchargedCollaborativeWorkspacesV3:
             "agentic_response": agentic_response,
             "timestamp": datetime.now().isoformat()
         }
-        
+
         await self._broadcast_to_session(session_id, broadcast_data)
-        
+
         return {
             "status": "processed",
             "analysis": analysis,
@@ -282,15 +282,15 @@ class SuperchargedCollaborativeWorkspacesV3:
     ) -> Dict[str, Any]:
         """
         🤖 INITIATE AGENTIC TAKEOVER MODE
-        
+
         Let Mama Bear take control and drive the collaboration session
         """
-        
+
         if session_id not in self.active_sessions:
             raise ValueError(f"Session {session_id} not found")
-        
+
         session = self.active_sessions[session_id]
-        
+
         # Update session mode and control level
         session.mode = CollaborationMode.AGENTIC_TAKEOVER
         session.agentic_control_level = {
@@ -298,13 +298,13 @@ class SuperchargedCollaborativeWorkspacesV3:
             "leadership": 0.8,
             "autonomous": 0.95
         }.get(takeover_level, 0.6)
-        
+
         # Generate agentic action plan
         action_plan = await self._generate_agentic_action_plan(task_description, session)
-        
+
         # Begin autonomous execution
         execution_results = await self._execute_agentic_plan(action_plan, session)
-        
+
         # Broadcast takeover initiation
         await self._broadcast_to_session(session_id, {
             "type": "agentic_takeover_initiated",
@@ -314,7 +314,7 @@ class SuperchargedCollaborativeWorkspacesV3:
             "initial_results": execution_results,
             "timestamp": datetime.now().isoformat()
         })
-        
+
         return {
             "status": "takeover_initiated",
             "takeover_level": takeover_level,
@@ -329,15 +329,15 @@ class SuperchargedCollaborativeWorkspacesV3:
         session: CollaborativeSession
     ) -> Dict[str, Any]:
         """Use Express Mode for ultra-fast message analysis"""
-        
+
         prompt = f"""
         🧠 ANALYZE COLLABORATION MESSAGE WITH EXPRESS MODE
-        
+
         Message: {json.dumps(message, indent=2)}
         Session Mode: {session.mode.value}
         Participants: {list(session.participants.keys())}
         Current Context: {json.dumps(session.shared_state, indent=2)[:500]}
-        
+
         Analyze:
         1. Intent and priority
         2. Required expertise/agents
@@ -345,10 +345,10 @@ class SuperchargedCollaborativeWorkspacesV3:
         4. Collaboration opportunities
         5. Code/technical implications
         6. Next step recommendations
-        
+
         Return detailed JSON analysis.
         """
-        
+
         try:
             request = {
                 "message": prompt,
@@ -360,9 +360,9 @@ class SuperchargedCollaborativeWorkspacesV3:
                 "user_id": "collaboration_session",
                 "mode": "express"
             }
-            
+
             result = await self.express_mode.process_express_request(request)
-            
+
             return {
                 "intent": "general",
                 "priority": "medium",
@@ -373,7 +373,7 @@ class SuperchargedCollaborativeWorkspacesV3:
                 "recommended_agents": [],
                 "confidence": 0.85
             }
-            
+
         except Exception as e:
             logger.error(f"Express Mode collaboration analysis failed: {e}")
             return {
@@ -389,10 +389,10 @@ class SuperchargedCollaborativeWorkspacesV3:
         analysis: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """Generate intelligent agentic response to collaboration message"""
-        
+
         if analysis.get("autonomous_potential", 0) < 0.4:
             return None
-        
+
         # Use agentic superpowers for response generation if available
         if self.agentic_superpowers is not None:
             agentic_result = await self.agentic_superpowers.process_user_interaction(
@@ -406,7 +406,7 @@ class SuperchargedCollaborativeWorkspacesV3:
                 },
                 allow_autonomous_actions=session.agentic_control_level > 0.6
             )
-            
+
             return {
                 "type": "agentic_assistance",
                 "response": agentic_result["response"],
@@ -426,7 +426,7 @@ class SuperchargedCollaborativeWorkspacesV3:
 
     def _select_optimal_express_agents(self, mode: CollaborationMode) -> List[ExpressAgentType]:
         """Select optimal express agents based on collaboration mode"""
-        
+
         agent_mapping = {
             CollaborationMode.PAIR_PROGRAMMING: [ExpressAgentType.CODING_PAIR, ExpressAgentType.DEBUG_DETECTIVE],
             CollaborationMode.CODE_REVIEW: [ExpressAgentType.CODING_PAIR, ExpressAgentType.INTEGRATION_MASTER],
@@ -437,7 +437,7 @@ class SuperchargedCollaborativeWorkspacesV3:
             CollaborationMode.LEARNING: [ExpressAgentType.RESEARCH_WIZARD, ExpressAgentType.CODING_PAIR],
             CollaborationMode.AGENTIC_TAKEOVER: list(ExpressAgentType)  # All agents available
         }
-        
+
         return agent_mapping.get(mode, [ExpressAgentType.CODING_PAIR])
 
     def _create_coding_pair_agent(self) -> Dict[str, Any]:
@@ -487,18 +487,18 @@ class SuperchargedCollaborativeWorkspacesV3:
 
     async def _initialize_session_context(self, session: CollaborativeSession):
         """Initialize AI context for the session"""
-        
+
         context_prompt = f"""
         🎯 INITIALIZE COLLABORATIVE SESSION CONTEXT
-        
+
         Session: {session.name}
         Mode: {session.mode.value}
         Participants: {list(session.participants.keys())}
         Agentic Level: {session.agentic_control_level}
-        
+
         Generate initial context and recommendations for optimal collaboration.
         """
-        
+
         try:
             request = {
                 "message": context_prompt,
@@ -510,29 +510,29 @@ class SuperchargedCollaborativeWorkspacesV3:
                 "user_id": "session_system",
                 "mode": "express"
             }
-            
+
             result = await self.express_mode.process_express_request(request)
-            
+
             session.shared_state["ai_context"] = {"initialized": True}
             session.real_time_insights.append({
                 "type": "session_initialization",
                 "insights": ["Session initialized with AI context"],
                 "timestamp": datetime.now().isoformat()
             })
-            
+
         except Exception as e:
             logger.error(f"Session context initialization failed: {e}")
 
     async def _broadcast_to_session(self, session_id: str, data: Dict[str, Any]):
         """Broadcast data to all session participants via WebSocket"""
-        
+
         # In a real implementation, this would use actual WebSocket connections
         logger.info(f"Broadcasting to session {session_id}: {data['type']}")
-        
+
         # Store for retrieval by participants
         if session_id not in self.session_metrics:
             self.session_metrics[session_id] = {"messages": []}
-        
+
         self.session_metrics[session_id]["messages"].append({
             "data": data,
             "timestamp": datetime.now().isoformat()
@@ -540,7 +540,7 @@ class SuperchargedCollaborativeWorkspacesV3:
 
     async def _get_session_ai_capabilities(self, session: CollaborativeSession) -> Dict[str, Any]:
         """Get AI capabilities available to the session"""
-        
+
         return {
             "express_mode_enabled": True,
             "agentic_control_level": session.agentic_control_level,
@@ -554,7 +554,7 @@ class SuperchargedCollaborativeWorkspacesV3:
 
     async def get_active_sessions(self) -> Dict[str, Any]:
         """Get all active collaborative sessions"""
-        
+
         sessions_data = {}
         for session_id, session in self.active_sessions.items():
             sessions_data[session_id] = {
@@ -567,7 +567,7 @@ class SuperchargedCollaborativeWorkspacesV3:
                 "express_agents": [agent.value for agent in session.express_agents],
                 "insights_count": len(session.real_time_insights)
             }
-        
+
         return {
             "active_sessions": sessions_data,
             "total_sessions": len(self.active_sessions),
@@ -576,13 +576,13 @@ class SuperchargedCollaborativeWorkspacesV3:
 
     async def get_session_metrics(self, session_id: str) -> Dict[str, Any]:
         """Get detailed metrics for a specific session"""
-        
+
         if session_id not in self.active_sessions:
             raise ValueError(f"Session {session_id} not found")
-        
+
         session = self.active_sessions[session_id]
         metrics = self.session_metrics.get(session_id, {})
-        
+
         return {
             "session_id": session_id,
             "duration_minutes": (datetime.now() - session.created_at).total_seconds() / 60,
