@@ -19,6 +19,7 @@ import AgentWorkbench from './experiences/AgentWorkbench'
 import ExecutionRouter from './experiences/ExecutionRouter'
 import SystemMonitor from './experiences/SystemMonitor'
 import ThemeStudio from './experiences/ThemeStudio'
+import AIMessengerExperience from './experiences/AIMessengerExperience'
 
 function App() {
   const { activeExperience } = useSanctuaryStore()
@@ -45,6 +46,8 @@ function App() {
         return <ComputerUse />
       case 'live-api-studio':
         return <LiveAPIStudio />
+      case 'ai-messenger':
+        return <AIMessengerExperience />
       case 'agents':
         return <AgentWorkbench />
       case 'router':

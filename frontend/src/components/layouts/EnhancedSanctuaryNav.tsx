@@ -3,7 +3,7 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { 
   Home, MessageSquare, Search, Bot, Zap, Monitor, Package, 
   ChevronDown, ChevronRight, Menu, User, Activity, Settings,
-  Palette, Code, Globe, Sparkles, Bell, Computer, Layers
+  Palette, Code, Globe, Sparkles, Bell, Computer, Layers, Users
 } from 'lucide-react'
 import { useSanctuaryStore } from '@/stores/sanctuaryStore'
 import { cn } from '@/lib/utils'
@@ -31,6 +31,15 @@ const NAVIGATION_STRUCTURE = {
       icon: Layers,
       path: 'multi-modal-chat',
       description: 'Enhanced multimedia conversations'
+    },
+    {
+      id: 'ai-messenger',
+      label: 'AI Messenger',
+      icon: Users,
+      path: 'ai-messenger',
+      badge: { text: '52 Models', type: 'success' as const },
+      isNew: true,
+      description: 'World\'s first AI instant messenger'
     }
   ],
   ai_systems: [
