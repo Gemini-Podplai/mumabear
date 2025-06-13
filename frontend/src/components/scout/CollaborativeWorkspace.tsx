@@ -6,7 +6,7 @@ import {
     CodeBracketIcon,
     CommandLineIcon,
     CpuChipIcon,
-    CursorArrowIcon,
+    CursorArrowRaysIcon,
     GlobeAltIcon,
     PaperClipIcon,
     UsersIcon
@@ -15,11 +15,11 @@ import { AnimatePresence, motion, useAnimationControls } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { workspaceService } from '../../services/workspaceService';
 import {
-    BrowserView,
-    CollaborativePresence,
-    ResearchContext,
-    ResearchMessage,
-    VirtualMachine
+    type BrowserView,
+    type CollaborativePresence,
+    type ResearchContext,
+    type ResearchMessage,
+    type VirtualMachine
 } from '../../types';
 import { FileTree } from './FileTree';
 import { FloatingBrowser } from './FloatingBrowser';
@@ -346,7 +346,7 @@ export const CollaborativeWorkspace: React.FC = () => {
                         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                     >
                         <div className="relative">
-                            <CursorArrowIcon
+                            <CursorArrowRaysIcon
                                 className="w-6 h-6"
                                 style={{ color: collaborator.color }}
                             />

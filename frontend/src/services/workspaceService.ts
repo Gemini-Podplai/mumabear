@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { CollaborativePresence, VirtualMachine } from '../types';
+import { type CollaborativePresence, type VirtualMachine } from '../types';
 
 const BACKEND_URL = 'http://localhost:5000';
 const socket = io(BACKEND_URL);

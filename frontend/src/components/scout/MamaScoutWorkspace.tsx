@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, CommandLineIcon, ComputerDesktopIcon, DocumentIcon, EyeIcon, FolderIcon, PlusIcon } from '@heroicons/react/24/solid';
-import { AnimatePresence, motion, useAnimationControls, Variants } from 'framer-motion';
+import { AnimatePresence, motion, useAnimationControls, type Variants } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { workspaceService } from '../../services/workspaceService';
 import { FilePreview } from './FilePreview';

@@ -1,4 +1,4 @@
-import { SearchIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { workspaceService } from '../../services/workspaceService';
 

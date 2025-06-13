@@ -9,7 +9,7 @@ interface FloatingTerminalProps {
     taskId?: string;
 }
 
-export const FloatingTerminal: React.FC<FloatingTerminalProps> = ({ isOpen, onClose, taskId }) => {
+export const FloatingTerminal: React.FC<FloatingTerminalProps> = ({ isOpen, onClose, taskId: _taskId }) => {
     const [command, setCommand] = useState('');
     const [history, setHistory] = useState<{ command: string; output: string }[]>([]);
     const [isExpanded, setIsExpanded] = useState(false);

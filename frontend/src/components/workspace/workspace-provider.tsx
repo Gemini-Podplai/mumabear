@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useCollaborativeWorkspace } from '../hooks/use-collaborative-workspace';
-import { FloatingComponent } from './workspace/fluid-transition';
-import { FloatingToolbar } from './workspace/floating-toolbar';
-import { CollaboratorPresence } from './workspace/collaborator-presence';
-import { CollaborationInsights } from './workspace/collaboration-insights';
+import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
+import { FloatingComponent } from './fluid-transition';
+import { FloatingToolbar } from './floating-toolbar';
+import { CollaboratorPresence } from './collaborator-presence';
+import { CollaborationInsights } from './collaboration-insights';
 
 interface WorkspaceContextType {
   sessionId: string;

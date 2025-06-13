@@ -1,16 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { AIModelMessenger } from './AIModelMessenger';
 import { NotificationProvider, NotificationBell, NotificationPanel, NotificationSettings } from './NotificationSystem';
 import { AIAnalytics } from './AIAnalytics';
 import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
-import { BarChart3, Settings, Bell } from 'lucide-react';
+import { BarChart3, Settings } from 'lucide-react';
 
 const MessengerPanel: React.FC = () => {
-    const { expressMode } = useCollaborativeWorkspace();
+    const { isConnected } = useCollaborativeWorkspace({
+        sessionId: 'messenger-session',
+        userId: 'user-1',
+        userName: 'User'
+    });
     const [showNotifications, setShowNotifications] = useState(false);
     const [showAnalytics, setShowAnalytics] = useState(false);
     const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+
+    // Express mode based on connection status for faster interactions
+    const expressMode = isConnected;
 
     return (
         <NotificationProvider>

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AgentVariant, WorkflowStep } from '../types/agents';
+import { type AgentVariant, type WorkflowStep } from '../types/agents';
 
 interface AgentState {
     agents: AgentVariant[];

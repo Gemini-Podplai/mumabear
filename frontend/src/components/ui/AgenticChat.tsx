@@ -25,9 +25,10 @@ interface AgenticChatProps {
         rag?: boolean;
         browser?: boolean;
     };
+    context?: Record<string, any>;
 }
 
-export const AgenticChat: React.FC<AgenticChatProps> = ({ agentId, agentName, features = { file: true, image: true, audio: true, video: true, rag: true, browser: true } }) => {
+export const AgenticChat: React.FC<AgenticChatProps> = ({ agentId, agentName, features = { file: true, image: true, audio: true, video: true, rag: true, browser: true }, context = {} }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
