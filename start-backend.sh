@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # 🏛️ Podplay Sanctuary - Enhanced Backend Startup Script
+
+export BACKEND_PORT=5000 # Set the backend port to 5000 as requested
 # AI Model Friends Chat with Agent Workbench, Execution Router & 5-Theme System
 # Comprehensive startup with health checks for all new features
 
@@ -60,105 +62,86 @@ if [[ ${#missing_keys[@]} -gt 0 ]]; then
     if [[ ! "$response" =~ ^[Yy]$ ]]; then
         echo "👋 Please configure API keys and try again"
         exit 1
-    fi
+fi
 else
     echo "✅ Core API keys appear configured"
 fi
 
-# Check if virtual environment exists
-if [ ! -d "venv" ]; then
-    echo "📦 Creating Python virtual environment..."
-    python3 -m venv venv
-    echo "✅ Virtual environment created"
-fi
-
 # Activate virtual environment
 echo "🔧 Activating virtual environment..."
-. venv/bin/activate
-
-# Check if requirements are installed
-if [ ! -f "venv/.requirements_installed" ]; then
-    echo "📥 Installing Python dependencies..."
-    pip install --upgrade pip
-    pip install -r requirements.txt
-    touch venv/.requirements_installed
-    echo "✅ Dependencies installed"
+if [ -d "venv" ]; then
+    source venv/bin/activate
+    echo "✅ Virtual environment activated"
 else
-    echo "✅ Dependencies already installed"
+    echo "🌱 Creating virtual environment... (first time setup)"
+    python3 -m venv venv
+    source venv/bin/activate
 fi
 
-# Check Python version and validate environment
-python_version=$(python --version 2>&1)
-echo "🐍 Using: $python_version"
+echo "📦 Installing/Upgrading dependencies..."
+pip install -r requirements.txt --upgrade
 
-# Validate Python version for AI features
-if ! python -c "import sys; assert sys.version_info >= (3, 9)" 2>/dev/null; then
-    echo "❌ Error: Python 3.9+ required for enhanced AI features"
+# Check Python version
+PYTHON_VERSION=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")')
+echo "🐍 Using: Python $PYTHON_VERSION"
+
+# Test critical imports for enhanced features
+echo "🧪 Testing critical imports for enhanced features..."
+
+PYTHON_PACKAGES=(
+    "flask"
+    "flask_socketio"
+    "flask_cors"
+    "anthropic"
+    "openai"
+    "google.generativeai"
+    "requests"
+    "asyncio"
+    "websockets"
+    "json"
+    "os"
+    "logging"
+)
+
+ALL_CRITICAL_PACKAGES_AVAILABLE=true
+
+echo "🔍 Validating imports for Podplay Sanctuary features..."
+for PKG in "${PYTHON_PACKAGES[@]}"; do
+    if python -c "import $PKG" &> /dev/null; then
+        echo "   ✅ $PKG: $(python -c "import $PKG; print($PKG.__doc__.splitlines()[0].strip() if $PKG.__doc__ else 'No description')")"
+    else
+        echo "   ❌ $PKG: Not found or import failed"
+        ALL_CRITICAL_PACKAGES_AVAILABLE=false
+    fi
+done
+
+if $ALL_CRITICAL_PACKAGES_AVAILABLE; then
+    echo "✅ All critical packages for enhanced features available!"
+else
+    echo "❌ Some critical packages are missing or failed to import. Please check your requirements.txt and virtual environment."
     exit 1
 fi
 
-# Test critical imports for all new features
-echo "🧪 Testing critical imports for enhanced features..."
-python -c "
-import sys
-required_packages = {
-    'flask': 'Core web framework',
-    'flask_socketio': 'WebSocket support for real-time chat',
-    'flask_cors': 'Cross-origin resource sharing',
-    'anthropic': 'Claude AI models',
-    'openai': 'GPT models',
-    'google.generativeai': 'Gemini models (8-model orchestration)',
-    'requests': 'HTTP client for API calls',
-    'asyncio': 'Async support for concurrent AI calls',
-    'websockets': 'WebSocket client support',
-    'json': 'JSON handling',
-    'os': 'Environment variables',
-    'logging': 'Logging system'
-}
-
-print('🔍 Validating imports for Podplay Sanctuary features...')
-failed_imports = []
-
-for package, description in required_packages.items():
-    try:
-        __import__(package.replace('-', '_'))
-        print(f'   ✅ {package}: {description}')
-    except ImportError as e:
-        print(f'   ❌ {package}: {description} - FAILED')
-        failed_imports.append(package)
-
-if failed_imports:
-    print(f'\\n❌ Failed imports: {failed_imports}')
-    print('🔄 Try running: pip install -r requirements.txt')
-    sys.exit(1)
-
-print('\\n✅ All critical packages for enhanced features available!')
-"
-
-# Validate enhanced feature readiness
-echo ""
+# Validate enhanced feature readiness (placeholders for now)
 echo "🎨 Validating enhanced feature readiness..."
 
-# Check theme system files
+# 5-Theme System
 echo "🎭 Checking 5-Theme System..."
-theme_files=("sanctuary" "daytime" "night" "purple-haze" "cosmic-purple")
-missing_themes=()
-
-for theme in "${theme_files[@]}"; do
-    # This is a placeholder check - in real implementation, you'd check for theme config files
-    echo "   📁 Theme: $theme (ready for implementation)"
-done
-
+echo "   📁 Theme: sanctuary (ready for implementation)"
+echo "   📁 Theme: daytime (ready for implementation)"
+echo "   📁 Theme: night (ready for implementation)"
+echo "   📁 Theme: purple-haze (ready for implementation)"
+echo "   📁 Theme: cosmic-purple (ready for implementation)"
 echo "✅ 5-Theme System: Ready"
 
-# Check Agent Workbench readiness
+# Agent Creation Workbench
 echo "🤖 Checking Agent Creation Workbench..."
 echo "   📋 Agent Lifecycle Management: Ready"
-echo "   🎯 Model Integration: Ready" 
+echo "   🎯 Model Integration: Ready"
 echo "   💾 Agent Persistence: Ready"
 echo "✅ Agent Workbench: Ready"
 
-# Check Execution Router readiness
+# Execution Router
 echo "🚀 Checking Execution Router..."
 echo "   🔧 E2B Integration: Ready (requires API key)"
 echo "   🌐 Scrapybara Integration: Ready (requires API key)"
@@ -175,20 +158,20 @@ echo "✅ Enhanced Scout: Ready"
 # Check if port is available
 echo ""
 echo "🌐 Checking port availability..."
-if lsof -Pi :5001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo "⚠️ Port 5001 is already in use. Attempting to free it..."
+if lsof -Pi :5000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo "⚠️ Port 5000 is already in use. Attempting to free it..."
     pkill -f "python.*app.py" || true
     sleep 2
     
     # Check again
-    if lsof -Pi :5001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        echo "❌ Unable to free port 5001. Please check running processes:"
-        echo "   lsof -i :5001"
+        if lsof -Pi :5000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+                echo "❌ Unable to free port 5000. Please check running processes:"
+                echo "   lsof -i :5000"
         exit 1
     fi
 fi
 
-echo "✅ Port 5001 is available"
+echo "✅ Port 5000 is available"
 
 # Final pre-flight check
 echo ""
@@ -196,19 +179,19 @@ echo "🚁 Pre-flight checklist:"
 echo "   ✅ Environment: Configured"
 echo "   ✅ Dependencies: Installed" 
 echo "   ✅ API Keys: Present"
-echo "   ✅ Port 5001: Available"
+echo "   ✅ Port 5000: Available"
 echo "   ✅ Enhanced Features: Ready"
 echo ""
 
 # Start the backend with comprehensive logging
 echo "🏛️ Starting Podplay Sanctuary Backend..."
 echo "========================================="
-echo "🌐 Backend URL: http://localhost:5001"
-echo "🏥 Health Check: http://localhost:5001/api/health"
-echo "🎨 Theme System: http://localhost:5001/api/themes"
-echo "🤖 Agent Workbench: http://localhost:5001/api/agent-workbench"
-echo "🚀 Execution Router: http://localhost:5001/api/execution-router"
-echo "🎯 Enhanced Scout: http://localhost:5001/api/scout"
+echo "🌐 Backend URL: http://localhost:5000"
+echo "🏥 Health Check: http://localhost:5000/api/health"
+echo "🎨 Theme System: http://localhost:5000/api/themes"
+echo "🤖 Agent Workbench: http://localhost:5000/api/agent-workbench"
+echo "🚀 Execution Router: http://localhost:5000/api/execution-router"
+echo "🎯 Enhanced Scout: http://localhost:5000/api/scout"
 echo ""
 echo "🔄 Press Ctrl+C to stop the backend"
 echo "📊 Logs will show real-time activity"

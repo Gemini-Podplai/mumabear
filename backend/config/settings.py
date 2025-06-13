@@ -126,8 +126,8 @@ class Config:
     
     # Frontend Configuration
     FRONTEND_PORT = int(os.getenv('FRONTEND_PORT', 3000))
-    BACKEND_PORT = int(os.getenv('BACKEND_PORT', 5001))
-    VITE_API_BASE_URL = os.getenv('VITE_API_BASE_URL', 'http://localhost:5001')
+    BACKEND_PORT = int(os.getenv('BACKEND_PORT', 5000))
+    VITE_API_BASE_URL = os.getenv('VITE_API_BASE_URL', 'http://localhost:5000')
     
     # MCP Configuration
     MCP_AGENT_ENABLED = os.getenv('MCP_AGENT_ENABLED', 'True').lower() == 'true'

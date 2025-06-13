@@ -11,6 +11,7 @@ mem0ai>=0.0.5
 python-dotenv>=1.0.0
 redis>=4.5.0
 scrapybara>=1.0.0
+beautifulsoup4>=4.12.2
 websockets>=11.0.2
 pydantic>=2.5.0
 dataclasses-json>=0.6.0
@@ -33,4 +34,3 @@ eventlet>=0.33.0
 
 # Enhanced async and concurrency support
 asyncio>=3.4.3
-concurrent-futures>=3.1.1

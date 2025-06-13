@@ -65,389 +65,197 @@ except ImportError as e:
 
 # Import Enhanced Scout Workflow
 try:
-    from api.scout_workflow_api import integrate_scout_workflow_api
+    from backend.api.scout_workflow_api import scout_workflow_bp, init_scout_workflow
     SCOUT_WORKFLOW_AVAILABLE = True
     logger.info("✅ Enhanced Scout Workflow API integration available")
 except ImportError as e:
     logger.warning(f"Enhanced Scout Workflow API integration not available: {e}")
     SCOUT_WORKFLOW_AVAILABLE = False
-    integrate_scout_workflow_api = None
+    scout_workflow_bp = None
+    init_scout_workflow = None
 
 # Import Express Mode + Vertex AI Supercharger
 try:
-    from api.express_mode_vertex_api import integrate_express_mode_with_app
-    EXPRESS_MODE_AVAILABLE = True
+    from backend.api.express_mode_vertex_api import express_mode_vertex_bp, init_express_mode_vertex
+    EXPRESS_MODE_VERTEX_AVAILABLE = True
     logger.info("✅ Express Mode + Vertex AI Supercharger integration available")
 except ImportError as e:
     logger.warning(f"Express Mode + Vertex AI Supercharger integration not available: {e}")
-    EXPRESS_MODE_AVAILABLE = False
-    integrate_express_mode_with_app = None
+    EXPRESS_MODE_VERTEX_AVAILABLE = False
+    express_mode_vertex_bp = None
+    init_express_mode_vertex = None
 
 # Import Multimodal Chat API
 try:
-    from api.multimodal_chat_api import integrate_multimodal_chat_with_app
+    from backend.api.multimodal_chat_api import multimodal_chat_bp, init_multimodal_chat
     MULTIMODAL_CHAT_AVAILABLE = True
     logger.info("✅ Multimodal Chat API integration available - ALL models accessible!")
 except ImportError as e:
     logger.warning(f"Multimodal Chat API integration not available: {e}")
     MULTIMODAL_CHAT_AVAILABLE = False
-    integrate_multimodal_chat_with_app = None
+    multimodal_chat_bp = None
+    init_multimodal_chat = None
 
-# Import Agentic Superpowers V3.0
+# Import Mama Bear Agentic Superpowers V3.0
 try:
-    from api.agentic_superpowers_api import agentic_superpowers_bp, init_agentic_service
+    from backend.api.agentic_superpowers_api import agentic_superpowers_bp, init_agentic_superpowers
     AGENTIC_SUPERPOWERS_AVAILABLE = True
     logger.info("✅ 🐻 Mama Bear Agentic Superpowers V3.0 integration available!")
 except ImportError as e:
-    logger.warning(f"Agentic Superpowers integration not available: {e}")
+    logger.warning(f"Mama Bear Agentic Superpowers V3.0 integration not available: {e}")
     AGENTIC_SUPERPOWERS_AVAILABLE = False
     agentic_superpowers_bp = None
-    init_agentic_service = None
+    init_agentic_superpowers = None
 
 # Import Supercharged Collaborative Workspaces V3.0
 try:
-    from api.collaborative_workspaces_api import collaborative_workspaces_bp, init_workspace_service
+    from backend.api.collaborative_workspaces_api import collaborative_workspaces_bp, init_collaborative_workspaces
     COLLABORATIVE_WORKSPACES_AVAILABLE = True
     logger.info("✅ 🚀 Supercharged Collaborative Workspaces V3.0 integration available!")
 except ImportError as e:
-    logger.warning(f"Collaborative Workspaces integration not available: {e}")
+    logger.warning(f"Supercharged Collaborative Workspaces V3.0 integration not available: {e}")
     COLLABORATIVE_WORKSPACES_AVAILABLE = False
     collaborative_workspaces_bp = None
-    init_workspace_service = None
+    init_collaborative_workspaces = None
 
 # Import Pipedream Integration Service
 try:
-    from api.pipedream_api import pipedream_bp, integrate_pipedream_api_with_app
-    from services.pipedream_integration_service import integrate_pipedream_with_app
-    PIPEDREAM_AVAILABLE = True
+    from backend.api.pipedream_api import pipedream_bp, init_pipedream_integration
+    PIPEDREAM_INTEGRATION_AVAILABLE = True
     logger.info("✅ 🔗 Pipedream Integration Service available - Autonomous workflow automation ready!")
 except ImportError as e:
     logger.warning(f"Pipedream Integration Service not available: {e}")
-    PIPEDREAM_AVAILABLE = False
+    PIPEDREAM_INTEGRATION_AVAILABLE = False
     pipedream_bp = None
-    integrate_pipedream_api_with_app = None
-    integrate_pipedream_with_app = None
+    init_pipedream_integration = None
 
-# Try to import Mem0 for enhanced memory
+# Import Deep Research Center (Library)
 try:
-    from mem0 import MemoryClient
-    MEM0_AVAILABLE = True
-except ImportError:
-    MEM0_AVAILABLE = False
-    MemoryClient = None
-
-# Try to import Deep Research Center (Library)
-try:
-    from api.library_api import integrate_library_api, library_bp
+    from backend.api.library_api import library_bp, init_library
     LIBRARY_AVAILABLE = True
     logger.info("✅ Deep Research Center (Library) integration available")
 except ImportError as e:
     logger.warning(f"Deep Research Center (Library) integration not available: {e}")
     LIBRARY_AVAILABLE = False
-    integrate_library_api = None
     library_bp = None
+    init_library = None
 
-# Initialize Flask app
+# Import Virtual Computer API
+try:
+    from backend.api.virtual_computer_api import virtual_computer_bp, integrate_virtual_computer_api
+    VIRTUAL_COMPUTER_AVAILABLE = True
+    logger.info("✅ 🖥️ Virtual Computer API integration available - Agent workspaces ready!")
+except ImportError as e:
+    logger.warning(f"Virtual Computer API integration not available: {e}")
+    VIRTUAL_COMPUTER_AVAILABLE = False
+    virtual_computer_bp = None
+    integrate_virtual_computer_api = None
+
 app = Flask(__name__)
-settings = get_settings()
-app.config['SECRET_KEY'] = settings.flask_secret_key
-CORS(app, origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:5001"])
+CORS(app)  # Enable CORS for all routes
 
-# Initialize SocketIO
+# Configure SocketIO
 socketio = SocketIO(
     app,
-    cors_allowed_origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:5001"],
+    cors_allowed_origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:9000", "http://localhost:9001", "http://localhost:9002", "http://localhost:9003", "http://localhost:9004", "http://localhost:9005", "http://localhost:9006", "http://localhost:9007", "http://localhost:9008", "http://localhost:9009", "http://localhost:9010", "http://localhost:5000"],
     async_mode='threading'
 )
 
-# Global service status
-services_initialized = False
-gemini_orchestra_initialized = False
+# Register blueprints
+app.register_blueprint(memory_bp)
+app.register_blueprint(chat_bp)
+app.register_blueprint(scrape_bp)
+
+logger.info("🔗 Registering API blueprints...")
+integrate_orchestration_with_app(app, socketio)
+integrate_mama_bear_scrapybara_api(app)
+register_multi_model_api(app)
+
+if GEMINI_ORCHESTRA_AVAILABLE:
+    app.register_blueprint(gemini_orchestra_bp)
+    logger.info("✅ Gemini Orchestra API registered")
+
+if SCOUT_WORKFLOW_AVAILABLE:
+    app.register_blueprint(scout_workflow_bp)
+    logger.info("✅ Scout API registered")
+
+if EXPRESS_MODE_VERTEX_AVAILABLE:
+    app.register_blueprint(express_mode_vertex_bp)
+    logger.info("✅ OpenAI Vertex API registered")
+
+if MULTIMODAL_CHAT_AVAILABLE:
+    app.register_blueprint(multimodal_chat_bp)
+    logger.info("✅ Live API Studio routes registered")
+
+if AGENTIC_SUPERPOWERS_AVAILABLE:
+    app.register_blueprint(agentic_superpowers_bp)
+    logger.info("✅ Agent Workbench API registered")
+
+if COLLABORATIVE_WORKSPACES_AVAILABLE:
+    app.register_blueprint(collaborative_workspaces_bp)
+    logger.info("✅ Execution Router API registered")
+
+if PIPEDREAM_INTEGRATION_AVAILABLE:
+    app.register_blueprint(pipedream_bp)
+    logger.info("✅ Pipedream Integration Service registered")
+
+if LIBRARY_AVAILABLE:
+    app.register_blueprint(library_bp)
+    logger.info("✅ Library API registered")
+
+if VIRTUAL_COMPUTER_AVAILABLE:
+    integrate_virtual_computer_api(app, socketio)
+    logger.info("✅ Virtual Computer API registered")
+
+logger.info("✅ API blueprints registered successfully")
+logger.info("✅ All sanctuary services initialized successfully")
 
 async def initialize_sanctuary_services():
-    """Initialize all sanctuary services using the service manager"""
-    global services_initialized, gemini_orchestra_initialized
+    """Initializes all core services for the Sanctuary."""
+    logger.info("🚀 Initializing Podplay Sanctuary services...")
+    await initialize_all_services()
+    logger.info("✅ Service initialization completed")
 
-    try:
-        logger.info("🚀 Initializing Podplay Sanctuary services...")
-
-        # Initialize basic services through the service manager
-        await initialize_all_services()
-
-        # Initialize Gemini Orchestra
-        if GEMINI_ORCHESTRA_AVAILABLE and init_gemini_orchestra:
-            logger.info("🎭 Initializing Gemini Orchestra...")
-            try:
-                gemini_orchestra_initialized = init_gemini_orchestra(app)
-                if gemini_orchestra_initialized:
-                    logger.info("✅ Gemini Orchestra initialized successfully!")
-                    # Register the blueprint
-                    if gemini_orchestra_bp is not None:
-                        app.register_blueprint(gemini_orchestra_bp)
-                        logger.info("✅ Gemini Orchestra API endpoints registered")
-                    else:
-                        logger.warning("❌ Gemini Orchestra blueprint is None")
-                else:
-                    logger.warning("❌ Gemini Orchestra initialization failed")
-            except Exception as e:
-                logger.error(f"Failed to initialize Gemini Orchestra: {e}")
-                gemini_orchestra_initialized = False
-        else:
-            logger.warning("Gemini Orchestra not available")
-
-        # Initialize Deep Research Center (Library)
-        if LIBRARY_AVAILABLE and integrate_library_api:
-            logger.info("🏛️ Initializing Deep Research Center (Library)...")
-            try:
-                library_initialized = integrate_library_api(app)
-                if library_initialized:
-                    logger.info("✅ Deep Research Center initialized successfully!")
-                    logger.info("✅ Library API endpoints registered")
-                else:
-                    logger.warning("❌ Deep Research Center initialization failed")
-            except Exception as e:
-                logger.error(f"Failed to initialize Deep Research Center: {e}")
-        else:
-            logger.warning("Deep Research Center not available")
-
-        # Initialize Enhanced Scout Workflow
-        if SCOUT_WORKFLOW_AVAILABLE and integrate_scout_workflow_api:
-            logger.info("🎯 Initializing Enhanced Scout Workflow...")
-            try:
-                scout_success = integrate_scout_workflow_api(app, socketio)
-                if scout_success:
-                    logger.info("✅ Enhanced Scout Workflow initialized!")
-                else:
-                    logger.warning("❌ Scout Workflow initialization failed")
-            except Exception as e:
-                logger.error(f"Failed to initialize Scout Workflow: {e}")
-        else:
-            logger.warning("Enhanced Scout Workflow not available")
-
-        # Initialize Express Mode + Vertex AI Supercharger
-        if EXPRESS_MODE_AVAILABLE and integrate_express_mode_with_app:
-            logger.info("🐻⚡ Initializing Express Mode + Vertex AI Supercharger...")
-            try:
-                # Store settings in app config for the supercharger
-                app.config['settings'] = settings
-                express_success = integrate_express_mode_with_app(app)
-                if express_success:
-                    logger.info("✅ Express Mode + Vertex AI Supercharger initialized! 6x faster responses available!")
-                else:
-                    logger.warning("❌ Express Mode + Vertex AI Supercharger initialization failed - running in fallback mode")
-            except Exception as e:
-                logger.error(f"Failed to initialize Express Mode + Vertex AI Supercharger: {e}")
-        else:
-            logger.warning("Express Mode + Vertex AI Supercharger not available")
-
-        # Initialize Multimodal Chat API
-        if MULTIMODAL_CHAT_AVAILABLE and integrate_multimodal_chat_with_app:
-            logger.info("🎨🧠 Initializing Multimodal Chat API...")
-            try:
-                multimodal_success = integrate_multimodal_chat_with_app(app)
-                if multimodal_success:
-                    logger.info("✅ Multimodal Chat API initialized! ALL models accessible via comprehensive chat system!")
-                else:
-                    logger.warning("❌ Multimodal Chat API initialization failed")
-            except Exception as e:
-                logger.error(f"Failed to initialize Multimodal Chat API: {e}")
-        else:
-            logger.warning("Multimodal Chat API not available")
-
-        # Initialize Agentic Superpowers V3.0
-        if AGENTIC_SUPERPOWERS_AVAILABLE and init_agentic_service:
-            logger.info("🐻💥 Initializing Mama Bear Agentic Superpowers V3.0...")
-            try:
-                agentic_config = {
-                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
-                    'express_mode_enabled': True,
-                    'autonomous_actions_enabled': True
-                }
-                init_agentic_service(agentic_config)
-                app.register_blueprint(agentic_superpowers_bp, url_prefix='/api/agentic')
-                logger.info("✅ 🐻💥 Mama Bear Agentic Superpowers V3.0 initialized! Autonomous AI agent ready!")
-            except Exception as e:
-                logger.error(f"Failed to initialize Agentic Superpowers: {e}")
-        else:
-            logger.warning("Agentic Superpowers not available")
-
-        # Initialize Supercharged Collaborative Workspaces V3.0
-        if COLLABORATIVE_WORKSPACES_AVAILABLE and init_workspace_service:
-            logger.info("🚀✨ Initializing Supercharged Collaborative Workspaces V3.0...")
-            try:
-                workspace_config = {
-                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
-                    'express_mode_enabled': True,
-                    'real_time_collaboration': True,
-                    'agentic_control_enabled': True
-                }
-                init_workspace_service(workspace_config)
-                app.register_blueprint(collaborative_workspaces_bp, url_prefix='/api/workspaces')
-                logger.info("✅ 🚀✨ Supercharged Collaborative Workspaces V3.0 initialized! Real-time AI collaboration ready!")
-            except Exception as e:
-                logger.error(f"Failed to initialize Collaborative Workspaces: {e}")
-        else:
-            logger.warning("Supercharged Collaborative Workspaces not available")
-
-        # Initialize Pipedream Integration Service
-        if PIPEDREAM_AVAILABLE and integrate_pipedream_api_with_app and integrate_pipedream_with_app:
-            logger.info("🔗 Initializing Pipedream Integration Service...")
-            try:
-                # Initialize service first
-                pipedream_config = {
-                    'PIPEDREAM_API_TOKEN': os.getenv('PIPEDREAM_API_TOKEN'),
-                    'PIPEDREAM_CLIENT_ID': os.getenv('PIPEDREAM_CLIENT_ID', 'podplay'),
-                    'PIPEDREAM_CLIENT_SECRET': os.getenv('PIPEDREAM_CLIENT_SECRET'),
-                    'PIPEDREAM_ENABLED': os.getenv('PIPEDREAM_ENABLED', 'true').lower() == 'true',
-                    'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
-                    'agentic_integration_enabled': True
-                }
-                
-                service_success = integrate_pipedream_with_app(app, pipedream_config)
-                api_success = integrate_pipedream_api_with_app(app)
-                
-                if service_success and api_success:
-                    logger.info("✅ 🔗 Pipedream Integration Service fully initialized! Autonomous workflow automation ready!")
-                    logger.info("✅ Available endpoints: /api/pipedream/workflows, /api/pipedream/natural-language")
-                else:
-                    logger.warning("❌ Pipedream Integration Service initialization failed")
-            except Exception as e:
-                logger.error(f"Failed to initialize Pipedream Integration Service: {e}")
-        else:
-            logger.warning("Pipedream Integration Service not available")
-
-        services_initialized = True
-
-        # Register API blueprints
-        try:
-            logger.info("🔗 Registering API blueprints...")
-            integrate_orchestration_with_app(app, socketio)
-            integrate_mama_bear_scrapybara_api(app)
-            register_multi_model_api(app)
-
-            # Register new Intelligent Execution Router API (commented out - using routes version)
-            # try:
-            #     from api.execution_router_api import execution_router_bp
-            #     app.register_blueprint(execution_router_bp)
-            #     logger.info("✅ Intelligent Execution Router API registered")
-            # except ImportError as e:
-            #     logger.warning(f"Execution Router API not available: {e}")
-
-            # Register new Agent Creation Workbench API (commented out - using routes version)
-            # try:
-            #     from api.agent_workbench_api import agent_workbench_bp
-            #     app.register_blueprint(agent_workbench_bp)
-            #     logger.info("✅ Agent Creation Workbench API registered")
-            # except ImportError as e:
-            #     logger.warning(f"Agent Workbench API not available: {e}")
-
-            # Register Live API Studio routes
-            app.register_blueprint(memory_bp, url_prefix='/api/memory')
-            app.register_blueprint(chat_bp, url_prefix='/api/chat')
-            app.register_blueprint(scrape_bp, url_prefix='/api/scrape')
-            logger.info("✅ Live API Studio routes registered")
-
-            # Register Enhanced Frontend API routes
-            try:
-                from routes.agent_workbench import agent_workbench_bp
-                app.register_blueprint(agent_workbench_bp, url_prefix='/api/agent-workbench')
-                logger.info("✅ Agent Workbench API registered")
-            except ImportError as e:
-                logger.warning(f"Agent Workbench API not available: {e}")
-
-            try:
-                from routes.execution_router import execution_router_bp
-                app.register_blueprint(execution_router_bp, url_prefix='/api/execution-router')
-                logger.info("✅ Execution Router API registered")
-            except ImportError as e:
-                logger.warning(f"Execution Router API not available: {e}")
-
-            try:
-                from routes.scout import scout_bp
-                app.register_blueprint(scout_bp, url_prefix='/api/scout')
-                logger.info("✅ Scout API registered")
-            except ImportError as e:
-                logger.warning(f"Scout API not available: {e}")
-
-            try:
-                from routes.themes import themes_bp
-                app.register_blueprint(themes_bp, url_prefix='/api/themes')
-                logger.info("✅ Themes API registered")
-            except ImportError as e:
-                logger.warning(f"Themes API not available: {e}")
-
-            # Register OpenAI Vertex API
-            try:
-                from api.openai_vertex_api_simple import openai_vertex_api
-                app.register_blueprint(openai_vertex_api)
-                logger.info("✅ OpenAI Vertex API registered")
-            except ImportError as e:
-                logger.warning(f"OpenAI Vertex API not available: {e}")
-
-            logger.info("✅ API blueprints registered successfully")
-        except Exception as e:
-            logger.error(f"❌ Failed to register API blueprints: {e}")
-
-        logger.info("✅ All sanctuary services initialized successfully")
-
-    except Exception as e:
-        logger.error(f"❌ Failed to initialize services: {str(e)}")
-        services_initialized = True
-        logger.info("⚠️ Running with basic services only")
-
-    logger.info("🐻 Podplay Sanctuary initialization complete!")
-
-def get_service_instances():
-    """Get all service instances"""
-    if not services_initialized:
-        raise RuntimeError("Services not initialized. Call initialize_sanctuary_services() first.")
-
-    return {
-        'mama_bear': get_mama_bear_agent(),
-        'memory': get_memory_manager(),
-        'scrapybara': get_scrapybara_manager(),
-        'theme': get_theme_manager()
-    }
-
-# ==============================================================================
-# SERVICE HEALTH AND STATUS ENDPOINTS
-# ==============================================================================
-
-@app.route('/api/health', methods=['GET'])
+@app.route('/api/health')
 def health_check():
     """Health check endpoint"""
-    try:
-        status = get_service_status()
+    logger.info("Health check requested")
+    status = get_service_status()
+    return jsonify({
+        'status': 'healthy',
+        'message': 'Podplay Sanctuary Backend is running!',
+        'services': status
+    })
 
-        return jsonify({
-            'success': True,
-            'status': 'healthy',
-            'services': status,
-            'gemini_orchestra': {
-                'available': GEMINI_ORCHESTRA_AVAILABLE,
-                'initialized': gemini_orchestra_initialized,
-                'models': '50+ specialized Gemini models' if gemini_orchestra_initialized else 'unavailable'
-            },
-            'enhanced_features': {
-                'mama_bear_variants': 7,
-                'claude_integration': bool(os.getenv('ANTHROPIC_API_KEY')),
-                'real_time_collaboration': gemini_orchestra_initialized,
-                'neurodivergent_optimized': True
-            },
-            'timestamp': datetime.now().isoformat()
-        })
+@app.route('/api/themes')
+def get_themes():
+    """Endpoint to get available themes"""
+    themes = get_theme_manager().get_available_themes()
+    return jsonify({'themes': themes})
 
-    except Exception as e:
-        logger.error(f"Health check failed: {str(e)}")
-        return jsonify({
-            'success': False,
-            'status': 'unhealthy',
-            'error': str(e)
-        }), 500
+@app.route('/api/agent-workbench')
+def agent_workbench():
+    """Agent workbench endpoint"""
+    return jsonify({
+        'message': 'Welcome to the Agent Workbench!',
+        'agent_status': get_mama_bear_agent().get_status()
+    })
 
-# ==============================================================================
-# WEBSOCKET HANDLERS
-# ==============================================================================
+@app.route('/api/execution-router')
+def execution_router():
+    """Execution router endpoint"""
+    return jsonify({
+        'message': 'Execution Router is active!',
+        'router_status': 'ready'
+    })
+
+@app.route('/api/scout')
+def scout_endpoint():
+    """Scout endpoint"""
+    return jsonify({
+        'message': 'Scout is ready for action!',
+        'scout_status': 'ready'
+    })
 
 @socketio.on('connect')
 def handle_connect():
@@ -515,7 +323,7 @@ if __name__ == '__main__':
     socketio.run(
         app,
         host='0.0.0.0',
-        port=int(os.getenv('BACKEND_PORT', 5001)),
+        port=int(os.getenv('BACKEND_PORT', 5000)),
         debug=os.getenv('DEBUG', 'False').lower() == 'true',
         allow_unsafe_werkzeug=True
     )

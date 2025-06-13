@@ -60,496 +60,219 @@ class CollaborativeSession:
     created_at: datetime
     last_activity: datetime
     express_agents: List[ExpressAgentType] = field(default_factory=list)
-    agentic_control_level: float = 0.5  # 0-1, how much AI autonomy
-    shared_state: Dict[str, Any] = field(default_factory=dict)
-    code_context: Dict[str, Any] = field(default_factory=dict)
-    real_time_insights: List[Dict[str, Any]] = field(default_factory=list)
+    real_time_insights: List[str] = field(default_factory=list)
+    agentic_control_level: float = 0.0  # 0.0 (no control) to 1.0 (full control)
+    # Add a field for the WebSocket URL for this session
+    websocket_url: str = ""
 
-class SuperchargedCollaborativeWorkspacesV3:
-    """
-    🚀 SUPERCHARGED COLLABORATIVE WORKSPACES WITH AGENTIC CONTROL
+    def __post_init__(self):
+        # Initialize the WebSocket URL after the session_id is set
+        self.websocket_url = f"ws://localhost:5000/ws/collaborate/{self.session_id}"
 
-    DEVASTATING NEW FEATURES:
-    ⚡ Express Mode collaboration (6x faster responses)
-    🤖 Agentic takeover capabilities
-    🧠 Real-time intelligent code analysis
-    🔄 Automatic workflow optimization
-    📊 Predictive collaboration insights
-    🎯 Context-aware assistance
-    💡 Creative problem-solving sessions
-    🛠️ Intelligent tool routing (E2B vs Scrapybara)
-    """
 
-    def __init__(self, config: Dict[str, Any]):
-        self.config = config
+class CollaborativeWorkspacesManager:
+    """Manages collaborative coding sessions with AI assistance"""
 
-        # Core AI capabilities
-        self.express_mode = ExpressModeVertexIntegration(config.get('vertex_config', {}))
-        # Note: agentic_superpowers will be injected later to avoid circular dependency
-        self.agentic_superpowers = None
-
-        # Enhanced capabilities
-        self.scrapybara_manager = EnhancedScrapybaraManager(config)
-        self.code_execution = EnhancedMamaBearCodeExecution()
-
-        # Intelligent routing for optimal execution paths (needs other components first)
-        try:
-            from .enhanced_gemini_scout_orchestration import EnhancedGeminiScoutOrchestrator
-            scout_orchestrator = EnhancedGeminiScoutOrchestrator()
-            self.execution_router = IntelligentExecutionRouter(
-                scout_orchestrator=scout_orchestrator,
-                e2b_execution=self.code_execution,
-                scrapybara_manager=self.scrapybara_manager
-            )
-        except Exception as e:
-            logger.warning(f"Could not initialize execution router: {e}")
-            self.execution_router = None
-
-        # Session management
-        self.active_sessions: Dict[str, CollaborativeSession] = {}
-        self.session_metrics: Dict[str, Dict[str, Any]] = defaultdict(dict)
-
-        # Real-time collaboration features
-        self.websocket_connections: Dict[str, List] = defaultdict(list)
-        self.collaboration_insights: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
-
-        # Express agents for specialized collaboration
-        self.express_agents = {
-            ExpressAgentType.CODING_PAIR: self._create_coding_pair_agent(),
-            ExpressAgentType.DEBUG_DETECTIVE: self._create_debug_detective_agent(),
-            ExpressAgentType.RESEARCH_WIZARD: self._create_research_wizard_agent(),
-            ExpressAgentType.DESIGN_GENIUS: self._create_design_genius_agent(),
-            ExpressAgentType.INTEGRATION_MASTER: self._create_integration_master_agent()
-        }
-
-        logger.info("🚀 Supercharged Collaborative Workspaces V3.0 initialized!")
-
-    async def create_collaborative_session(
+    def __init__(
         self,
-        session_name: str,
-        mode: CollaborationMode,
-        creator_id: str,
-        initial_participants: List[Dict[str, str]] = None,
-        agentic_control_level: float = 0.5
-    ) -> Dict[str, Any]:
-        """
-        🎯 CREATE NEW COLLABORATIVE SESSION WITH AGENTIC SUPERPOWERS
-        """
+        mama_bear_agent: Any,  # Placeholder for MamaBearAgenticSuperpowersV3
+        memory_manager: Any,
+        scrapybara_manager: EnhancedScrapybaraManager,
+        execution_router: IntelligentExecutionRouter,
+        code_executor: EnhancedMamaBearCodeExecution,
+        express_mode_integration: ExpressModeVertexIntegration
+    ):
+        self.mama_bear_agent = mama_bear_agent
+        self.memory_manager = memory_manager
+        self.scrapybara_manager = scrapybara_manager
+        self.execution_router = execution_router
+        self.code_executor = code_executor
+        self.express_mode_integration = express_mode_integration
+        self.active_sessions: Dict[str, CollaborativeSession] = {}
+        self.session_metrics: Dict[str, Dict[str, Any]] = defaultdict(lambda: {
+            "messages": [],
+            "code_changes": [],
+            "agent_actions": []
+        })
+        self.websocket_connections: Dict[str, Set[websockets.WebSocketClientProtocol]] = defaultdict(set)
+        logger.info("🚀 CollaborativeWorkspacesManager initialized with enhanced capabilities.")
 
+    async def create_session(
+        self,
+        name: str,
+        mode: CollaborationMode = CollaborationMode.PAIR_PROGRAMMING,
+        initial_participants: Optional[Dict[str, ParticipantRole]] = None,
+        express_agents: Optional[List[ExpressAgentType]] = None
+    ) -> CollaborativeSession:
+        """Creates a new collaborative session"""
         session_id = str(uuid.uuid4())
+        participants = initial_participants if initial_participants is not None else {}
+        express_agents = express_agents if express_agents is not None else []
 
-        # Initialize participants
-        participants = {creator_id: ParticipantRole.DEVELOPER}
-        if initial_participants:
-            for participant in initial_participants:
-                participants[participant["user_id"]] = ParticipantRole(participant.get("role", "developer"))
-
-        # Add Mama Bear as agentic participant
-        participants["mama_bear_ai"] = (
-            ParticipantRole.AGENTIC_CONTROLLER
-            if agentic_control_level > 0.7
-            else ParticipantRole.MAMA_BEAR
-        )
-
-        # Create session
         session = CollaborativeSession(
             session_id=session_id,
-            name=session_name,
+            name=name,
             mode=mode,
             participants=participants,
             created_at=datetime.now(),
             last_activity=datetime.now(),
-            agentic_control_level=agentic_control_level
+            express_agents=express_agents
         )
-
-        # Auto-assign express agents based on mode
-        session.express_agents = self._select_optimal_express_agents(mode)
-
         self.active_sessions[session_id] = session
+        logger.info(f"✅ Created new collaborative session: {session.name} ({session.session_id})")
+        return session
 
-        # Initialize session with AI context analysis
-        await self._initialize_session_context(session)
-
-        logger.info(f"🚀 Created collaborative session: {session_name} (ID: {session_id})")
-
-        return {
-            "session_id": session_id,
-            "session": {
-                "name": session_name,
-                "mode": mode.value,
-                "participants": {k: v.value for k, v in participants.items()},
-                "express_agents": [agent.value for agent in session.express_agents],
-                "agentic_control_level": agentic_control_level,
-                "created_at": session.created_at.isoformat()
-            },
-            "websocket_url": f"ws://localhost:5001/ws/collaboration/{session_id}",
-            "ai_capabilities": await self._get_session_ai_capabilities(session)
-        }
-
-    async def join_collaborative_session(
-        self,
-        session_id: str,
-        user_id: str,
-        role: str = "developer"
-    ) -> Dict[str, Any]:
-        """Join an existing collaborative session"""
-
-        if session_id not in self.active_sessions:
+    async def join_session(self, session_id: str, participant_id: str, role: ParticipantRole) -> CollaborativeSession:
+        """Adds a participant to an existing session"""
+        session = self.active_sessions.get(session_id)
+        if not session:
             raise ValueError(f"Session {session_id} not found")
 
-        session = self.active_sessions[session_id]
-        session.participants[user_id] = ParticipantRole(role)
+        session.participants[participant_id] = role
         session.last_activity = datetime.now()
+        logger.info(f"➡️ Participant {participant_id} ({role.value}) joined session {session_id}")
+        return session
 
-        # Notify all participants
-        await self._broadcast_to_session(session_id, {
-            "type": "participant_joined",
-            "user_id": user_id,
-            "role": role,
-            "timestamp": datetime.now().isoformat()
-        })
+    async def leave_session(self, session_id: str, participant_id: str):
+        """Removes a participant from a session"""
+        session = self.active_sessions.get(session_id)
+        if not session:
+            logger.warning(f"Attempted to remove participant from non-existent session {session_id}")
+            return
 
-        # Generate AI welcome and context summary
-        welcome_message = await self._generate_ai_welcome(session, user_id)
-
-        return {
-            "status": "joined",
-            "session": await self._get_session_state(session_id),
-            "welcome_message": welcome_message,
-            "ai_insights": await self._get_current_session_insights(session_id)
-        }
-
-    async def process_collaboration_message(
-        self,
-        session_id: str,
-        user_id: str,
-        message: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        🧠 PROCESS COLLABORATION MESSAGE WITH AGENTIC INTELLIGENCE
-
-        Features:
-        - Express Mode real-time analysis
-        - Agentic assistance and suggestions
-        - Automatic code optimization
-        - Predictive collaboration insights
-        """
-
-        if session_id not in self.active_sessions:
-            raise ValueError(f"Session {session_id} not found")
-
-        session = self.active_sessions[session_id]
-        session.last_activity = datetime.now()
-
-        # Express Mode analysis of the message
-        analysis = await self._analyze_collaboration_message_express(message, session)
-
-        # Generate agentic response if appropriate
-        agentic_response = None
-        if session.agentic_control_level > 0.5:
-            agentic_response = await self._generate_agentic_collaboration_response(
-                message, session, analysis
-            )
-
-        # Update session insights
-        await self._update_session_insights(session, message, analysis)
-
-        # Broadcast to all participants
-        broadcast_data = {
-            "type": "collaboration_message",
-            "user_id": user_id,
-            "message": message,
-            "ai_analysis": analysis,
-            "agentic_response": agentic_response,
-            "timestamp": datetime.now().isoformat()
-        }
-
-        await self._broadcast_to_session(session_id, broadcast_data)
-
-        return {
-            "status": "processed",
-            "analysis": analysis,
-            "agentic_response": agentic_response,
-            "session_insights": session.real_time_insights[-3:] if session.real_time_insights else []
-        }
-
-    async def initiate_agentic_takeover(
-        self,
-        session_id: str,
-        user_id: str,
-        task_description: str,
-        takeover_level: str = "collaborative"  # collaborative, leadership, autonomous
-    ) -> Dict[str, Any]:
-        """
-        🤖 INITIATE AGENTIC TAKEOVER MODE
-
-        Let Mama Bear take control and drive the collaboration session
-        """
-
-        if session_id not in self.active_sessions:
-            raise ValueError(f"Session {session_id} not found")
-
-        session = self.active_sessions[session_id]
-
-        # Update session mode and control level
-        session.mode = CollaborationMode.AGENTIC_TAKEOVER
-        session.agentic_control_level = {
-            "collaborative": 0.6,
-            "leadership": 0.8,
-            "autonomous": 0.95
-        }.get(takeover_level, 0.6)
-
-        # Generate agentic action plan
-        action_plan = await self._generate_agentic_action_plan(task_description, session)
-
-        # Begin autonomous execution
-        execution_results = await self._execute_agentic_plan(action_plan, session)
-
-        # Broadcast takeover initiation
-        await self._broadcast_to_session(session_id, {
-            "type": "agentic_takeover_initiated",
-            "takeover_level": takeover_level,
-            "task_description": task_description,
-            "action_plan": action_plan,
-            "initial_results": execution_results,
-            "timestamp": datetime.now().isoformat()
-        })
-
-        return {
-            "status": "takeover_initiated",
-            "takeover_level": takeover_level,
-            "action_plan": action_plan,
-            "execution_results": execution_results,
-            "next_steps": action_plan.get("next_steps", [])
-        }
-
-    async def _analyze_collaboration_message_express(
-        self,
-        message: Dict[str, Any],
-        session: CollaborativeSession
-    ) -> Dict[str, Any]:
-        """Use Express Mode for ultra-fast message analysis"""
-
-        prompt = f"""
-        🧠 ANALYZE COLLABORATION MESSAGE WITH EXPRESS MODE
-
-        Message: {json.dumps(message, indent=2)}
-        Session Mode: {session.mode.value}
-        Participants: {list(session.participants.keys())}
-        Current Context: {json.dumps(session.shared_state, indent=2)[:500]}
-
-        Analyze:
-        1. Intent and priority
-        2. Required expertise/agents
-        3. Potential autonomous actions
-        4. Collaboration opportunities
-        5. Code/technical implications
-        6. Next step recommendations
-
-        Return detailed JSON analysis.
-        """
-
-        try:
-            request = {
-                "message": prompt,
-                "variant": "collaboration_analyzer",
-                "context": {
-                    "session_mode": session.mode.value,
-                    "participants": list(session.participants.keys())
-                },
-                "user_id": "collaboration_session",
-                "mode": "express"
-            }
-
-            result = await self.express_mode.process_express_request(request)
-
-            return {
-                "intent": "general",
-                "priority": "medium",
-                "required_expertise": [],
-                "autonomous_potential": 0.5,
-                "collaboration_score": 0.7,
-                "technical_complexity": "medium",
-                "recommended_agents": [],
-                "confidence": 0.85
-            }
-
-        except Exception as e:
-            logger.error(f"Express Mode collaboration analysis failed: {e}")
-            return {
-                "intent": "general",
-                "priority": "medium",
-                "confidence": 0.5
-            }
-
-    async def _generate_agentic_collaboration_response(
-        self,
-        message: Dict[str, Any],
-        session: CollaborativeSession,
-        analysis: Dict[str, Any]
-    ) -> Optional[Dict[str, Any]]:
-        """Generate intelligent agentic response to collaboration message"""
-
-        if analysis.get("autonomous_potential", 0) < 0.4:
-            return None
-
-        # Use agentic superpowers for response generation if available
-        if self.agentic_superpowers is not None:
-            agentic_result = await self.agentic_superpowers.process_user_interaction(
-                user_input=json.dumps(message),
-                user_id="collaborative_session",
-                context={
-                    "session_id": session.session_id,
-                    "mode": session.mode.value,
-                    "participants": list(session.participants.keys()),
-                    "analysis": analysis
-                },
-                allow_autonomous_actions=session.agentic_control_level > 0.6
-            )
-
-            return {
-                "type": "agentic_assistance",
-                "response": agentic_result["response"],
-                "autonomous_actions": agentic_result["agentic_metadata"].get("autonomous_actions_taken", []),
-                "confidence": agentic_result["agentic_metadata"].get("confidence", 0.8),
-                "interaction_id": agentic_result["interaction_id"]
-            }
+        if participant_id in session.participants:
+            del session.participants[participant_id]
+            session.last_activity = datetime.now()
+            logger.info(f"⬅️ Participant {participant_id} left session {session_id}")
+            if not session.participants:
+                await self.end_session(session_id)
         else:
-            # Fallback response without agentic superpowers
-            return {
-                "type": "agentic_assistance",
-                "response": "🤖 I'm here to help with your collaborative session! Agentic superpowers are currently initializing.",
-                "autonomous_actions": [],
-                "confidence": 0.6,
-                "interaction_id": str(uuid.uuid4())
-            }
+            logger.warning(f"Participant {participant_id} not found in session {session_id}")
 
-    def _select_optimal_express_agents(self, mode: CollaborationMode) -> List[ExpressAgentType]:
-        """Select optimal express agents based on collaboration mode"""
+    async def end_session(self, session_id: str):
+        """Ends a collaborative session and cleans up resources"""
+        if session_id in self.active_sessions:
+            del self.active_sessions[session_id]
+            if session_id in self.session_metrics:
+                del self.session_metrics[session_id]
+            # Close all WebSocket connections for this session
+            for ws in list(self.websocket_connections[session_id]):
+                await ws.close()
+            if session_id in self.websocket_connections:
+                del self.websocket_connections[session_id]
+            logger.info(f"🛑 Ended collaborative session: {session_id}")
+        else:
+            logger.warning(f"Attempted to end non-existent session: {session_id}")
 
-        agent_mapping = {
-            CollaborationMode.PAIR_PROGRAMMING: [ExpressAgentType.CODING_PAIR, ExpressAgentType.DEBUG_DETECTIVE],
-            CollaborationMode.CODE_REVIEW: [ExpressAgentType.CODING_PAIR, ExpressAgentType.INTEGRATION_MASTER],
-            CollaborationMode.DEBUGGING: [ExpressAgentType.DEBUG_DETECTIVE, ExpressAgentType.CODING_PAIR],
-            CollaborationMode.RESEARCH: [ExpressAgentType.RESEARCH_WIZARD, ExpressAgentType.INTEGRATION_MASTER],
-            CollaborationMode.DESIGN: [ExpressAgentType.DESIGN_GENIUS, ExpressAgentType.RESEARCH_WIZARD],
-            CollaborationMode.BRAINSTORMING: [ExpressAgentType.DESIGN_GENIUS, ExpressAgentType.RESEARCH_WIZARD],
-            CollaborationMode.LEARNING: [ExpressAgentType.RESEARCH_WIZARD, ExpressAgentType.CODING_PAIR],
-            CollaborationMode.AGENTIC_TAKEOVER: list(ExpressAgentType)  # All agents available
-        }
+    async def process_message(self, session_id: str, sender_id: str, content: str, message_type: str = "text"):
+        """Processes a message within a session, potentially triggering AI actions"""
+        session = self.active_sessions.get(session_id)
+        if not session:
+            raise ValueError(f"Session {session_id} not found")
 
-        return agent_mapping.get(mode, [ExpressAgentType.CODING_PAIR])
-
-    def _create_coding_pair_agent(self) -> Dict[str, Any]:
-        """Create specialized coding pair programming agent"""
-        return {
-            "name": "Coding Pair",
-            "specialties": ["code_generation", "refactoring", "optimization"],
-            "personality": "collaborative_expert",
-            "response_style": "technical_detailed"
-        }
-
-    def _create_debug_detective_agent(self) -> Dict[str, Any]:
-        """Create specialized debugging agent"""
-        return {
-            "name": "Debug Detective",
-            "specialties": ["error_analysis", "root_cause_analysis", "testing"],
-            "personality": "analytical_investigator",
-            "response_style": "systematic_diagnostic"
-        }
-
-    def _create_research_wizard_agent(self) -> Dict[str, Any]:
-        """Create specialized research agent"""
-        return {
-            "name": "Research Wizard",
-            "specialties": ["information_gathering", "trend_analysis", "documentation"],
-            "personality": "curious_scholar",
-            "response_style": "comprehensive_informative"
-        }
-
-    def _create_design_genius_agent(self) -> Dict[str, Any]:
-        """Create specialized design agent"""
-        return {
-            "name": "Design Genius",
-            "specialties": ["ui_ux", "architecture", "creative_solutions"],
-            "personality": "creative_visionary",
-            "response_style": "innovative_aesthetic"
-        }
-
-    def _create_integration_master_agent(self) -> Dict[str, Any]:
-        """Create specialized integration agent"""
-        return {
-            "name": "Integration Master",
-            "specialties": ["system_integration", "api_design", "workflow_optimization"],
-            "personality": "systematic_orchestrator",
-            "response_style": "strategic_holistic"
-        }
-
-    async def _initialize_session_context(self, session: CollaborativeSession):
-        """Initialize AI context for the session"""
-
-        context_prompt = f"""
-        🎯 INITIALIZE COLLABORATIVE SESSION CONTEXT
-
-        Session: {session.name}
-        Mode: {session.mode.value}
-        Participants: {list(session.participants.keys())}
-        Agentic Level: {session.agentic_control_level}
-
-        Generate initial context and recommendations for optimal collaboration.
-        """
-
-        try:
-            request = {
-                "message": context_prompt,
-                "variant": "session_initializer",
-                "context": {
-                    "session_name": session.name,
-                    "mode": session.mode.value
-                },
-                "user_id": "session_system",
-                "mode": "express"
-            }
-
-            result = await self.express_mode.process_express_request(request)
-
-            session.shared_state["ai_context"] = {"initialized": True}
-            session.real_time_insights.append({
-                "type": "session_initialization",
-                "insights": ["Session initialized with AI context"],
-                "timestamp": datetime.now().isoformat()
-            })
-
-        except Exception as e:
-            logger.error(f"Session context initialization failed: {e}")
-
-    async def _broadcast_to_session(self, session_id: str, data: Dict[str, Any]):
-        """Broadcast data to all session participants via WebSocket"""
-
-        # In a real implementation, this would use actual WebSocket connections
-        logger.info(f"Broadcasting to session {session_id}: {data['type']}")
-
-        # Store for retrieval by participants
-        if session_id not in self.session_metrics:
-            self.session_metrics[session_id] = {"messages": []}
-
-        self.session_metrics[session_id]["messages"].append({
-            "data": data,
+        session.last_activity = datetime.now()
+        message_data = {
+            "sender_id": sender_id,
+            "content": content,
+            "type": message_type,
             "timestamp": datetime.now().isoformat()
-        })
+        }
+        self.session_metrics[session_id]["messages"].append(message_data)
+        logger.info(f"💬 Session {session_id} - {sender_id}: {content[:50]}...")
 
-    async def _get_session_ai_capabilities(self, session: CollaborativeSession) -> Dict[str, Any]:
-        """Get AI capabilities available to the session"""
+        # Broadcast message to all participants in the session
+        await self._broadcast_message(session_id, message_data)
 
+        # Trigger AI assistance based on content and mode
+        if session.mode == CollaborationMode.PAIR_PROGRAMMING and "help" in content.lower():
+            await self._trigger_ai_assistance(session, content)
+        elif session.mode == CollaborationMode.AGENTIC_TAKEOVER:
+            await self._trigger_agentic_takeover(session, content)
+
+    async def _broadcast_message(self, session_id: str, message: Dict[str, Any]):
+        """Broadcasts a message to all connected WebSocket clients for a session"""
+        if session_id in self.websocket_connections:
+            disconnected_clients = set()
+            for websocket in self.websocket_connections[session_id]:
+                try:
+                    await websocket.send(json.dumps(message))
+                except websockets.exceptions.ConnectionClosed:
+                    disconnected_clients.add(websocket)
+                    logger.warning(f"Client {websocket.remote_address} disconnected during broadcast.")
+            self.websocket_connections[session_id].difference_update(disconnected_clients)
+
+    async def _trigger_ai_assistance(self, session: CollaborativeSession, prompt: str):
+        """Triggers AI assistance based on the session context and prompt"""
+        logger.info(f"🧠 Triggering AI assistance for session {session.session_id} with prompt: {prompt[:50]}...")
+        # Example: Use Mama Bear to generate a code suggestion
+        try:
+            # Dynamically import to avoid circular dependency
+            from services.mama_bear_agentic_superpowers_v3 import MamaBearAgenticSuperpowersV3
+            if isinstance(self.mama_bear_agent, MamaBearAgenticSuperpowersV3):
+                response = await self.mama_bear_agent.generate_code_suggestion(prompt, session.mode.value)
+                ai_message = {
+                    "sender_id": "Mama Bear",
+                    "content": response,
+                    "type": "ai_suggestion",
+                    "timestamp": datetime.now().isoformat()
+                }
+                self.session_metrics[session.session_id]["messages"].append(ai_message)
+                await self._broadcast_message(session.session_id, ai_message)
+                logger.info(f"✅ AI assistance provided for session {session.session_id}.")
+            else:
+                logger.warning("Mama Bear agent not properly initialized for agentic superpowers.")
+        except Exception as e:
+            logger.error(f"Error triggering AI assistance: {e}")
+            error_message = {
+                "sender_id": "Mama Bear",
+                "content": f"Error providing AI assistance: {e}",
+                "type": "error",
+                "timestamp": datetime.now().isoformat()
+            }
+            await self._broadcast_message(session.session_id, error_message)
+
+    async def _trigger_agentic_takeover(self, session: CollaborativeSession, initial_task: str):
+        """Initiates an agentic takeover, where AI takes full control to complete a task"""
+        logger.info(f"🤖 Initiating agentic takeover for session {session.session_id} with task: {initial_task[:50]}...")
+        try:
+            from services.mama_bear_agentic_superpowers_v3 import MamaBearAgenticSuperpowersV3
+            if isinstance(self.mama_bear_agent, MamaBearAgenticSuperpowersV3):
+                await self.mama_bear_agent.execute_agentic_task(session.session_id, initial_task, self.memory_manager, self.scrapybara_manager, self.code_executor)
+                logger.info(f"✅ Agentic takeover task initiated for session {session.session_id}.")
+            else:
+                logger.warning("Mama Bear agent not properly initialized for agentic superpowers.")
+        except Exception as e:
+            logger.error(f"Error during agentic takeover: {e}")
+            error_message = {
+                "sender_id": "Mama Bear",
+                "content": f"Error during agentic takeover: {e}",
+                "type": "error",
+                "timestamp": datetime.now().isoformat()
+            }
+            await self._broadcast_message(session.session_id, error_message)
+
+    async def register_websocket_connection(self, session_id: str, websocket: websockets.WebSocketClientProtocol):
+        """Registers a new WebSocket connection for a session"""
+        if session_id not in self.active_sessions:
+            raise ValueError(f"Session {session_id} not found")
+        self.websocket_connections[session_id].add(websocket)
+        logger.info(f"🔌 Registered new WebSocket connection for session {session_id}. Total: {len(self.websocket_connections[session_id])}")
+
+    async def unregister_websocket_connection(self, session_id: str, websocket: websockets.WebSocketClientProtocol):
+        """Unregisters a WebSocket connection for a session"""
+        if session_id in self.websocket_connections and websocket in self.websocket_connections[session_id]:
+            self.websocket_connections[session_id].remove(websocket)
+            logger.info(f"🔌 Unregistered WebSocket connection for session {session_id}. Total: {len(self.websocket_connections[session_id])}")
+
+    async def get_supported_modes(self) -> Dict[str, List[str]]:
+        """Returns a list of supported collaboration modes and express agent types"""
         return {
-            "express_mode_enabled": True,
-            "agentic_control_level": session.agentic_control_level,
-            "available_agents": [agent.value for agent in session.express_agents],
-            "autonomous_actions_permitted": session.agentic_control_level > 0.6,
-            "real_time_analysis": True,
-            "predictive_insights": True,
-            "code_execution_capabilities": ["python", "javascript", "bash"],
-            "research_capabilities": ["web_search", "documentation_analysis", "trend_analysis"]
+            "collaboration_modes": [mode.value for mode in CollaborationMode],
+            "participant_roles": [role.value for role in ParticipantRole],
+            "express_agent_types": [agent.value for agent in ExpressAgentType],
+            "ai_capabilities": ["code_suggestion", "debug_assistance", "research_summary", "design_critique", "integration_guidance", "agentic_task_execution"],
+            "available_tools": ["code_executor", "scrapybara", "memory_manager", "execution_router"],
+            "supported_insights": ["performance_bottleneck", "security_vulnerability", "code_smell", "design_pattern_suggestion", "documentation_analysis", "trend_analysis"]
         }
 
     async def get_active_sessions(self) -> Dict[str, Any]:
@@ -588,10 +311,10 @@ class SuperchargedCollaborativeWorkspacesV3:
             "duration_minutes": (datetime.now() - session.created_at).total_seconds() / 60,
             "message_count": len(metrics.get("messages", [])),
             "participants_count": len(session.participants),
-            "agentic_interactions": len([
+            "agentic_interactions": [
                 m for m in metrics.get("messages", [])
                 if m["data"].get("type") == "agentic_assistance"
-            ]),
+            ],
             "insights_generated": len(session.real_time_insights),
             "ai_capabilities_used": session.express_agents,
             "collaboration_effectiveness": 0.85  # Calculated based on interactions
