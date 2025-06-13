@@ -1,12 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
-import { 
-  Home, MessageSquare, Search, Bot, Zap, Monitor, Package, 
-  ChevronDown, ChevronRight, Menu, User, Activity, Settings,
-  Palette, Code, Globe, Sparkles, Bell, Computer, Layers, Users
-} from 'lucide-react'
-import { useSanctuaryStore } from '@/stores/sanctuaryStore'
 import { cn } from '@/lib/utils'
+import { useSanctuaryStore } from '@/stores/sanctuaryStore'
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion'
+import {
+  Activity,
+  Bot,
+  ChevronRight,
+  Code,
+  Computer,
+  Globe,
+  Home,
+  Layers,
+  Menu,
+  MessageSquare,
+  Monitor, Package,
+  Palette,
+  Search,
+  Settings,
+  Sparkles,
+  User,
+  Users,
+  Zap
+} from 'lucide-react'
+import React, { useRef, useState } from 'react'
 
 // Enhanced Navigation Structure with new features
 const NAVIGATION_STRUCTURE = {
@@ -156,21 +171,21 @@ interface EnhancedSanctuaryNavProps {
 }
 
 const EnhancedSanctuaryNav: React.FC<EnhancedSanctuaryNavProps> = ({ className = "" }) => {
-  const { 
-    activeExperience, 
-    setActiveExperience, 
-    sidebarCollapsed, 
-    setSidebarCollapsed 
+  const {
+    activeExperience,
+    setActiveExperience,
+    sidebarCollapsed,
+    setSidebarCollapsed
   } = useSanctuaryStore()
-  
+
   const [expandedSections, setExpandedSections] = useState<string[]>(['core', 'ai_systems'])
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
   const navRef = useRef<HTMLDivElement>(null)
 
   const toggleSection = (sectionId: string) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionId) 
+    setExpandedSections(prev =>
+      prev.includes(sectionId)
         ? prev.filter(id => id !== sectionId)
         : [...prev, sectionId]
     )
@@ -205,7 +220,7 @@ const EnhancedSanctuaryNav: React.FC<EnhancedSanctuaryNavProps> = ({ className =
             <ChevronRight className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-90")} />
           </button>
         )}
-        
+
         <AnimatePresence>
           {(isExpanded || sidebarCollapsed) && (
             <motion.div
@@ -221,8 +236,8 @@ const EnhancedSanctuaryNav: React.FC<EnhancedSanctuaryNavProps> = ({ className =
                   onMouseMove={(e) => handleMouseMove(e, item.id)}
                   className={cn(
                     "flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                    activeExperience === item.path 
-                      ? "bg-primary text-primary-foreground shadow-sm" 
+                    activeExperience === item.path
+                      ? "bg-primary text-primary-foreground shadow-sm"
                       : "hover:bg-muted text-muted-foreground hover:text-foreground",
                     sidebarCollapsed && "justify-center"
                   )}

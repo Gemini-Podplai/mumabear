@@ -1,137 +1,54 @@
-# Scout Vite Template
+# React + TypeScript + Vite
 
-This is a [Vite](https://vite.dev) project bootstrapped with React + TypeScript and configured with TailwindCSS v4 and ShadCN UI.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-**Repository**: https://github.com/Gemini-Podplai/mumabear
+Currently, two official plugins are available:
 
-## Getting Started
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-First, run the development server:
+## Expanding the ESLint configuration
 
-```bash
-bun dev
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
 
-Open [http://localhost:5173](http://localhost:5173) with your browser to see the result.
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-You can start editing the page by modifying `src/App.tsx`. The page auto-updates as you edit the file.
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Project Configuration
-
-### Package Management
-
-This project uses [Bun](https://bun.sh/) as the package manager:
-
-- Install dependencies: `bun add <package-name>`
-- Run scripts: `bun <script-name>`
-- Manage dev dependencies: `bun add -d <package-name>`
-
-### Theme Customization
-
-The project uses Tailwind CSS V4 with a theme defined in:
-
-- `src/index.css` - For CSS variables including colors in OKLCH format and custom theming
-- Tailwind V4 uses the new `@theme` directive for configuration
-
-### ShadCN UI Components
-
-This project uses [ShadCN UI](https://ui.shadcn.com) for styled components. The components are incorporated directly into the codebase (not as dependencies), making them fully customizable. All components have been installed:
-
-- accordion
-- alert-dialog
-- alert
-- aspect-ratio
-- avatar
-- badge
-- breadcrumb
-- button
-- calendar
-- card
-- carousel
-- chart
-- checkbox
-- collapsible
-- command
-- context-menu
-- dialog
-- drawer
-- dropdown-menu
-- form
-- hover-card
-- input-otp
-- input
-- label
-- menubar
-- navigation-menu
-- pagination
-- popover
-- progress
-- radio-group
-- scroll-area
-- select
-- separator
-- sheet
-- skeleton
-- slider
-- sonner
-- switch
-- table
-- tabs
-- textarea
-- toast
-- toggle-group
-- toggle
-
-### Icon Library
-
-[Lucide React](https://lucide.dev/) is the preferred icon library for this project, as specified in components.json. Always use Lucide icons to maintain consistency:
-
-```tsx
-import { ArrowRight } from "lucide-react";
-
-// Use in components
-<Button>
-  <span>Click me</span>
-  <ArrowRight />
-</Button>;
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
 ```
-
-### Font Configuration
-
-This project uses Google Fonts with:
-
-- Inter (sans-serif)
-- Playfair Display (serif)
-
-The font is imported via Google Fonts CDN in `src/index.css` and configured in the Tailwind theme:
-
-```css
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-
-@theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
-}
-```
-
-To change or update fonts:
-
-1. Update the Google Fonts import in `src/index.css`
-2. Modify the `--font-sans` variable in the `@theme` directive
-
-## Build and Deploy
-
-Build the project:
-
-```bash
-bun run build
-```
-
-Preview the production build:
-
-```bash
-bun run preview
-```
-
-The built files will be in the `dist` directory, ready for deployment to any static hosting service.

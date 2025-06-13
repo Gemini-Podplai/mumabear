@@ -1,79 +1,56 @@
-import { useSanctuaryStore } from '@/stores/sanctuaryStore'
-import SanctuaryLayout from '@/components/layouts/SanctuaryLayout'
-import { Toaster } from '@/components/ui/sonner'
-import { ThemeProvider } from '@/components/theme-provider'
-import { EnhancedThemeProvider } from '@/contexts/EnhancedThemeContext'
-import { ThemeTransition } from '@/components/effects/AnimatedBackground'
-import ScoutWorkflow from './experiences/ScoutWorkflow'
-import EnhancedScoutWorkflow from './experiences/EnhancedScoutWorkflow'
-import SanctuaryHome from './experiences/SanctuaryHome'
-import DevWorkspaces from './experiences/DevWorkspaces'
-import MCPMarketplace from './experiences/MCPMarketplace'
-import LiveAPIStudio from './experiences/LiveAPIStudio'
-import MultiModalChat from './experiences/MultiModalChat'
-import ComputerUse from './experiences/ComputerUse'
-import MiniAppsHub from './experiences/MiniAppsHub'
-import Settings from './experiences/Settings'
-import MainChat from './experiences/MainChat'
-import AgentWorkbench from './experiences/AgentWorkbench'
-import ExecutionRouter from './experiences/ExecutionRouter'
-import SystemMonitor from './experiences/SystemMonitor'
-import ThemeStudio from './experiences/ThemeStudio'
-import AIMessengerExperience from './experiences/AIMessengerExperience'
+import { useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import './App.css'
+import AgentScoutHub from './components/agentHub/AgentScoutHub'
+import MessengerPanel from './components/messenger/MessengerPanel'
+import ResearchPanel from './components/research/ResearchPanel'
+import AccessibilityToolbar from './components/ui/AccessibilityToolbar'
+import CommandPalette from './components/ui/CommandPalette'
+import FeedbackWidget from './components/ui/FeedbackWidget'
+import FloatingMamaBearWidget from './components/ui/FloatingMamaBearWidget'
+import MamaBearChatOverlay from './components/ui/MamaBearChatOverlay'
+import NotificationCenter from './components/ui/NotificationCenter'
+import ThemeToggle from './components/ui/ThemeToggle'
+import UserProfileMenu from './components/ui/UserProfileMenu'
+import IDEWorkspace from './components/workspace/IDEWorkspace'
+import MarketplacePanel from './components/workspace/MarketplacePanel'
+import MCPMarketDockPanel from './components/workspace/MCPMarketDockPanel'
+import PipedreamStudioPanel from './components/workspace/PipedreamStudioPanel'
 
 function App() {
-  const { activeExperience } = useSanctuaryStore()
-
-  const renderExperience = () => {
-    switch (activeExperience) {
-      case 'home':
-        return <SanctuaryHome />
-      case 'main-chat':
-        return <MainChat />
-      case 'scout-workflow':
-        return <ScoutWorkflow />
-      case 'enhanced-scout':
-        return <EnhancedScoutWorkflow />
-      case 'dev-workspaces':
-        return <DevWorkspaces />
-      case 'multi-modal-chat':
-        return <MultiModalChat />
-      case 'mcp-marketplace':
-        return <MCPMarketplace />
-      case 'mini-apps':
-        return <MiniAppsHub />
-      case 'computer-use':
-        return <ComputerUse />
-      case 'live-api-studio':
-        return <LiveAPIStudio />
-      case 'ai-messenger':
-        return <AIMessengerExperience />
-      case 'agents':
-        return <AgentWorkbench />
-      case 'router':
-        return <ExecutionRouter />
-      case 'system-monitor':
-        return <SystemMonitor />
-      case 'themes':
-        return <ThemeStudio />
-      case 'settings':
-        return <Settings />
-      default:
-        return <SanctuaryHome />
-    }
-  }
-
+  const [chatOpen, setChatOpen] = useState(false)
   return (
-    <EnhancedThemeProvider defaultTheme="sanctuary-purple" defaultLayoutSize="comfortable">
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <ThemeTransition>
-          <SanctuaryLayout>
-            {renderExperience()}
-          </SanctuaryLayout>
-        </ThemeTransition>
-        <Toaster />
-      </ThemeProvider>
-    </EnhancedThemeProvider>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        {/* Top Bar with Theme Toggle and User Profile */}
+        <div className="w-full flex justify-end items-center px-4 py-2 space-x-2">
+          <ThemeToggle />
+          <UserProfileMenu />
+        </div>
+        {/* Main Content */}
+        <Routes>
+          <Route path="/" element={<AgentScoutHub />} />
+          <Route path="/workspace" element={<IDEWorkspace />} />
+          <Route path="/research" element={<ResearchPanel />} />
+          <Route path="/messenger" element={<MessengerPanel />} />
+          <Route path="/marketplace" element={<MarketplacePanel />} />
+          <Route path="/pipedream" element={<PipedreamStudioPanel />} />
+          <Route path="/mcp-marketdock" element={<MCPMarketDockPanel />} />
+        </Routes>
+        {/* Floating Mama Bear Widget - Always Present */}
+        <FloatingMamaBearWidget onOpen={() => setChatOpen(true)} />
+        {/* Mama Bear Chat Overlay - Always Present */}
+        <MamaBearChatOverlay open={chatOpen} onClose={() => setChatOpen(false)} />
+        {/* Notification Center - Always Present */}
+        <NotificationCenter />
+        {/* Command Palette - Always Present */}
+        <CommandPalette />
+        {/* Accessibility Toolbar - Always Present */}
+        <AccessibilityToolbar />
+        {/* Feedback Widget - Always Present */}
+        <FeedbackWidget />
+      </div>
+    </BrowserRouter>
   )
 }
 

@@ -1,8 +1,8 @@
 // 🚀 Advanced AI Messenger Features
 // Enhanced capabilities for the world's first AI instant messenger
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { MessageSquare, Settings, Star, Bookmark, TrendingUp, Activity, Users, Bot } from 'lucide-react';
+import { Activity, Bot, MessageSquare, Star, TrendingUp, Users } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface ModelPerformanceMetrics {
   modelId: string;
@@ -70,7 +70,7 @@ export const AIMessengerAnalytics = ({ conversations, models }) => {
     });
 
     const favoriteModels = Object.entries(modelUsage)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 3)
       .map(([modelId]) => modelId);
 
@@ -354,4 +354,5 @@ export const SmartRecommendations = ({ userPreferences, models, conversationHist
   );
 };
 
-export { ModelPerformanceMetrics, ConversationStats };
+export { ConversationStats, ModelPerformanceMetrics };
+

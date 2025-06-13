@@ -302,10 +302,10 @@ async def initialize_sanctuary_services():
                     'vertex_config': settings.vertex_ai_config if hasattr(settings, 'vertex_ai_config') else {},
                     'agentic_integration_enabled': True
                 }
-                
+
                 service_success = integrate_pipedream_with_app(app, pipedream_config)
                 api_success = integrate_pipedream_api_with_app(app)
-                
+
                 if service_success and api_success:
                     logger.info("✅ 🔗 Pipedream Integration Service fully initialized! Autonomous workflow automation ready!")
                     logger.info("✅ Available endpoints: /api/pipedream/workflows, /api/pipedream/natural-language")

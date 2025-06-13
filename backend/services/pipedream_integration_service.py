@@ -135,11 +135,11 @@ class PipedreamIntegrationService:
             # In development mode, simulate workflow creation
             if self.environment == 'development':
                 logger.info("🔧 Development mode: Simulating workflow creation")
-                
+
                 # Simulate successful creation
                 workflow_url = f"https://pipedream.com/workflows/{workflow_id}"
                 simulated_pipedream_id = f"pd_{uuid.uuid4().hex[:12]}"
-                
+
                 # Cache the workflow
                 self.workflows_cache[workflow_id] = {
                     **workflow_data,
@@ -152,11 +152,11 @@ class PipedreamIntegrationService:
                     'last_run': None,
                     'simulated': True
                 }
-                
+
                 self.total_workflows += 1
-                
+
                 logger.info(f"✅ Workflow '{workflow_data['name']}' created successfully (simulated)")
-                
+
                 return {
                     'success': True,
                     'workflow_id': workflow_id,
@@ -165,7 +165,7 @@ class PipedreamIntegrationService:
                     'message': f"Workflow '{workflow_data['name']}' created and deployed! (Development Mode)",
                     'simulated': True
                 }
-            
+
             # Production mode: Create workflow via Pipedream API
             else:
                 async with aiohttp.ClientSession() as session:
@@ -231,14 +231,14 @@ class PipedreamIntegrationService:
             else:
                 # Use pattern matching fallback
                 return await self._create_with_patterns(request, user_id)
-                
+
         except Exception as e:
             logger.error(f"❌ Error creating workflow from natural language: {e}")
             return {
                 'success': False,
                 'error': str(e)
             }
-    
+
     async def _create_with_ai(self, request: str, user_id: str = None) -> Dict[str, Any]:
         """Create workflow using AI (when available)"""
         try:
@@ -295,34 +295,34 @@ class PipedreamIntegrationService:
             else:
                 logger.warning("❌ AI analysis failed, falling back to patterns")
                 return await self._create_with_patterns(request, user_id)
-                
+
         except Exception as e:
             logger.error(f"❌ Error in AI workflow creation: {e}")
             return await self._create_with_patterns(request, user_id)
-    
+
     async def _create_with_patterns(self, request: str, user_id: str = None) -> Dict[str, Any]:
         """Create workflow using pattern matching fallback"""
         try:
             fallback_service = get_fallback_service()
             result = fallback_service.create_workflow_from_patterns(request, user_id)
-            
+
             if result.get('success'):
                 workflow_spec = result['workflow_spec']
-                
+
                 # Create the actual workflow
                 create_result = await self.create_workflow(workflow_spec, user_id)
-                
+
                 if create_result.get('success'):
                     create_result['pattern_matched'] = result.get('pattern_matched')
                     create_result['confidence'] = result.get('confidence')
                     create_result['fallback_used'] = True
                     create_result['original_request'] = request
                     create_result['message'] = f"✅ {result.get('message', '')} - Workflow created successfully!"
-                
+
                 return create_result
             else:
                 return result
-                
+
         except Exception as e:
             logger.error(f"❌ Error in pattern-based workflow creation: {e}")
             return {

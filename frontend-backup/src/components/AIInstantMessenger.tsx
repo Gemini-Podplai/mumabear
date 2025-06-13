@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Send, Phone, Video, MoreVertical, Star, Zap, Image, Code, Brain, Clock, DollarSign, Shield, Sparkles } from 'lucide-react';
+import { Brain, Clock, DollarSign, Image, MoreVertical, Phone, Search, Send, Shield, Sparkles, Video, Zap } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAIMessengerService } from '../services/aiMessengerService';
 
 // 🤖 Complete AI Model Database - World's First AI Instant Messenger
@@ -1062,8 +1062,8 @@ const AIInstantMessenger = () => {
   const filteredModels = useMemo(() => {
     return Object.entries(AI_MODELS_DATABASE).filter(([id, model]) => {
       const matchesSearch = model.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           model.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           model.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+        model.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        model.specialty.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesTier = filterTier === 'all' || model.tier === filterTier;
       return matchesSearch && matchesTier;
     });
@@ -1097,7 +1097,7 @@ const AIInstantMessenger = () => {
       });
 
       const responseTime = response.timing?.total_time_ms || parseInt(selectedModel.responseTime);
-      
+
       setTimeout(() => {
         const aiResponse = {
           id: Date.now() + 1,
@@ -1204,9 +1204,8 @@ const AIInstantMessenger = () => {
           {filteredModels.map(([id, model]) => (
             <div
               key={id}
-              className={`p-4 border-b border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors ${
-                selectedModel?.name === model.name ? 'bg-gray-700 border-l-4 border-blue-500' : ''
-              }`}
+              className={`p-4 border-b border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors ${selectedModel?.name === model.name ? 'bg-gray-700 border-l-4 border-blue-500' : ''
+                }`}
               onClick={() => setSelectedModel(model)}
             >
               <div className="flex items-center justify-between">
@@ -1306,11 +1305,10 @@ const AIInstantMessenger = () => {
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                      msg.sender === 'user'
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${msg.sender === 'user'
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 text-gray-100'
-                    }`}
+                      }`}
                   >
                     {msg.sender === 'ai' && (
                       <div className="flex items-center space-x-2 mb-1">
@@ -1332,8 +1330,8 @@ const AIInstantMessenger = () => {
                       <span className="text-sm">{selectedModel.name} is typing...</span>
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>
