@@ -20,9 +20,11 @@ import {
   Maximize2,
   Minimize2,
   RotateCcw,
-  Shuffle
+  Shuffle,
+  Brain
 } from 'lucide-react';
 import { Button } from '../ui/button';
+import { MCPAgenticPanel } from './MCPAgenticPanel';
 
 // Panel Types - Each one is a draggable puzzle piece
 type PanelType =
@@ -36,7 +38,8 @@ type PanelType =
   | 'web-search'
   | 'image-generator'
   | 'video-creator'
-  | 'audio-mixer';
+  | 'audio-mixer'
+  | 'mcp-agentic-rag';
 
 interface PanelConfig {
   id: string;
@@ -135,6 +138,15 @@ const AVAILABLE_TOOLS: Tool[] = [
     category: 'media',
     panelType: 'audio-mixer',
     animationColor: 'from-teal-500 to-cyan-500'
+  },
+  {
+    id: 'mcp-agentic',
+    name: 'MCP Agentic RAG',
+    description: '🧠 Autonomous AI system with 5 intelligence levels',
+    icon: <Brain className="w-5 h-5" />,
+    category: 'ai',
+    panelType: 'mcp-agentic-rag',
+    animationColor: 'from-purple-500 to-pink-500'
   }
 ];
 
@@ -229,7 +241,7 @@ const DraggablePanel: React.FC<{
     onBringToFront(panel.id);
   };
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (_event: any, info: any) => {
     setIsDragging(false);
     onUpdate(panel.id, {
       x: panel.x + info.offset.x,
@@ -507,7 +519,7 @@ export const RevolutionaryWorkspace: React.FC = () => {
   const [panels, setPanels] = useState<PanelConfig[]>([]);
   const [nextZIndex, setNextZIndex] = useState(1);
   const [isToolMarketplaceOpen, setIsToolMarketplaceOpen] = useState(false);
-  const [workspaceMode, setWorkspaceMode] = useState<'development' | 'creative' | 'hybrid'>('hybrid');
+  const [isMCPAgenticOpen, setIsMCPAgenticOpen] = useState(false);
 
   // Add a new panel from tool marketplace
   const addPanel = useCallback((tool: Tool) => {

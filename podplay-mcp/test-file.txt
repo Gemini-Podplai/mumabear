@@ -1,0 +1,9 @@
+Hello! This is a test file for the Podplay File Transfer Server.
+
+🚀 Features:
+- Easy file sharing via web interface
+- HTTP API for programmatic access  
+- Command line tools for automation
+- MCP protocol support for AI assistants
+
+Perfect for sharing files quickly and securely!
