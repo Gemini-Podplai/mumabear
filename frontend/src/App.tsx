@@ -16,6 +16,7 @@ import IDEWorkspace from './components/workspace/IDEWorkspace'
 import MarketplacePanel from './components/workspace/MarketplacePanel'
 import MCPMarketDockPanel from './components/workspace/MCPMarketDockPanel'
 import PipedreamStudioPanel from './components/workspace/PipedreamStudioPanel'
+import { RevolutionaryMcpClient } from './components/revolutionary-mcp-client/RevolutionaryMcpClient'
 
 function App() {
   const [chatOpen, setChatOpen] = useState(false)
@@ -36,6 +37,7 @@ function App() {
           <Route path="/marketplace" element={<MarketplacePanel />} />
           <Route path="/pipedream" element={<PipedreamStudioPanel />} />
           <Route path="/mcp-marketdock" element={<MCPMarketDockPanel />} />
+          <Route path="/revolutionary-mcp" element={<RevolutionaryMcpClient currentProject="Revolutionary AI Workspace" />} />
         </Routes>
         {/* Floating Mama Bear Widget - Always Present */}
         <FloatingMamaBearWidget onOpen={() => setChatOpen(true)} />

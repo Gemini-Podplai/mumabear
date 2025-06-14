@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, GitMerge, Users, Zap } from 'lucide-react';
+import React, { useCallback, useMemo } from 'react';
 
 interface CollaborationMetrics {
   participantCount: number;

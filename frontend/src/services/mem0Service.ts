@@ -112,16 +112,16 @@ class Mem0Service {
     context: MemoryContext;
   }): Promise<void> {
     const { message, context } = params;
-    
+
     // Extract insights from the message
     const insights = await this.extractInsights(message);
-    
+
     // Update context with new insights
     await this.updateContextWithInsights(context.id, insights, message.id);
-    
+
     // Store message reference
     this.updateMemoryWithMessage(context.id, message);
-    
+
     await this.saveToStorage();
   }
 
@@ -133,34 +133,34 @@ class Mem0Service {
   }> {
     // Simple NLP-like extraction (in a real implementation, this would use actual NLP)
     const content = message.content.toLowerCase();
-    
+
     const topicKeywords = ['ai', 'machine learning', 'programming', 'coding', 'technology', 'science', 'art', 'music', 'literature', 'philosophy', 'business', 'health', 'sports', 'travel', 'food', 'education'];
     const topics = topicKeywords.filter(topic => content.includes(topic));
-    
+
     const facts: string[] = [];
     const preferences: string[] = [];
     const entities: string[] = [];
-    
+
     // Extract facts (sentences starting with "I am", "I have", "I work", etc.)
     if (content.includes('i am ') || content.includes('i\'m ')) {
       facts.push(message.content);
     }
-    
+
     // Extract preferences (sentences with "like", "love", "prefer", "enjoy")
     if (content.includes('like ') || content.includes('love ') || content.includes('prefer ') || content.includes('enjoy ')) {
       preferences.push(message.content);
     }
-    
+
     // Extract entities (simple capitalized words)
     const words = message.content.split(' ');
     entities.push(...words.filter(word => /^[A-Z][a-z]+$/.test(word)));
-    
+
     return { topics, facts, preferences, entities };
   }
 
   private async updateContextWithInsights(
-    contextId: string, 
-    insights: any, 
+    contextId: string,
+    insights: any,
     messageId: string
   ): Promise<void> {
     const context = this.memoryStore.get(contextId);
@@ -175,7 +175,7 @@ class Mem0Service {
 
     // Add memory entries
     const entries = this.memoryEntries.get(contextId) || [];
-    
+
     insights.facts.forEach((fact: string) => {
       entries.push({
         id: `entry-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -213,12 +213,12 @@ class Mem0Service {
 
   async getRelevantMemories(contextId: string, query: string): Promise<MemoryEntry[]> {
     const entries = this.memoryEntries.get(contextId) || [];
-    
+
     // Simple relevance scoring based on keyword matching
-    const relevantEntries = entries.filter(entry => 
+    const relevantEntries = entries.filter(entry =>
       entry.content.toLowerCase().includes(query.toLowerCase())
     );
-    
+
     // Sort by importance and recency
     return relevantEntries.sort((a, b) => {
       const importanceScore = b.importance - a.importance;
@@ -235,7 +235,7 @@ class Mem0Service {
   }> {
     const context = this.memoryStore.get(contextId);
     const entries = this.memoryEntries.get(contextId) || [];
-    
+
     if (!context) {
       return {
         userPreferences: [],
@@ -248,11 +248,11 @@ class Mem0Service {
     const userPreferences = entries
       .filter(e => e.type === 'preference')
       .map(e => e.content);
-    
+
     const knownFacts = entries
       .filter(e => e.type === 'fact')
       .map(e => e.content);
-    
+
     const conversationHistory = context.topics;
     const suggestedTopics = this.generateSuggestedTopics(context, entries);
 
@@ -267,18 +267,18 @@ class Mem0Service {
   private generateSuggestedTopics(context: MemoryContext, entries: MemoryEntry[]): string[] {
     // Generate topic suggestions based on user's interests and conversation history
     const topicFrequency: { [key: string]: number } = {};
-    
+
     context.topics.forEach(topic => {
       topicFrequency[topic] = (topicFrequency[topic] || 0) + 1;
     });
-    
+
     // Suggest related topics
     const suggestions: string[] = [];
     Object.keys(topicFrequency).forEach(topic => {
       const relatedTopics = this.getRelatedTopics(topic);
       suggestions.push(...relatedTopics);
     });
-    
+
     return [...new Set(suggestions)].slice(0, 5);
   }
 
@@ -292,7 +292,7 @@ class Mem0Service {
       'art': ['painting', 'sculpture', 'design', 'creativity'],
       'music': ['instruments', 'composition', 'genres', 'performance']
     };
-    
+
     return relationships[topic] || [];
   }
 
@@ -313,7 +313,7 @@ class Mem0Service {
         contexts: Array.from(this.memoryStore.entries()),
         entries: Array.from(this.memoryEntries.entries())
       };
-      
+
       localStorage.setItem('ai_messenger_memory', JSON.stringify(memoryData));
     } catch (error) {
       console.error('Error saving memory to storage:', error);
@@ -323,9 +323,9 @@ class Mem0Service {
   async exportMemory(contextId: string): Promise<string> {
     const context = this.memoryStore.get(contextId);
     const entries = this.memoryEntries.get(contextId) || [];
-    
+
     if (!context) return '';
-    
+
     return JSON.stringify({ context, entries }, null, 2);
   }
 
@@ -353,7 +353,7 @@ class Mem0Service {
   }> {
     const context = this.memoryStore.get(contextId);
     const entries = this.memoryEntries.get(contextId) || [];
-    
+
     if (!context) {
       return {
         totalEntries: 0,
@@ -363,12 +363,12 @@ class Mem0Service {
         memoryAge: 0
       };
     }
-    
+
     const factCount = entries.filter(e => e.type === 'fact').length;
     const preferenceCount = entries.filter(e => e.type === 'preference').length;
     const topicCount = context.topics.length;
     const memoryAge = Math.floor((Date.now() - context.createdAt.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     return {
       totalEntries: entries.length,
       factCount,
@@ -380,5 +380,6 @@ class Mem0Service {
 }
 
 // Export singleton instance
-export const Mem0Service = Mem0Service.getInstance();
-export default Mem0Service;
+const mem0ServiceInstance = Mem0Service.getInstance();
+export { mem0ServiceInstance as Mem0Service };
+export default mem0ServiceInstance;

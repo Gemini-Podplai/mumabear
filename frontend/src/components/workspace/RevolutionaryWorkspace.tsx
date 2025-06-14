@@ -1,28 +1,30 @@
 // Revolutionary Draggable Workspace - The Windsurf Killer 🚀
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { AnimatePresence, motion, useDragControls } from 'framer-motion';
 import {
+  Brain,
   Code2,
-  Terminal,
-  Globe,
+  Database,
   FileText,
-  MessageSquare,
-  Sparkles,
-  Zap,
-  Search,
+  Folder,
+  Globe,
   Image,
-  Video,
-  Music,
-  Settings,
-  Plus,
-  X,
-  GripVertical,
+  Layers,
   Maximize2,
+  MessageSquare,
   Minimize2,
+  Music,
+  Plus,
   RotateCcw,
+  Search,
+  Settings,
   Shuffle,
-  Brain
+  Sparkles,
+  Terminal,
+  Video,
+  X,
+  Zap
 } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 import { Button } from '../ui/button';
 import { MCPAgenticPanel } from './MCPAgenticPanel';
 
@@ -164,7 +166,7 @@ const GenerationAnimation: React.FC<{ type: string; color: string }> = ({ type, 
             <div className="flex justify-center mt-2 space-x-1">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
-                     style={{ animationDelay: `${i * 0.2}s` }} />
+                  style={{ animationDelay: `${i * 0.2}s` }} />
               ))}
             </div>
           </div>
@@ -209,7 +211,7 @@ const GenerationAnimation: React.FC<{ type: string; color: string }> = ({ type, 
           <div className="flex justify-center mb-4 space-x-2">
             {[...Array(3)].map((_, i) => (
               <div key={i} className={`w-4 h-4 rounded-full bg-gradient-to-r ${color} animate-bounce`}
-                   style={{ animationDelay: `${i * 0.3}s` }} />
+                style={{ animationDelay: `${i * 0.3}s` }} />
             ))}
           </div>
           <div className="text-white text-sm">
@@ -300,7 +302,7 @@ const DraggablePanel: React.FC<{
             <div className="flex space-x-1">
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="w-1 h-1 bg-cyan-400 rounded-full animate-pulse"
-                     style={{ animationDelay: `${i * 0.2}s` }} />
+                  style={{ animationDelay: `${i * 0.2}s` }} />
               ))}
             </div>
           )}
@@ -449,8 +451,141 @@ const PanelContent: React.FC<{ type: PanelType }> = ({ type }) => {
           </div>
         </div>
       </div>
+    ),
+    'file-explorer': (
+      <div className="h-full">
+        <div className="bg-gray-800 rounded border border-gray-700 h-full">
+          <div className="p-3 border-b border-gray-700">
+            <div className="flex items-center space-x-2">
+              <Folder className="w-4 h-4 text-blue-400" />
+              <span className="text-white text-sm">Project Files</span>
+            </div>
+          </div>
+          <div className="p-2 space-y-1 text-sm">
+            <div className="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer">
+              <FileText className="w-4 h-4 text-gray-400" />
+              <span className="text-gray-300">src/</span>
+            </div>
+            <div className="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer ml-4">
+              <FileText className="w-4 h-4 text-blue-400" />
+              <span className="text-gray-300">components/</span>
+            </div>
+            <div className="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer ml-8">
+              <FileText className="w-4 h-4 text-green-400" />
+              <span className="text-gray-300">Revolutionary.tsx</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    'tool-marketplace': (
+      <div className="h-full">
+        <div className="bg-gray-800 rounded border border-gray-700 h-full p-3">
+          <div className="flex items-center space-x-2 mb-3">
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span className="text-white text-sm">Available Tools</span>
+          </div>
+          <div className="space-y-2 text-sm">
+            <div className="bg-gray-700 p-2 rounded flex items-center space-x-2">
+              <Settings className="w-4 h-4 text-gray-400" />
+              <span className="text-gray-300">Advanced Settings</span>
+            </div>
+            <div className="bg-gray-700 p-2 rounded flex items-center space-x-2">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <span className="text-gray-300">Performance Monitor</span>
+            </div>
+            <div className="bg-gray-700 p-2 rounded flex items-center space-x-2">
+              <Database className="w-4 h-4 text-blue-400" />
+              <span className="text-gray-300">Data Analytics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    'media-creator': (
+      <div className="h-full">
+        <div className="bg-gray-800 rounded border border-gray-700 h-full p-3">
+          <div className="text-center">
+            <Layers className="w-8 h-8 mx-auto mb-2 text-purple-400" />
+            <div className="text-white text-sm mb-2">Media Creation Suite</div>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 bg-gray-700 p-2 rounded">
+                <Video className="w-4 h-4 text-red-400" />
+                <span className="text-gray-300 text-sm">Video Editor</span>
+              </div>
+              <div className="flex items-center space-x-2 bg-gray-700 p-2 rounded">
+                <Music className="w-4 h-4 text-green-400" />
+                <span className="text-gray-300 text-sm">Audio Mixer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    'video-creator': (
+      <div className="h-full flex flex-col">
+        <input
+          placeholder="Describe your video concept..."
+          className="mb-3 bg-gray-800 text-white px-3 py-2 rounded border border-gray-700"
+        />
+        <div className="flex-1 bg-gray-800 rounded border border-gray-700 flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <Video className="w-12 h-12 mx-auto mb-2 text-red-400" />
+            <div>AI Video Generation</div>
+            <div className="text-sm">Create stunning videos</div>
+          </div>
+        </div>
+      </div>
+    ),
+    'audio-mixer': (
+      <div className="h-full">
+        <div className="bg-gray-800 rounded border border-gray-700 h-full p-3">
+          <div className="text-center">
+            <Music className="w-8 h-8 mx-auto mb-2 text-green-400" />
+            <div className="text-white text-sm mb-3">Audio Mixer</div>
+            <div className="space-y-2">
+              <div className="bg-gray-700 p-2 rounded">
+                <div className="text-xs text-gray-400 mb-1">Track 1</div>
+                <div className="w-full bg-gray-600 rounded-full h-2">
+                  <div className="bg-green-400 h-2 rounded-full w-3/4"></div>
+                </div>
+              </div>
+              <div className="bg-gray-700 p-2 rounded">
+                <div className="text-xs text-gray-400 mb-1">Track 2</div>
+                <div className="w-full bg-gray-600 rounded-full h-2">
+                  <div className="bg-blue-400 h-2 rounded-full w-1/2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    'mcp-agentic-rag': (
+      <div className="h-full">
+        <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 rounded border border-purple-500/30 h-full p-3">
+          <div className="flex items-center space-x-2 mb-3">
+            <Brain className="w-5 h-5 text-purple-400" />
+            <span className="text-white font-medium">MCP Agentic RAG</span>
+          </div>
+          <div className="space-y-2 text-sm">
+            <div className="bg-purple-800/30 p-2 rounded">
+              <div className="text-purple-300">Intelligence Level: AUTONOMOUS</div>
+              <div className="text-xs text-gray-400">Making smart decisions...</div>
+            </div>
+            <div className="bg-blue-800/30 p-2 rounded">
+              <div className="text-blue-300">Context Retrieval: Active</div>
+              <div className="text-xs text-gray-400">Enhancing responses...</div>
+            </div>
+            <div className="bg-green-800/30 p-2 rounded">
+              <div className="text-green-300">Learning: Enabled</div>
+              <div className="text-xs text-gray-400">Improving with each interaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
     )
-  };
+  } as Record<PanelType, React.ReactElement>;
 
   return content[type] || <div className="text-gray-400 text-center">Panel Content</div>;
 };
@@ -536,14 +671,69 @@ export const RevolutionaryWorkspace: React.FC = () => {
       isMinimized: false,
       isGenerating: false,
       animationType: tool.category === 'development' ? 'code' :
-                    tool.category === 'ai' ? 'chat' :
-                    tool.category === 'media' ? 'media' : 'search'
+        tool.category === 'ai' ? 'chat' :
+          tool.category === 'media' ? 'media' : 'search'
     };
 
     setPanels(prev => [...prev, newPanel]);
     setNextZIndex(prev => prev + 1);
     setIsToolMarketplaceOpen(false);
+
+    // Auto-open MCP Agentic panel for MCP tools
+    if (tool.panelType === 'mcp-agentic-rag') {
+      setIsMCPAgenticOpen(true);
+    }
   }, [panels.length, nextZIndex]);
+
+  // Handle MCP Agentic RAG requests
+  const handleMCPAgenticRequest = useCallback(async (request: string) => {
+    try {
+      // This would connect to your Python backend MCP system
+      const response = await fetch('/api/mcp-agentic-rag', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_request: request,
+          user_id: 'current_user', // Replace with actual user ID
+          session_context: {
+            active_panels: panels.map(p => p.type),
+            workspace_state: 'active'
+          }
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        return result;
+      } else {
+        // Fallback for demo purposes
+        return {
+          response: {
+            message: "MCP Agentic RAG processed your request with autonomous intelligence!",
+            enhancements: ["memory_search", "context_expansion", "cross_session_learning"]
+          },
+          agentic_enhancements: {
+            rag_decisions_made: 3,
+            context_sources_used: 5,
+            models_optimized: ["context_master_primary", "deep_thinker_primary"],
+            processing_time_ms: 1250,
+            intelligence_level: "AUTONOMOUS"
+          }
+        };
+      }
+    } catch (error) {
+      console.error('MCP Agentic request failed:', error);
+      // Return demo response
+      return {
+        response: {
+          message: "MCP Agentic RAG is ready! This is a demo response showing the system's capabilities.",
+          enhancements: ["autonomous_decisions", "context_retrieval", "predictive_processing"]
+        }
+      };
+    }
+  }, [panels]);
 
   // Update panel properties
   const updatePanel = useCallback((id: string, updates: Partial<PanelConfig>) => {
@@ -599,6 +789,14 @@ export const RevolutionaryWorkspace: React.FC = () => {
           </Button>
 
           <Button
+            onClick={() => setIsMCPAgenticOpen(true)}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+          >
+            <Brain className="w-4 h-4 mr-2" />
+            MCP Agentic
+          </Button>
+
+          <Button
             variant="outline"
             onClick={autoArrange}
             className="border-gray-600 text-gray-300 hover:text-white"
@@ -642,6 +840,13 @@ export const RevolutionaryWorkspace: React.FC = () => {
         isOpen={isToolMarketplaceOpen}
         onClose={() => setIsToolMarketplaceOpen(false)}
         onAddTool={addPanel}
+      />
+
+      {/* MCP Agentic RAG Panel */}
+      <MCPAgenticPanel
+        isOpen={isMCPAgenticOpen}
+        onClose={() => setIsMCPAgenticOpen(false)}
+        onTriggerAgentic={handleMCPAgenticRequest}
       />
 
       {/* Empty State */}

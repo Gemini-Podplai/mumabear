@@ -1,4 +1,4 @@
-import { CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
 import { workspaceService } from '../../services/workspaceService';
 

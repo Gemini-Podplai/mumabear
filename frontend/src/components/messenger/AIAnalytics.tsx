@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  BarChart3,
-  TrendingUp,
-  DollarSign,
-  Zap,
-  Brain,
-  Users,
-  MessageSquare,
-  Star,
   Award,
-  Filter,
+  BarChart3,
+  Brain,
+  DollarSign,
   Download,
-  RefreshCw
+  Filter,
+  MessageSquare,
+  RefreshCw,
+  Star,
+  TrendingUp,
+  Users,
+  Zap
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ModelMetrics {
   modelId: string;
@@ -110,7 +110,7 @@ export const AIAnalytics: React.FC<AIAnalyticsProps> = ({
           'Problem Solving': Math.random() * 20
         },
         timeDistribution: Object.fromEntries(
-          Array.from({length: 24}, (_, i) => [i.toString(), Math.random() * 10])
+          Array.from({ length: 24 }, (_, i) => [i.toString(), Math.random() * 10])
         ),
         errorRate: Math.random() * 5,
         popularityScore: totalMessages * 0.1 + Math.random() * 50
@@ -253,11 +253,10 @@ export const AIAnalytics: React.FC<AIAnalyticsProps> = ({
                     <button
                       key={range}
                       onClick={() => setSelectedTimeRange(range as any)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        selectedTimeRange === range
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedTimeRange === range
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      }`}
+                        }`}
                     >
                       {range.charAt(0).toUpperCase() + range.slice(1)}
                     </button>
@@ -269,11 +268,10 @@ export const AIAnalytics: React.FC<AIAnalyticsProps> = ({
                     <button
                       key={metric}
                       onClick={() => setSelectedMetric(metric as any)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                        selectedMetric === metric
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedMetric === metric
                           ? 'bg-purple-600 text-white'
                           : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      }`}
+                        }`}
                     >
                       {metric.charAt(0).toUpperCase() + metric.slice(1)}
                     </button>
@@ -442,10 +440,9 @@ export const AIAnalytics: React.FC<AIAnalyticsProps> = ({
                                   </div>
                                 </td>
                                 <td className="p-3 text-right">
-                                  <span className={`text-sm font-medium ${
-                                    metric.uptime >= 99 ? 'text-green-400' :
-                                    metric.uptime >= 95 ? 'text-yellow-400' : 'text-red-400'
-                                  }`}>
+                                  <span className={`text-sm font-medium ${metric.uptime >= 99 ? 'text-green-400' :
+                                      metric.uptime >= 95 ? 'text-yellow-400' : 'text-red-400'
+                                    }`}>
                                     {metric.uptime.toFixed(1)}%
                                   </span>
                                 </td>

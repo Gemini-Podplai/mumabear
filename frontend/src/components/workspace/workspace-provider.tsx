@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
-import { FloatingComponent } from './fluid-transition';
-import { FloatingToolbar } from './floating-toolbar';
-import { CollaboratorPresence } from './collaborator-presence';
 import { CollaborationInsights } from './collaboration-insights';
+import { CollaboratorPresence } from './collaborator-presence';
+import { FloatingToolbar } from './floating-toolbar';
+import { FloatingComponent } from './fluid-transition';
 
 interface WorkspaceContextType {
   sessionId: string;
@@ -141,11 +141,10 @@ export const WorkspaceProvider: React.FC<WorkspaceProviderProps> = ({
         </FloatingComponent>
 
         {/* Express Mode indicator */}
-        <div className={`fixed bottom-4 left-4 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-          expressMode
+        <div className={`fixed bottom-4 left-4 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${expressMode
             ? 'bg-green-500 text-white'
             : 'bg-gray-200 text-gray-700'
-        }`}>
+          }`}>
           {expressMode ? '⚡ Express Mode' : 'Standard Mode'}
         </div>
       </div>

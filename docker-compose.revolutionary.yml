@@ -1,0 +1,274 @@
+version: '3.8'
+
+# 🚀 REVOLUTIONARY AI WORKSPACE - COMPETITION DESTROYER 🚀
+# STEALTH PORT STRATEGY: Complete separation from competitor's broken system
+# 🔥 OUR PORTS: 7777 (backend), 4200 (frontend), 4400+ (MCP services)
+# 💩 THEIR PORTS: 5000 (backend), 9000 (frontend), 3001-3004 (broken MCP)
+# 🎯 NO CONFUSION - BOSSES WILL SEE THE DIFFERENCE!
+
+services:
+  # 🐻 REVOLUTIONARY Mama Bear Backend - ACTUALLY WORKING
+  revolutionary-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: revolutionary-ai-backend
+    ports:
+      - "7777:7777" # STEALTH PORT - Different from competitor's 5000
+    volumes:
+      - ./backend:/app
+      - ./podplay-build-alpha-8fcf03975028.json:/app/credentials/podplay-build-alpha-8fcf03975028.json:ro
+      - ./podplay-build-beta-10490f7d079e.json:/app/credentials/podplay-build-beta-10490f7d079e.json:ro
+      - ./backend/logs:/app/logs
+      - ./new-logic:/app/new-logic
+    environment:
+      # Google Cloud Configuration
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/podplay-build-alpha-8fcf03975028.json
+      - GOOGLE_CLOUD_PROJECT=podplay-build-alpha
+      - VERTEX_AI_LOCATION=us-central1
+
+      # Flask Configuration
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=true
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=7777
+      - BACKEND_PORT=7777
+      - DEBUG=true
+
+      # Revolutionary AI Configuration
+      - MEM0_API_KEY=${MEM0_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
+
+      # WORKING MCP Server URLs (different ports from competitor)
+      - MCP_FILESYSTEM_URL=http://revolutionary-mcp-filesystem:4401
+      - MCP_SEARCH_URL=http://revolutionary-mcp-search:4402
+      - MCP_MEMORY_URL=http://revolutionary-mcp-memory:4403
+      - MCP_SEQUENTIAL_THINKING_URL=http://revolutionary-mcp-thinking:4404
+
+      # Mem0.ai Advanced Memory Configuration (£250/month enhanced features)
+      - MEM0_USER_ID=${MEM0_USER_ID}
+      - MEM0_MEMORY_ENABLED=${MEM0_MEMORY_ENABLED}
+      - MEM0_RAG_ENABLED=${MEM0_RAG_ENABLED}
+
+      # Performance Settings
+      - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
+    depends_on:
+      - revolutionary-mcp-filesystem
+      - revolutionary-mcp-search
+      - revolutionary-mcp-memory
+      - revolutionary-mcp-thinking
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:7777/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 🚀 REVOLUTIONARY Frontend - STUNNING UI EXPERIENCE
+  revolutionary-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: revolutionary-ai-frontend
+    ports:
+      - "4200:4200" # STEALTH PORT - Different from competitor's 9000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:7777
+      - VITE_WS_URL=ws://localhost:7777
+    depends_on:
+      - revolutionary-backend
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0 --port 4200
+
+  # 🧠 WORKING MCP Sequential Thinking Server (Unlike competitor's broken version)
+  revolutionary-mcp-thinking:
+    image: node:20-alpine
+    container_name: revolutionary-mcp-thinking
+    working_dir: /app
+    ports:
+      - "4404:4404"
+    volumes:
+      - ./podplay-mcp/sequential-thinking:/app
+    command: >
+      sh -c "
+        npm install express &&
+        echo '🧠 Revolutionary MCP Sequential Thinking Server ACTUALLY RUNNING' &&
+        node index.js
+      "
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+
+  # 📁 WORKING MCP Filesystem Server
+  revolutionary-mcp-filesystem:
+    image: node:20-alpine
+    container_name: revolutionary-mcp-filesystem
+    working_dir: /app
+    ports:
+      - "4401:4401"
+    volumes:
+      - ./podplay-mcp/filesystem:/app
+      - ./backend:/data/backend:ro
+      - ./frontend:/data/frontend:ro
+      - ./new-logic:/data/new-logic:ro
+    command: >
+      sh -c "
+        npm install express &&
+        echo '📁 Revolutionary MCP Filesystem Server ACTUALLY RUNNING' &&
+        node index.js
+      "
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+
+  # 🔍 WORKING MCP Search Server
+  revolutionary-mcp-search:
+    image: node:20-alpine
+    container_name: revolutionary-mcp-search
+    working_dir: /app
+    ports:
+      - "4402:4402"
+    volumes:
+      - ./podplay-mcp/search:/app
+    environment:
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    command: >
+      sh -c "
+        npm install express &&
+        echo '🔍 Revolutionary MCP Search Server ACTUALLY RUNNING' &&
+        node index.js
+      "
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+
+  # 🧠 WORKING MCP Memory Server
+  revolutionary-mcp-memory:
+    image: node:20-alpine
+    container_name: revolutionary-mcp-memory
+    working_dir: /app
+    ports:
+      - "4403:4403"
+    volumes:
+      - ./podplay-mcp/memory:/app
+      - revolutionary-memory-data:/app/data
+    command: >
+      sh -c "
+        npm install express &&
+        echo '🧠 Revolutionary MCP Memory Server ACTUALLY RUNNING' &&
+        node index.js
+      "
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+
+  # 🔄 Redis REMOVED - Using Mem0.ai (£250/month) instead for superior AI memory
+  # revolutionary-redis:
+  #   image: redis:7-alpine
+  #   container_name: revolutionary-redis
+  #   ports:
+  #     - "6380:6379" # Different from competitor's 6379
+  #   volumes:
+  #     - revolutionary-redis-data:/data
+  #   networks:
+  #     - revolutionary-network
+  #   restart: unless-stopped
+  #   command: redis-server --appendonly yes
+
+  # 📊 Revolutionary Monitoring (Better than competitor) - DISABLED FOR NOW
+  # revolutionary-prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: revolutionary-prometheus
+  #   ports:
+  #     - "9091:9090"  # Different from competitor's 9090
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - revolutionary-prometheus-data:/prometheus
+  #   networks:
+  #     - revolutionary-network
+  #   restart: unless-stopped
+
+  # 📈 Revolutionary Grafana Dashboard
+  revolutionary-grafana:
+    image: grafana/grafana:latest
+    container_name: revolutionary-grafana
+    ports:
+      - "3010:3000" # Different from competitor's 3001
+    volumes:
+      - revolutionary-grafana-data:/var/lib/grafana
+      - ./monitoring/grafana-dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=revolutionary_ai_2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+
+  # 🔧 Revolutionary Development Environment
+  revolutionary-code-server:
+    image: codercom/code-server:latest
+    container_name: revolutionary-code-server
+    ports:
+      - "8081:8080" # Different from competitor's 8080
+    volumes:
+      - .:/home/coder/revolutionary-workspace
+      - revolutionary-code-data:/home/coder/.local
+    environment:
+      - PASSWORD=revolutionary_dev_2024
+    networks:
+      - revolutionary-network
+    restart: unless-stopped
+    command: >
+      --bind-addr 0.0.0.0:8080 --user-data-dir /home/coder/.local/share/code-server --extensions-dir /home/coder/.local/share/code-server/extensions /home/coder/revolutionary-workspace
+
+  # 🧪 Revolutionary Testing Environment
+  revolutionary-test-runner:
+    build:
+      context: ./tests
+      dockerfile: Dockerfile.test
+    container_name: revolutionary-test-runner
+    volumes:
+      - .:/app
+    environment:
+      - PYTEST_ARGS=--verbose --tb=short
+      - API_BASE_URL=http://revolutionary-backend:7777
+    networks:
+      - revolutionary-network
+    depends_on:
+      - revolutionary-backend
+      - revolutionary-frontend
+    profiles:
+      - testing
+
+volumes:
+  revolutionary-memory-data:
+    driver: local
+  # revolutionary-redis-data:  # REMOVED - Using Mem0.ai (£250/month) instead
+  #   driver: local
+  revolutionary-prometheus-data:
+    driver: local
+  revolutionary-grafana-data:
+    driver: local
+  revolutionary-code-data:
+    driver: local
+
+networks:
+  revolutionary-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16 # Different from competitor's 172.25.0.0/16

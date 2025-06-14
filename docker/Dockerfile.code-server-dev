@@ -1,0 +1,62 @@
+# Enhanced Code-Server with Revolutionary Workspace Extensions
+FROM codercom/code-server:latest
+
+# Switch to root for installation
+USER root
+
+# Install additional tools and dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    python3 \
+    python3-pip \
+    nodejs \
+    npm \
+    docker.io \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies for backend development
+RUN pip3 install \
+    fastapi \
+    uvicorn \
+    pytest \
+    black \
+    flake8 \
+    debugpy
+
+# Install useful VS Code extensions
+RUN code-server \
+    --install-extension ms-python.python \
+    --install-extension ms-vscode.js-debug \
+    --install-extension ms-vscode.vscode-typescript-next \
+    --install-extension bradlc.vscode-tailwindcss \
+    --install-extension esbenp.prettier-vscode \
+    --install-extension ms-vscode.docker \
+    --install-extension ms-kubernetes-tools.vscode-kubernetes-tools \
+    --install-extension github.copilot \
+    --install-extension ms-python.black-formatter \
+    --install-extension ms-python.flake8 \
+    --install-extension ms-toolsai.jupyter
+
+# Create Revolutionary Workspace configuration
+COPY settings.json /home/coder/.local/share/code-server/User/settings.json
+COPY keybindings.json /home/coder/.local/share/code-server/User/keybindings.json
+
+# Install Docker Compose
+RUN curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+
+# Set up workspace directory
+RUN mkdir -p /home/coder/revolutionary-workspace
+
+# Switch back to coder user
+RUN chown -R coder:coder /home/coder
+USER coder
+
+# Set default working directory
+WORKDIR /home/coder/revolutionary-workspace
+
+# Expose code-server port
+EXPOSE 8080

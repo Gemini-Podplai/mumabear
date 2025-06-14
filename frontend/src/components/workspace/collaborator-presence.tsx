@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
-import { User, Video, Mic, MicOff, VideoOff, X } from 'lucide-react';
+import { Mic, MicOff, User, Video, VideoOff, X } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 interface CollaboratorPresenceProps {
   collaborator: {

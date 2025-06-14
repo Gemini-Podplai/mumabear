@@ -1,6 +1,6 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import { Crown, Users, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Users, Crown } from 'lucide-react';
 
 interface AIModel {
   id: string;
@@ -183,22 +183,19 @@ export const GroupChatModal: React.FC<GroupChatModalProps> = ({
           <div className="flex items-center justify-between">
             {['basic', 'participants', 'settings'].map((stepName, index) => (
               <React.Fragment key={stepName}>
-                <div className={`flex items-center space-x-2 ${
-                  step === stepName ? 'text-blue-400' :
-                  ['basic', 'participants', 'settings'].indexOf(step) > index ? 'text-green-400' : 'text-gray-500'
-                }`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                    step === stepName ? 'border-blue-400 bg-blue-400/20' :
-                    ['basic', 'participants', 'settings'].indexOf(step) > index ? 'border-green-400 bg-green-400/20' : 'border-gray-500'
+                <div className={`flex items-center space-x-2 ${step === stepName ? 'text-blue-400' :
+                    ['basic', 'participants', 'settings'].indexOf(step) > index ? 'text-green-400' : 'text-gray-500'
                   }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${step === stepName ? 'border-blue-400 bg-blue-400/20' :
+                      ['basic', 'participants', 'settings'].indexOf(step) > index ? 'border-green-400 bg-green-400/20' : 'border-gray-500'
+                    }`}>
                     {['basic', 'participants', 'settings'].indexOf(step) > index ? '✓' : index + 1}
                   </div>
                   <span className="capitalize font-medium">{stepName}</span>
                 </div>
                 {index < 2 && (
-                  <div className={`flex-1 h-0.5 mx-4 ${
-                    ['basic', 'participants', 'settings'].indexOf(step) > index ? 'bg-green-400' : 'bg-gray-600'
-                  }`} />
+                  <div className={`flex-1 h-0.5 mx-4 ${['basic', 'participants', 'settings'].indexOf(step) > index ? 'bg-green-400' : 'bg-gray-600'
+                    }`} />
                 )}
               </React.Fragment>
             ))}
@@ -225,11 +222,10 @@ export const GroupChatModal: React.FC<GroupChatModalProps> = ({
                     {groupTypes.map(type => (
                       <motion.button
                         key={type.id}
-                        className={`p-4 rounded-xl border-2 text-left transition-all ${
-                          groupData.groupType === type.id
+                        className={`p-4 rounded-xl border-2 text-left transition-all ${groupData.groupType === type.id
                             ? 'border-blue-500 bg-blue-500/10'
                             : 'border-gray-600 hover:border-gray-500'
-                        }`}
+                          }`}
                         onClick={() => setGroupData(prev => ({ ...prev, groupType: type.id as any }))}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -287,42 +283,42 @@ export const GroupChatModal: React.FC<GroupChatModalProps> = ({
                 className="space-y-6"
               >
                 {/* Recommended Models */}
-                {groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels && 
-                 groupTypes.find(t => t.id === groupData.groupType)!.recommendedModels.length > 0 && (
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <label className="block text-sm font-medium text-gray-300">
-                        Recommended for {groupTypes.find(t => t.id === groupData.groupType)?.name}
-                      </label>
-                      <button
-                        onClick={() => applyRecommendedModels(
-                          groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels || []
-                        )}
-                        className="text-xs text-blue-400 hover:text-blue-300 font-medium"
-                      >
-                        Add All Recommended
-                      </button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels
-                        .map(id => models.find(m => m.id === id))
-                        .filter(Boolean)
-                        .map(model => (
-                          <div
-                            key={model!.id}
-                            className="flex items-center space-x-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg"
-                          >
-                            <span className="text-xl">{model!.avatar}</span>
-                            <div className="flex-1">
-                              <span className="text-sm font-medium text-white">{model!.name}</span>
-                              <p className="text-xs text-gray-400">{model!.provider}</p>
+                {groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels &&
+                  groupTypes.find(t => t.id === groupData.groupType)!.recommendedModels.length > 0 && (
+                    <div>
+                      <div className="flex items-center justify-between mb-3">
+                        <label className="block text-sm font-medium text-gray-300">
+                          Recommended for {groupTypes.find(t => t.id === groupData.groupType)?.name}
+                        </label>
+                        <button
+                          onClick={() => applyRecommendedModels(
+                            groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels || []
+                          )}
+                          className="text-xs text-blue-400 hover:text-blue-300 font-medium"
+                        >
+                          Add All Recommended
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {groupTypes.find(t => t.id === groupData.groupType)?.recommendedModels
+                          .map(id => models.find(m => m.id === id))
+                          .filter(Boolean)
+                          .map(model => (
+                            <div
+                              key={model!.id}
+                              className="flex items-center space-x-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg"
+                            >
+                              <span className="text-xl">{model!.avatar}</span>
+                              <div className="flex-1">
+                                <span className="text-sm font-medium text-white">{model!.name}</span>
+                                <p className="text-xs text-gray-400">{model!.provider}</p>
+                              </div>
+                              <Crown className="w-4 h-4 text-yellow-400" />
                             </div>
-                            <Crown className="w-4 h-4 text-yellow-400" />
-                          </div>
-                        ))}
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Search */}
                 <div>
@@ -359,11 +355,10 @@ export const GroupChatModal: React.FC<GroupChatModalProps> = ({
                     return (
                       <motion.div
                         key={model.id}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          isSelected
+                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${isSelected
                             ? 'border-blue-500 bg-blue-500/10'
                             : 'border-gray-600 hover:border-gray-500'
-                        } ${selectedModels.size >= groupData.maxParticipants && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          } ${selectedModels.size >= groupData.maxParticipants && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
                         onClick={() => toggleModelSelection(model.id)}
                         whileHover={{ scale: selectedModels.size >= groupData.maxParticipants && !isSelected ? 1 : 1.02 }}
                         whileTap={{ scale: selectedModels.size >= groupData.maxParticipants && !isSelected ? 1 : 0.98 }}
@@ -383,18 +378,16 @@ export const GroupChatModal: React.FC<GroupChatModalProps> = ({
                         </div>
                         <p className="text-xs text-gray-400 truncate">{model.specialty}</p>
                         <div className="flex items-center justify-between mt-2">
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            model.tier === 'premium' ? 'bg-purple-500/20 text-purple-300' :
-                            model.tier === 'advanced' ? 'bg-blue-500/20 text-blue-300' :
-                            'bg-gray-500/20 text-gray-300'
-                          }`}>
+                          <span className={`text-xs px-2 py-1 rounded ${model.tier === 'premium' ? 'bg-purple-500/20 text-purple-300' :
+                              model.tier === 'advanced' ? 'bg-blue-500/20 text-blue-300' :
+                                'bg-gray-500/20 text-gray-300'
+                            }`}>
                             {model.tier}
                           </span>
-                          <div className={`w-2 h-2 rounded-full ${
-                            model.status === 'online' ? 'bg-green-500' :
-                            model.status === 'busy' ? 'bg-yellow-500' :
-                            'bg-gray-500'
-                          }`} />
+                          <div className={`w-2 h-2 rounded-full ${model.status === 'online' ? 'bg-green-500' :
+                              model.status === 'busy' ? 'bg-yellow-500' :
+                                'bg-gray-500'
+                            }`} />
                         </div>
                       </motion.div>
                     );

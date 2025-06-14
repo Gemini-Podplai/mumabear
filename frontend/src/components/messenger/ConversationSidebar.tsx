@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface AIModel {
   id: string;
@@ -74,7 +74,7 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
   const getFilteredConversations = () => {
     const filtered = conversations.filter(conv => {
       const matchesSearch = conv.modelName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           conv.lastMessage.content.toLowerCase().includes(searchQuery.toLowerCase());
+        conv.lastMessage.content.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesView = activeView === 'archived' ? conv.isArchived : !conv.isArchived;
       return matchesSearch && matchesView;
     });
@@ -154,20 +154,18 @@ export const ConversationSidebar: React.FC<ConversationSidebarProps> = ({
           ].map(tab => (
             <motion.button
               key={tab.key}
-              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeView === tab.key
+              className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${activeView === tab.key
                   ? 'bg-blue-600 text-white'
                   : 'text-gray-300 hover:text-white hover:bg-gray-600'
-              }`}
+                }`}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onViewChange(tab.key as any)}
             >
               {tab.label}
               {tab.count > 0 && (
-                <span className={`ml-2 px-1.5 py-0.5 rounded-full text-xs ${
-                  activeView === tab.key ? 'bg-blue-700' : 'bg-gray-500'
-                }`}>
+                <span className={`ml-2 px-1.5 py-0.5 rounded-full text-xs ${activeView === tab.key ? 'bg-blue-700' : 'bg-gray-500'
+                  }`}>
                   {tab.count}
                 </span>
               )}
@@ -306,7 +304,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-    
+
     if (diff < 60000) return 'now';
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`;
@@ -315,9 +313,8 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
 
   return (
     <motion.div
-      className={`p-4 cursor-pointer border-b border-gray-700 hover:bg-gray-750 transition-colors ${
-        isSelected ? 'bg-gray-700 border-l-4 border-blue-500' : ''
-      }`}
+      className={`p-4 cursor-pointer border-b border-gray-700 hover:bg-gray-750 transition-colors ${isSelected ? 'bg-gray-700 border-l-4 border-blue-500' : ''
+        }`}
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
@@ -383,11 +380,10 @@ const GroupChatItem: React.FC<{
 }> = ({ group, isSelected, onClick, expressMode }) => {
   return (
     <motion.div
-      className={`p-3 rounded-lg cursor-pointer transition-all ${
-        isSelected
+      className={`p-3 rounded-lg cursor-pointer transition-all ${isSelected
           ? 'bg-blue-600/20 border border-blue-500/50'
           : 'hover:bg-gray-700'
-      }`}
+        }`}
       whileHover={{ scale: expressMode ? 1 : 1.02, x: 4 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
@@ -410,7 +406,7 @@ const GroupChatItem: React.FC<{
               })}
             </span>
           </div>
-          
+
           <div className="flex items-center space-x-2 mt-1">
             <p className="text-sm text-gray-400 truncate flex-1">
               {group.participants.length} participants

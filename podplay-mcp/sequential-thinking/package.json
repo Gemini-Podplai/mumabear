@@ -1,0 +1,9 @@
+{
+    "name": "revolutionary-mcp-thinking",
+    "version": "1.0.0",
+    "description": "Revolutionary MCP Sequential Thinking Server",
+    "main": "index.js",
+    "dependencies": {
+        "express": "^4.21.2"
+    }
+}

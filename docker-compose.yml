@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # MCP File Transfer Service
+  mcp-file-transfer:
+    build:
+      context: ./podplay-mcp
+      dockerfile: Dockerfile
+    container_name: revolutionary-mcp-files
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./podplay-mcp/transfer:/app/transfer
+      - ./podplay-mcp/logs:/app/logs
+      - ./podplay-mcp/temp:/app/temp
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - MAX_FILE_SIZE=100
+      - TRANSFER_DIR=/app/transfer
+    restart: unless-stopped
+    networks:
+      - revolutionary-network
+
+  # Backend Services
+  revolutionary-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: revolutionary-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/mama_bear_memory:/app/mama_bear_memory
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - MCP_ENDPOINT=http://mcp-file-transfer:3000
+    depends_on:
+      - mcp-file-transfer
+    restart: unless-stopped
+    networks:
+      - revolutionary-network
+
+  # Code Server (VS Code in Browser)
+  code-server:
+    image: codercom/code-server:latest
+    container_name: revolutionary-workspace
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/home/coder/revolutionary-workspace
+      - code-server-data:/home/coder/.local/share/code-server
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PASSWORD=${CODE_SERVER_PASSWORD:-revolution2024}
+      - SUDO_PASSWORD=${CODE_SERVER_PASSWORD:-revolution2024}
+    command: >
+      --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry /home/coder/revolutionary-workspace
+    restart: unless-stopped
+    networks:
+      - revolutionary-network
+    depends_on:
+      - revolutionary-backend
+      - mcp-file-transfer
+
+  # Frontend Development Server (when needed)
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: revolutionary-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    profiles:
+      - development
+    networks:
+      - revolutionary-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: revolutionary-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - code-server
+      - revolutionary-backend
+    restart: unless-stopped
+    networks:
+      - revolutionary-network
+    profiles:
+      - production
+
+volumes:
+  code-server-data:
+    driver: local
+
+networks:
+  revolutionary-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

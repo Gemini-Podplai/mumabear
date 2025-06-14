@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
 
 interface MessageInputProps {
   onSendMessage: (content: string, type?: 'text' | 'image' | 'file' | 'audio' | 'video' | 'code' | 'location', metadata?: any) => void;
@@ -27,10 +27,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   const handleSend = () => {
     if (!message.trim()) return;
-    
+
     onSendMessage(message);
     setMessage('');
-    
+
     // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -46,7 +46,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
-    
+
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -196,19 +196,18 @@ export const MessageInput: React.FC<MessageInputProps> = ({
         <div className="flex space-x-2">
           {/* Voice Recording Button */}
           <motion.button
-            className={`p-2 rounded-lg ${
-              isRecording 
-                ? 'bg-red-600 hover:bg-red-700 text-white' 
+            className={`p-2 rounded-lg ${isRecording
+                ? 'bg-red-600 hover:bg-red-700 text-white'
                 : 'bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white'
-            }`}
+              }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={isRecording ? onStopRecording : onStartRecording}
           >
             {isRecording ? (
-              <motion.svg 
-                className="w-5 h-5" 
-                fill="currentColor" 
+              <motion.svg
+                className="w-5 h-5"
+                fill="currentColor"
                 viewBox="0 0 20 20"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}

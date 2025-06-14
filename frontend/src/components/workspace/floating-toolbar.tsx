@@ -1,15 +1,15 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Command,
   ArrowLeftRight,
+  Code,
+  Command,
   MessageSquare,
-  Video,
   Mic,
-  Users,
   Settings,
-  Code
+  Users,
+  Video
 } from 'lucide-react';
+import React from 'react';
 
 interface FloatingToolbarProps {
   isVisible: boolean;
@@ -94,11 +94,10 @@ export const FloatingToolbar: React.FC<FloatingToolbarProps> = ({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleToolClick(tool.id)}
-              className={`p-2 rounded ${
-                activeTools.includes(tool.id)
+              className={`p-2 rounded ${activeTools.includes(tool.id)
                   ? 'bg-blue-500 text-white'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
-              } transition-colors relative group`}
+                } transition-colors relative group`}
             >
               {tool.icon}
               {/* Tooltip */}

@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
   id: string;
@@ -257,19 +257,17 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div className="relative">
           {/* Message bubble */}
           <motion.div
-            className={`px-4 py-3 rounded-2xl relative shadow-lg ${
-              isUser
+            className={`px-4 py-3 rounded-2xl relative shadow-lg ${isUser
                 ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-br-md'
                 : 'bg-gray-700 text-white rounded-bl-md border border-gray-600'
-            } ${message.isTyping ? 'animate-pulse' : ''}`}
+              } ${message.isTyping ? 'animate-pulse' : ''}`}
             whileHover={{ y: -1 }}
           >
             {renderMessageContent()}
 
             {/* Timestamp and read status */}
-            <div className={`text-xs mt-2 flex items-center space-x-1 ${
-              isUser ? 'text-blue-100 justify-end' : 'text-gray-400'
-            }`}>
+            <div className={`text-xs mt-2 flex items-center space-x-1 ${isUser ? 'text-blue-100 justify-end' : 'text-gray-400'
+              }`}>
               <span>
                 {message.timestamp.toLocaleTimeString([], {
                   hour: '2-digit',

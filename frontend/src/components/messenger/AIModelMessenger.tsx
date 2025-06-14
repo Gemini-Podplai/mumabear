@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
-import { MessageBubble } from './MessageBubble';
-import { ModelSelectorModal } from './ModelSelectorModal';
-import { ConversationSidebar } from './ConversationSidebar';
-import { MessageInput } from './MessageInput';
-import { ChatHeader } from './ChatHeader';
-import { GroupChatModal } from './GroupChatModal';
-import { GroupChatInterface } from './GroupChatInterface';
 import { Mem0Service } from '../../services/mem0Service';
+import { ChatHeader } from './ChatHeader';
+import { ConversationSidebar } from './ConversationSidebar';
+import { GroupChatInterface } from './GroupChatInterface';
+import { GroupChatModal } from './GroupChatModal';
+import { MessageBubble } from './MessageBubble';
+import { MessageInput } from './MessageInput';
+import { ModelSelectorModal } from './ModelSelectorModal';
 
 // AI Model Interface with 57+ models
 interface AIModel {
@@ -100,7 +100,7 @@ export const AIModelMessenger: React.FC = () => {
     userName: 'User',
     expressMode: true
   });
-  
+
   // Enable express mode for faster responses
   const expressMode = true;
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -915,7 +915,7 @@ export const AIModelMessenger: React.FC = () => {
   // Initialize Mem0 service
   useEffect(() => {
     Mem0Service.initialize();
-    
+
     // Load sample group chats for demonstration
     const sampleGroups: GroupChat[] = [
       {
@@ -977,7 +977,7 @@ export const AIModelMessenger: React.FC = () => {
         }
       }
     ];
-    
+
     setGroupChats(sampleGroups);
   }, []);
 
@@ -1039,11 +1039,11 @@ export const AIModelMessenger: React.FC = () => {
       setConversations(prev => prev.map(conv =>
         conv.id === selectedConversation
           ? {
-              ...conv,
-              messages: [...conv.messages, newMessage],
-              lastMessage: newMessage,
-              updatedAt: new Date()
-            }
+            ...conv,
+            messages: [...conv.messages, newMessage],
+            lastMessage: newMessage,
+            updatedAt: new Date()
+          }
           : conv
       ));
 
@@ -1076,12 +1076,12 @@ export const AIModelMessenger: React.FC = () => {
         setConversations(prev => prev.map(conv =>
           conv.id === selectedConversation
             ? {
-                ...conv,
-                messages: [...conv.messages, aiResponse],
-                lastMessage: aiResponse,
-                unreadCount: conv.unreadCount + 1,
-                updatedAt: new Date()
-              }
+              ...conv,
+              messages: [...conv.messages, aiResponse],
+              lastMessage: aiResponse,
+              unreadCount: conv.unreadCount + 1,
+              updatedAt: new Date()
+            }
             : conv
         ));
 
@@ -1096,10 +1096,10 @@ export const AIModelMessenger: React.FC = () => {
       setGroupChats(prev => prev.map(gchat =>
         gchat.id === selectedConversation
           ? {
-              ...gchat,
-              messages: [...gchat.messages, newMessage],
-              lastActivity: new Date()
-            }
+            ...gchat,
+            messages: [...gchat.messages, newMessage],
+            lastActivity: new Date()
+          }
           : gchat
       ));
     }
@@ -1163,15 +1163,15 @@ export const AIModelMessenger: React.FC = () => {
     setGroupChats(prev => prev.map(group =>
       group.id === selectedGroupChat
         ? {
-            ...group,
-            messages: [...group.messages, newMessage],
-            lastActivity: new Date()
-          }
+          ...group,
+          messages: [...group.messages, newMessage],
+          lastActivity: new Date()
+        }
         : group
     ));
 
     // Simulate AI responses from group participants
-    const activeParticipants = groupChat.participants.filter(id => 
+    const activeParticipants = groupChat.participants.filter(id =>
       aiModels.find(m => m.id === id)?.status === 'online'
     );
 
@@ -1199,10 +1199,10 @@ export const AIModelMessenger: React.FC = () => {
         setGroupChats(prev => prev.map(group =>
           group.id === selectedGroupChat
             ? {
-                ...group,
-                messages: [...group.messages, aiResponse],
-                lastActivity: new Date()
-              }
+              ...group,
+              messages: [...group.messages, aiResponse],
+              lastActivity: new Date()
+            }
             : group
         ));
 
@@ -1379,7 +1379,7 @@ export const AIModelMessenger: React.FC = () => {
             />
           </>
         ) : (
-          <WelcomeScreen 
+          <WelcomeScreen
             onNewChat={() => setShowModelSelector(true)}
             onNewGroupChat={() => setShowGroupChatModal(true)}
           />
@@ -1424,9 +1424,9 @@ export const AIModelMessenger: React.FC = () => {
   );
 };
 
-const WelcomeScreen: React.FC<{ onNewChat: () => void; onNewGroupChat: () => void }> = ({ 
-  onNewChat, 
-  onNewGroupChat 
+const WelcomeScreen: React.FC<{ onNewChat: () => void; onNewGroupChat: () => void }> = ({
+  onNewChat,
+  onNewGroupChat
 }) => (
   <div className="flex-1 flex items-center justify-center">
     <div className="text-center max-w-md">
@@ -1451,7 +1451,7 @@ const WelcomeScreen: React.FC<{ onNewChat: () => void; onNewGroupChat: () => voi
         Chat with 57+ AI models in a revolutionary WhatsApp-like experience.
         Each conversation is powered by persistent memory for truly personalized interactions.
       </p>
-      
+
       <div className="flex space-x-4 justify-center mb-8">
         <motion.button
           className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:from-blue-700 hover:to-purple-700 font-semibold shadow-lg"
@@ -1461,7 +1461,7 @@ const WelcomeScreen: React.FC<{ onNewChat: () => void; onNewGroupChat: () => voi
         >
           Start 1-on-1 Chat
         </motion.button>
-        
+
         <motion.button
           className="px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 rounded-lg hover:from-green-700 hover:to-teal-700 font-semibold shadow-lg"
           whileHover={{ scale: 1.05, y: -2 }}

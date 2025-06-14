@@ -20,11 +20,14 @@ from flask_socketio import SocketIO, emit
 import json
 
 # Initialize logging first
+log_file = os.path.join('/app/logs', os.getenv('LOG_FILE', 'mama_bear.log'))
+os.makedirs('/app/logs', exist_ok=True)
+
 logging.basicConfig(
     level=getattr(logging, os.getenv('LOG_LEVEL', 'INFO')),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.getenv('LOG_FILE', 'mama_bear.log')),
+        logging.FileHandler(log_file),
         logging.StreamHandler()
     ]
 )
@@ -383,6 +386,14 @@ async def initialize_sanctuary_services():
                 logger.info("✅ OpenAI Vertex API registered")
             except ImportError as e:
                 logger.warning(f"OpenAI Vertex API not available: {e}")
+
+            # Register Revolutionary MCP Client API
+            try:
+                from api.revolutionary_mcp_api import revolutionary_mcp_bp
+                app.register_blueprint(revolutionary_mcp_bp)
+                logger.info("✅ 🚀 Revolutionary MCP Client API registered")
+            except ImportError as e:
+                logger.warning(f"Revolutionary MCP Client API not available: {e}")
 
             logger.info("✅ API blueprints registered successfully")
         except Exception as e:

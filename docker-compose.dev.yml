@@ -1,0 +1,99 @@
+# Development version with hot reload and debugging
+version: '3.8'
+
+services:
+  # MCP File Transfer Service - Development Mode
+  mcp-file-transfer-dev:
+    build:
+      context: ./podplay-mcp
+      dockerfile: Dockerfile.dev
+    container_name: revolutionary-mcp-dev
+    ports:
+      - "3000:3000"
+      - "9229:9229" # Node.js debugging port
+    volumes:
+      - ./podplay-mcp:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=debug
+      - DEBUG=*
+    command: npm run dev
+    restart: unless-stopped
+    networks:
+      - revolutionary-dev-network
+
+  # Backend Services - Development Mode
+  revolutionary-backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: revolutionary-backend-dev
+    ports:
+      - "8000:8000"
+      - "5678:5678" # Python debugger port
+    volumes:
+      - ./backend:/app
+      - ./backend/mama_bear_memory:/app/mama_bear_memory
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - MCP_ENDPOINT=http://mcp-file-transfer-dev:3000
+    depends_on:
+      - mcp-file-transfer-dev
+    command: python -m debugpy --listen 0.0.0.0:5678 --wait-for-client app.py
+    restart: unless-stopped
+    networks:
+      - revolutionary-dev-network
+
+  # Code Server with Development Extensions
+  code-server-dev:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.code-server-dev
+    container_name: revolutionary-workspace-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/home/coder/revolutionary-workspace
+      - code-server-dev-data:/home/coder/.local/share/code-server
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PASSWORD=${CODE_SERVER_PASSWORD:-dev123}
+      - SUDO_PASSWORD=${CODE_SERVER_PASSWORD:-dev123}
+    command: >
+      --bind-addr 0.0.0.0:8080 --auth password --disable-telemetry --install-extension ms-python.python --install-extension ms-vscode.js-debug --install-extension ms-vscode.vscode-typescript-next --install-extension bradlc.vscode-tailwindcss --install-extension esbenp.prettier-vscode /home/coder/revolutionary-workspace
+    restart: unless-stopped
+    networks:
+      - revolutionary-dev-network
+
+  # Test Database for Development
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: revolutionary-db-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=revolutionary_dev
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_pass
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - revolutionary-dev-network
+
+volumes:
+  code-server-dev-data:
+    driver: local
+  postgres-dev-data:
+    driver: local
+
+networks:
+  revolutionary-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

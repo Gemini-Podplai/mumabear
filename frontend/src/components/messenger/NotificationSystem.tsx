@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, MessageCircle, Users, BellOff } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Bell, BellOff, MessageCircle, Users, X } from 'lucide-react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface Notification {
   id: string;
@@ -362,11 +362,10 @@ export const NotificationPanel: React.FC<{
                   <button
                     key={tab.key}
                     onClick={() => setFilter(tab.key as any)}
-                    className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-colors ${
-                      filter === tab.key
+                    className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-colors ${filter === tab.key
                         ? 'bg-blue-600 text-white'
                         : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                    }`}
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -381,9 +380,8 @@ export const NotificationPanel: React.FC<{
                   filteredNotifications.map(notification => (
                     <motion.div
                       key={notification.id}
-                      className={`p-4 border-b border-gray-700 hover:bg-gray-750 cursor-pointer ${
-                        !notification.isRead ? 'bg-blue-500/5 border-l-4 border-l-blue-500' : ''
-                      }`}
+                      className={`p-4 border-b border-gray-700 hover:bg-gray-750 cursor-pointer ${!notification.isRead ? 'bg-blue-500/5 border-l-4 border-l-blue-500' : ''
+                        }`}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}

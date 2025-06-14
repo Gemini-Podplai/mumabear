@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon, QrCodeIcon, FolderIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ChevronLeftIcon, ChevronRightIcon, FolderIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { AnimatePresence, motion, useAnimationControls, type Variants } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';

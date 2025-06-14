@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AIModelMessenger } from './AIModelMessenger';
-import { NotificationProvider, NotificationBell, NotificationPanel, NotificationSettings } from './NotificationSystem';
-import { AIAnalytics } from './AIAnalytics';
-import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
 import { BarChart3, Settings } from 'lucide-react';
+import React, { useState } from 'react';
+import { useCollaborativeWorkspace } from '../../hooks/use-collaborative-workspace';
+import { AIAnalytics } from './AIAnalytics';
+import { AIModelMessenger } from './AIModelMessenger';
+import { NotificationBell, NotificationPanel, NotificationProvider, NotificationSettings } from './NotificationSystem';
 
 const MessengerPanel: React.FC = () => {
     const { isConnected } = useCollaborativeWorkspace({
@@ -21,7 +21,7 @@ const MessengerPanel: React.FC = () => {
 
     return (
         <NotificationProvider>
-            <motion.div 
+            <motion.div
                 className="h-full flex flex-col bg-gray-900 text-white rounded-lg overflow-hidden relative"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ const MessengerPanel: React.FC = () => {
                 <AIModelMessenger />
 
                 {/* Notification Panel */}
-                <NotificationPanel 
+                <NotificationPanel
                     isOpen={showNotifications}
                     onClose={() => setShowNotifications(false)}
                 />

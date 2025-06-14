@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Settings, UserPlus, Crown, MoreVertical, Sparkles } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Crown, MoreVertical, Settings, Sparkles, UserPlus, Users } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface AIModel {
   id: string;
@@ -208,13 +208,12 @@ export const GroupChatInterface: React.FC<GroupChatInterfaceProps> = ({
 
           <div className="flex items-center space-x-2">
             {/* Group Type Badge */}
-            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-              groupChat.groupType === 'collaboration' ? 'bg-blue-500/20 text-blue-300' :
-              groupChat.groupType === 'research' ? 'bg-purple-500/20 text-purple-300' :
-              groupChat.groupType === 'creative' ? 'bg-orange-500/20 text-orange-300' :
-              groupChat.groupType === 'coding' ? 'bg-green-500/20 text-green-300' :
-              'bg-gray-500/20 text-gray-300'
-            }`}>
+            <div className={`px-3 py-1 rounded-full text-xs font-medium ${groupChat.groupType === 'collaboration' ? 'bg-blue-500/20 text-blue-300' :
+                groupChat.groupType === 'research' ? 'bg-purple-500/20 text-purple-300' :
+                  groupChat.groupType === 'creative' ? 'bg-orange-500/20 text-orange-300' :
+                    groupChat.groupType === 'coding' ? 'bg-green-500/20 text-green-300' :
+                      'bg-gray-500/20 text-gray-300'
+              }`}>
               {groupChat.groupType}
             </div>
 
@@ -228,9 +227,8 @@ export const GroupChatInterface: React.FC<GroupChatInterfaceProps> = ({
             </button>
             <button
               onClick={() => setContextSharing(!contextSharing)}
-              className={`p-2 rounded-lg transition-colors ${
-                contextSharing ? 'bg-blue-600 text-white' : 'hover:bg-gray-700'
-              }`}
+              className={`p-2 rounded-lg transition-colors ${contextSharing ? 'bg-blue-600 text-white' : 'hover:bg-gray-700'
+                }`}
               title="Context Sharing"
             >
               <Sparkles className="w-5 h-5" />
@@ -310,21 +308,19 @@ export const GroupChatInterface: React.FC<GroupChatInterfaceProps> = ({
                         <span className="text-sm font-medium" style={{ color: senderModel?.color }}>
                           {senderModel?.name}
                         </span>
-                        <div className={`text-xs px-2 py-0.5 rounded ${
-                          senderModel?.tier === 'premium' ? 'bg-purple-500/20 text-purple-300' :
-                          senderModel?.tier === 'advanced' ? 'bg-blue-500/20 text-blue-300' :
-                          'bg-gray-500/20 text-gray-300'
-                        }`}>
+                        <div className={`text-xs px-2 py-0.5 rounded ${senderModel?.tier === 'premium' ? 'bg-purple-500/20 text-purple-300' :
+                            senderModel?.tier === 'advanced' ? 'bg-blue-500/20 text-blue-300' :
+                              'bg-gray-500/20 text-gray-300'
+                          }`}>
                           {senderModel?.tier}
                         </div>
                       </div>
                     )}
 
-                    <div className={`inline-block px-4 py-2 rounded-2xl ${
-                      isUser
+                    <div className={`inline-block px-4 py-2 rounded-2xl ${isUser
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-700 text-white'
-                    } ${isConsecutive ? (isUser ? 'rounded-tr-md' : 'rounded-tl-md') : ''}`}>
+                      } ${isConsecutive ? (isUser ? 'rounded-tr-md' : 'rounded-tl-md') : ''}`}>
                       <p className="whitespace-pre-wrap break-words">{message.content}</p>
                       <div className={`text-xs mt-1 ${isUser ? 'text-blue-200' : 'text-gray-400'}`}>
                         {message.timestamp.toLocaleTimeString('en-US', {
@@ -448,11 +444,10 @@ export const GroupChatInterface: React.FC<GroupChatInterfaceProps> = ({
                     >
                       {model.avatar}
                     </div>
-                    <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-gray-800 ${
-                      model.status === 'online' ? 'bg-green-500' :
-                      model.status === 'busy' ? 'bg-yellow-500' :
-                      'bg-gray-500'
-                    }`} />
+                    <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-gray-800 ${model.status === 'online' ? 'bg-green-500' :
+                        model.status === 'busy' ? 'bg-yellow-500' :
+                          'bg-gray-500'
+                      }`} />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">

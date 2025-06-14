@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useMemo, useState } from 'react';
 
 interface AIModel {
   id: string;
@@ -72,10 +72,10 @@ export const ModelSelectorModal: React.FC<ModelSelectorModalProps> = ({
   const filteredAndSortedModels = useMemo(() => {
     let filtered = models.filter(model => {
       const matchesSearch = model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           model.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           model.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           model.capabilities.some(cap => cap.toLowerCase().includes(searchQuery.toLowerCase()));
-      
+        model.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        model.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        model.capabilities.some(cap => cap.toLowerCase().includes(searchQuery.toLowerCase()));
+
       const matchesProvider = selectedProvider === 'all' || model.provider === selectedProvider;
       const matchesTier = selectedTier === 'all' || model.tier === selectedTier;
       const matchesPricing = selectedPricing === 'all' || model.pricing === selectedPricing;
@@ -112,7 +112,7 @@ export const ModelSelectorModal: React.FC<ModelSelectorModalProps> = ({
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-black bg-opacity-75 backdrop-blur-sm" />
-      
+
       {/* Modal */}
       <motion.div
         className="relative bg-gray-900 rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
@@ -353,7 +353,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, onSelect }) => {
               </div>
             )}
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-white truncate text-lg">{model.name}</h3>
             <p className="text-sm text-gray-400">{model.provider}</p>
@@ -426,10 +426,10 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, onSelect }) => {
             </span>
           )}
         </div>
-        
+
         <span className={`text-${model.status === 'online' ? 'green' : 'gray'}-400`}>
-          {model.status === 'online' ? 'Online' : 
-           model.lastSeen ? `Last seen ${model.lastSeen.toLocaleTimeString()}` : 'Offline'}
+          {model.status === 'online' ? 'Online' :
+            model.lastSeen ? `Last seen ${model.lastSeen.toLocaleTimeString()}` : 'Offline'}
         </span>
       </div>
     </motion.div>
