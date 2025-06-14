@@ -508,6 +508,13 @@ class MamaBearAgenticSuperpowersV3:
         """🧠 Initialize Mem0 client for enhanced memory management"""
         try:
             import os
+            
+            # Check if we should skip Mem0 initialization
+            skip_init = os.getenv('MEM0_SKIP_INITIALIZATION', 'False').lower() == 'true'
+            if skip_init:
+                logger.info("⚡ Skipping Mem0 client initialization (MEM0_SKIP_INITIALIZATION=true)")
+                return None
+            
             from mem0 import Memory
 
             # Check if mem0 is enabled
@@ -519,7 +526,7 @@ class MamaBearAgenticSuperpowersV3:
             # Initialize mem0 with API key
             api_key = os.getenv('MEM0_API_KEY')
             if not api_key:
-                logger.warning("MEM0_API_KEY not found in environment")
+                logger.warning("⚠️ MEM0_API_KEY not found in environment")
                 return None
 
             config = {
@@ -530,9 +537,14 @@ class MamaBearAgenticSuperpowersV3:
                 "memory_retention": os.getenv('MEM0_MEMORY_RETENTION', 'persistent')
             }
 
-            memory_client = Memory.from_config(config)
-            logger.info("🧠 Mem0 client initialized successfully!")
-            return memory_client
+            try:
+                memory_client = Memory.from_config(config)
+                logger.info("✅ Mem0 client initialized successfully!")
+                return memory_client
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to initialize Mem0 (API key may be invalid): {e}")
+                logger.info("🔄 Falling back to local memory system")
+                return None
 
         except ImportError:
             logger.warning("mem0 package not available. Install with: pip install mem0ai")

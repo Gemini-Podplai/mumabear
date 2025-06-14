@@ -288,7 +288,7 @@ async def search_agents(request: AgentSearchRequest):
     """Search agents across all MCP marketplaces"""
     try:
         agents = await revolutionary_mcp_service.search_agents(request.query, request.filters)
-        
+
         # Convert agents to dictionaries
         agent_dicts = []
         for agent in agents:
@@ -324,7 +324,7 @@ async def get_agent_suggestions(request: AgentSuggestionRequest):
         suggestions = await revolutionary_mcp_service.get_mama_bear_suggestions(
             request.project_context
         )
-        
+
         return {
             "success": True,
             "suggestions": suggestions,
@@ -340,11 +340,11 @@ async def install_agent(request: AgentInstallRequest):
     """Install an agent from a marketplace"""
     try:
         result = await revolutionary_mcp_service.install_agent(
-            request.agent_id, 
-            request.source, 
+            request.agent_id,
+            request.source,
             request.configuration or {}
         )
-        
+
         return {
             "success": True,
             "agent_id": request.agent_id,
@@ -366,9 +366,9 @@ async def create_custom_agent(request: AgentCreateRequest):
             "template_id": request.template_id,
             **request.configuration
         }
-        
+
         agent = await revolutionary_mcp_service.create_custom_agent(config)
-        
+
         return {
             "success": True,
             "agent": {

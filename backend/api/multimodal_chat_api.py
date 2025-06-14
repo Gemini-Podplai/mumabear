@@ -558,10 +558,20 @@ def integrate_multimodal_chat_with_app(app):
         # Register the blueprint
         app.register_blueprint(multimodal_chat_bp)
         
-        # Get supercharger from app context
+        # Initialize supercharger directly
         with app.app_context():
-            from api.express_mode_vertex_api import _supercharger as express_supercharger
-            _supercharger = express_supercharger
+            try:
+                from api.express_mode_vertex_api import _supercharger as express_supercharger
+                if express_supercharger is not None:
+                    _supercharger = express_supercharger
+                    logger.info("✅ Multimodal Chat API using existing Express Mode supercharger")
+                else:
+                    # Initialize a basic supercharger if Express Mode isn't ready
+                    logger.warning("Express Mode supercharger not available, creating basic instance")
+                    _initialize_basic_supercharger()
+            except ImportError as e:
+                logger.warning(f"Express Mode API not available: {e}")
+                _initialize_basic_supercharger()
         
         logger.info("✅ Multimodal Chat API integration complete - ALL models accessible!")
         return True
@@ -569,3 +579,30 @@ def integrate_multimodal_chat_with_app(app):
     except Exception as e:
         logger.error(f"Failed to integrate Multimodal Chat API: {e}")
         return False
+
+def _initialize_basic_supercharger():
+    """Initialize a FULL supercharger with ALL your premium models"""
+    global _supercharger
+    
+    # Load the actual model registry from chat.py
+    from routes.chat import MODEL_REGISTRY
+    
+    class FullSupercharger:
+        def __init__(self):
+            # Convert the full MODEL_REGISTRY to express_models format
+            self.express_models = {}
+            
+            for model_id, config in MODEL_REGISTRY.items():
+                self.express_models[model_id] = {
+                    'provider': config['provider'],
+                    'capabilities': config['capabilities'],
+                    'response_time_target': 150 if 'flash' in model_id else 300,
+                    'cost_per_1k_tokens': 0.001 if 'gemini' in model_id else 0.003,
+                    'max_tokens': config.get('max_tokens', 8192),
+                    'multimodal': 'images' in config.get('capabilities', []),
+                    'express_mode': 'flash' in model_id or 'claude-3.5' in model_id
+                }
+    
+    _supercharger = FullSupercharger()
+    logger.info(f"✅ FULL multimodal supercharger initialized with {len(_supercharger.express_models)} models!")
+    logger.info(f"🔥 Available models: {list(_supercharger.express_models.keys())[:10]}...")  # Show first 10

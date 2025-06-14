@@ -20,9 +20,9 @@ interface McpMarketplaceProps {
   currentProject?: string;
 }
 
-export const McpMarketplace: React.FC<McpMarketplaceProps> = ({ 
-  onAgentSelect, 
-  currentProject 
+export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
+  onAgentSelect,
+  currentProject
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -114,8 +114,8 @@ export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
     setAgents(mockAgents);
     // Simulate Mama Bear analyzing current project context
     if (currentProject) {
-      const suggestions = mockAgents.filter(agent => 
-        agent.source === 'revolutionary' || 
+      const suggestions = mockAgents.filter(agent =>
+        agent.source === 'revolutionary' ||
         agent.capabilities.some(cap => currentProject.includes(cap.toLowerCase()))
       );
       setMamaBearSuggestions(suggestions);
@@ -128,7 +128,7 @@ export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
                          agent.capabilities.some(cap => cap.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = selectedCategory === 'all' || agent.category === selectedCategory;
     const matchesSource = selectedSource === 'all' || agent.source === selectedSource;
-    
+
     return matchesSearch && matchesCategory && matchesSource;
   });
 
@@ -136,7 +136,7 @@ export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
     setLoading(true);
     // Simulate Mama Bear analyzing project and creating custom agent
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     const customAgent: McpAgent = {
       id: `mama-bear-custom-${Date.now()}`,
       name: `Custom ${currentProject} Agent`,
@@ -149,7 +149,7 @@ export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
       source: 'revolutionary',
       capabilities: ['Project-Specific', 'Context-Aware', 'Adaptive Learning']
     };
-    
+
     setAgents(prev => [customAgent, ...prev]);
     setLoading(false);
     onAgentSelect(customAgent);
@@ -209,7 +209,7 @@ export const McpMarketplace: React.FC<McpMarketplaceProps> = ({
               className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-purple-500 transition-colors"
             />
           </div>
-          
+
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}

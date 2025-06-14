@@ -88,7 +88,7 @@ class RevolutionaryMcpService:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(10)
                 sock.connect((host, port))
-                
+
                 # Send MCP initialization message
                 init_message = {
                     "jsonrpc": "2.0",
@@ -119,14 +119,14 @@ class RevolutionaryMcpService:
                 if response_data:
                     logger.info("✅ Successfully connected to Docker MCP Toolkit!")
                     logger.info(f"MCP Server Response: {response_data.strip()}")
-                    
+
                     # Try to get available tools
                     docker_agents = await self._get_docker_mcp_tools_direct(host, port)
-                    
+
                 else:
                     logger.warning("No response from Docker MCP server, using default agents")
                     docker_agents = self._get_default_docker_agents()
-                    
+
             except socket.timeout:
                 logger.warning("Docker MCP connection timeout, using default agents")
                 docker_agents = self._get_default_docker_agents()
@@ -404,12 +404,12 @@ class RevolutionaryMcpService:
         try:
             import socket
             import json
-            
+
             # Create new socket for tools request
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(5)
             sock.connect((host, port))
-            
+
             # Send tools/list request to get available MCP tools
             tools_request = {
                 "jsonrpc": "2.0",
@@ -417,19 +417,19 @@ class RevolutionaryMcpService:
                 "method": "tools/list",
                 "params": {}
             }
-            
+
             tools_json = json.dumps(tools_request) + '\n'
             sock.send(tools_json.encode())
-            
+
             # Receive response
             response_data = sock.recv(4096).decode()
             sock.close()
-            
+
             if response_data:
                 try:
                     response = json.loads(response_data.strip())
                     tools = response.get('result', {}).get('tools', [])
-                    
+
                     # Convert MCP tools to McpAgent objects
                     docker_agents = []
                     for tool in tools:
@@ -446,7 +446,7 @@ class RevolutionaryMcpService:
                             capabilities=['Docker', 'MCP', tool.get('name', 'Tool')]
                         )
                         docker_agents.append(agent)
-                    
+
                     logger.info(f"✅ Retrieved {len(docker_agents)} tools from Docker MCP")
                     return docker_agents
                 except json.JSONDecodeError as e:
@@ -454,7 +454,7 @@ class RevolutionaryMcpService:
                     return self._get_default_docker_agents()
             else:
                 return self._get_default_docker_agents()
-                
+
         except Exception as e:
             logger.error(f"Error getting Docker MCP tools: {e}")
             return self._get_default_docker_agents()
@@ -469,14 +469,14 @@ class RevolutionaryMcpService:
                 "method": "tools/list",
                 "params": {}
             }
-            
+
             tools_json = json.dumps(tools_request) + '\n'
             stdout, stderr = process.communicate(input=tools_json, timeout=5)
-            
+
             if stdout:
                 response = json.loads(stdout.strip())
                 tools = response.get('result', {}).get('tools', [])
-                
+
                 # Convert MCP tools to McpAgent objects
                 docker_agents = []
                 for tool in tools:
@@ -493,12 +493,12 @@ class RevolutionaryMcpService:
                         capabilities=['Docker', 'MCP', tool.get('name', 'Tool')]
                     )
                     docker_agents.append(agent)
-                
+
                 logger.info(f"✅ Retrieved {len(docker_agents)} tools from Docker MCP")
                 return docker_agents
             else:
                 return self._get_default_docker_agents()
-                
+
         except Exception as e:
             logger.error(f"Error getting Docker MCP tools: {e}")
             return self._get_default_docker_agents()
@@ -519,7 +519,7 @@ class RevolutionaryMcpService:
                 capabilities=['Docker', 'Compose', 'Orchestration', 'Containers']
             ),
             McpAgent(
-                id='kubernetes-navigator', 
+                id='kubernetes-navigator',
                 name='Kubernetes Navigator',
                 description='Kubernetes deployment and management specialist',
                 author='CNCF Community',

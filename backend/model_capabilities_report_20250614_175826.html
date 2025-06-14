@@ -1,0 +1,1307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Revolutionary AI Workspace - Model Capabilities Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        .category-section {
+            margin-bottom: 50px;
+        }
+        .category-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 0;
+        }
+        .category-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0;
+        }
+        .category-description {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 0 0 15px 15px;
+        }
+        .model-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .model-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .model-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        .model-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .model-provider {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+        .model-specs {
+            margin-bottom: 15px;
+        }
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+        }
+        .spec-label {
+            color: #666;
+        }
+        .spec-value {
+            font-weight: 500;
+            color: #333;
+        }
+        .capabilities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 15px;
+        }
+        .capability-tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-available {
+            background: #4caf50;
+            color: white;
+        }
+        .status-configured {
+            background: #ff9800;
+            color: white;
+        }
+        .status-vertex_ai {
+            background: #2196f3;
+            color: white;
+        }
+        .status-orchestrated {
+            background: #9c27b0;
+            color: white;
+        }
+        .status-research_service {
+            background: #607d8b;
+            color: white;
+        }
+        .status-agentic_service {
+            background: #e91e63;
+            color: white;
+        }
+        .status-scout_service {
+            background: #795548;
+            color: white;
+        }
+        .summary-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 50px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .summary-item h3 {
+            color: #d2691e;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .provider-list {
+            list-style: none;
+            padding: 0;
+        }
+        .provider-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 6px;
+        }
+        .capability-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .capability-item {
+            background: rgba(255,255,255,0.7);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            color: #666;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Revolutionary AI Workspace</h1>
+            <div class="subtitle">Comprehensive Model Capabilities Report</div>
+            <p>Generated on 2025-06-14T17:58:26.454135</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">37</div>
+                <div class="stat-label">Total Models</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Model Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">9</div>
+                <div class="stat-label">AI Providers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">76</div>
+                <div class="stat-label">Unique Capabilities</div>
+            </div>
+        </div>
+    
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">OpenAI models accessed via Vertex AI Model Garden</div>
+                <div class="category-description">5 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-configured">Configured</div>
+                <div class="model-name">GPT-4o</div>
+                <div class="model-provider">OpenAI via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">128,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Completion</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Code</span><span class="capability-tag">Multimodal</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-configured">Configured</div>
+                <div class="model-name">GPT-4o Mini</div>
+                <div class="model-provider">OpenAI via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">128,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Completion</span><span class="capability-tag">Fast</span><span class="capability-tag">Code</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-configured">Configured</div>
+                <div class="model-name">GPT-4</div>
+                <div class="model-provider">OpenAI via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Completion</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Analysis</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-configured">Configured</div>
+                <div class="model-name">GPT-4 Turbo</div>
+                <div class="model-provider">OpenAI via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">128,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Completion</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Code</span><span class="capability-tag">Multimodal</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-configured">Configured</div>
+                <div class="model-name">GPT-3.5 Turbo</div>
+                <div class="model-provider">OpenAI via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">16,385 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Low</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Completion</span><span class="capability-tag">Fast</span></div>
+            </div>
+            </div></div>
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">Claude models (Direct Anthropic + Vertex AI access)</div>
+                <div class="category-description">7 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Claude 3.5 Sonnet</div>
+                <div class="model-provider">Anthropic</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Code</span><span class="capability-tag">Analysis</span><span class="capability-tag">Computer Use</span><span class="capability-tag">Function Calling</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Claude 3 Opus</div>
+                <div class="model-provider">Anthropic</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Enterprise</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Analysis</span><span class="capability-tag">Creative Writing</span><span class="capability-tag">Research</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Claude 3 Haiku</div>
+                <div class="model-provider">Anthropic</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Low</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Chat</span><span class="capability-tag">Fast</span><span class="capability-tag">Lightweight</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Claude 4 Opus (Vertex AI)</div>
+                <div class="model-provider">Anthropic via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Enterprise</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Advanced Coding</span><span class="capability-tag">Long Horizon Tasks</span><span class="capability-tag">Ai Agents</span><span class="capability-tag">Agentic Search</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Claude 4 Sonnet (Vertex AI)</div>
+                <div class="model-provider">Anthropic via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Everyday Development</span><span class="capability-tag">Code Reviews</span><span class="capability-tag">Api Integrations</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Claude 3.5 Sonnet v2 (Vertex AI)</div>
+                <div class="model-provider">Anthropic via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Tool Use</span><span class="capability-tag">Agentic Workflows</span><span class="capability-tag">Advanced Reasoning</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Claude 3.5 Haiku (Vertex AI)</div>
+                <div class="model-provider">Anthropic via Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Low</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Speed</span><span class="capability-tag">Cost Effectiveness</span><span class="capability-tag">Real Time Responses</span></div>
+            </div>
+            </div></div>
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">Google Gemini models (Direct API access)</div>
+                <div class="category-description">12 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.5 Pro</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Advanced Reasoning</span><span class="capability-tag">Complex Analysis</span><span class="capability-tag">Coding</span><span class="capability-tag">Multimodal</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.5 Pro Thinking</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Thinking</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Long Output</span><span class="capability-tag">Complex Debugging</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.5 Flash</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Fast</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Coding</span><span class="capability-tag">Batch Processing</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.5 Flash Thinking</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Thinking</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Complex Reasoning Backup</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.0 Flash</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Low</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Ultra Fast</span><span class="capability-tag">Real Time</span><span class="capability-tag">Live Collaboration</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.0 Flash Lite</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Free</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Speed</span><span class="capability-tag">Instant Responses</span><span class="capability-tag">Ui Interactions</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 2.0 Flash Thinking</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Thinking</span><span class="capability-tag">Architecture Decisions</span><span class="capability-tag">Complex Debugging</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 1.5 Pro</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Reasoning</span><span class="capability-tag">Analysis</span><span class="capability-tag">Large Context</span><span class="capability-tag">Multimodal</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 1.5 Flash</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Speed</span><span class="capability-tag">Efficiency</span><span class="capability-tag">General Purpose</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini 1.5 Flash 8B</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Free</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Ultra Fast</span><span class="capability-tag">High Volume</span><span class="capability-tag">Cost Effective</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini Pro Vision</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">12,288 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Vision</span><span class="capability-tag">Multimodal</span><span class="capability-tag">Image Analysis</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-available">Available</div>
+                <div class="model-name">Gemini Embedding</div>
+                <div class="model-provider">Google Gemini</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">1 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Low</span>
+                    </div>
+                    
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Embedding</span><span class="capability-tag">Vector Search</span><span class="capability-tag">Semantic Analysis</span></div>
+            </div>
+            </div></div>
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">Vertex AI Express Mode optimized models</div>
+                <div class="category-description">2 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Gemini 2.5 Pro (Vertex AI)</div>
+                <div class="model-provider">Google Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Premium</span>
+                    </div>
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Avg Response:</span>
+                    <span class="spec-value">400ms</span>
+                </div>
+                
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Express Mode</span><span class="capability-tag">Large Context</span><span class="capability-tag">Multimodal</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-vertex_ai">Vertex Ai</div>
+                <div class="model-name">Gemini 2.5 Flash (Vertex AI)</div>
+                <div class="model-provider">Google Vertex AI</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Medium</span>
+                    </div>
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Avg Response:</span>
+                    <span class="spec-value">200ms</span>
+                </div>
+                
+                    
+                </div>
+                <div class="capabilities"><span class="capability-tag">Fastest Responses</span><span class="capability-tag">Cost Effective</span><span class="capability-tag">High Throughput</span></div>
+            </div>
+            </div></div>
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">Revolutionary AI Orchestra specialized variants</div>
+                <div class="category-description">7 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Conductor (Gemini 2.5 Pro)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Ultimate Task Router</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Task Routing</span><span class="capability-tag">Orchestration</span><span class="capability-tag">Master Conductor</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Deep Thinker (Gemini 2.0 Flash Thinking)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Complex Analysis</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Thinking</span><span class="capability-tag">Reasoning</span><span class="capability-tag">Architecture Decisions</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Speed Demon (Gemini 2.0 Flash Lite)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Instant Responses</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Speed</span><span class="capability-tag">Instant Responses</span><span class="capability-tag">Ui Interactions</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Context Master (Gemini 1.5 Pro)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">2M Context Window</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Massive Context</span><span class="capability-tag">Document Analysis</span><span class="capability-tag">Long Form</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Creative Writer (Gemini 2.5 Pro)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,048,576 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">65,536 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">65K Output</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Creativity</span><span class="capability-tag">Writing</span><span class="capability-tag">Storytelling</span><span class="capability-tag">Long Output</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Code Specialist (Gemini 2.5 Flash)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Code Generation</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Coding</span><span class="capability-tag">Development</span><span class="capability-tag">Debugging</span><span class="capability-tag">Optimization</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-orchestrated">Orchestrated</div>
+                <div class="model-name">Research Expert (Gemini 1.5 Pro)</div>
+                <div class="model-provider">Revolutionary AI Orchestra</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Research Analysis</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Research</span><span class="capability-tag">Analysis</span><span class="capability-tag">Investigation</span><span class="capability-tag">Deep Research</span></div>
+            </div>
+            </div></div>
+        <div class="category-section">
+            <div class="category-header">
+                <div class="category-title">Specialized service models for specific use cases</div>
+                <div class="category-description">4 models available</div>
+            </div>
+            <div class="models-grid">
+        
+            <div class="model-card">
+                <div class="status-badge status-research_service">Research Service</div>
+                <div class="model-name">Deep Research Claude Opus</div>
+                <div class="model-provider">Deep Research Center</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">200,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">4,096 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Research Collaboration</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Exhaustive Research</span><span class="capability-tag">Complex Analysis</span><span class="capability-tag">Collaboration</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-research_service">Research Service</div>
+                <div class="model-name">Deep Research Gemini Pro</div>
+                <div class="model-provider">Deep Research Center</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Gemini Deep Research</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Deep Research</span><span class="capability-tag">Gemini Search</span><span class="capability-tag">Collaborative Research</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-agentic_service">Agentic Service</div>
+                <div class="model-name">Mama Bear V3 Agentic Superpowers</div>
+                <div class="model-provider">Mama Bear Agentic Service</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">2,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Agentic Intelligence</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Agentic Ai</span><span class="capability-tag">Memory Operations</span><span class="capability-tag">Mem0 Integration</span><span class="capability-tag">Superpowers</span></div>
+            </div>
+            
+            <div class="model-card">
+                <div class="status-badge status-scout_service">Scout Service</div>
+                <div class="model-name">Enhanced Gemini Scout Orchestrator</div>
+                <div class="model-provider">Scout Workflow Service</div>
+                <div class="model-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">Context Window:</span>
+                        <span class="spec-value">1,000,000 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Max Output:</span>
+                        <span class="spec-value">8,192 tokens</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cost Tier:</span>
+                        <span class="spec-value">Unknown</span>
+                    </div>
+                    
+                    
+                <div class="spec-item">
+                    <span class="spec-label">Specialty:</span>
+                    <span class="spec-value">Workflow Automation</span>
+                </div>
+                
+                </div>
+                <div class="capabilities"><span class="capability-tag">Workflow Orchestration</span><span class="capability-tag">Scout Roles</span><span class="capability-tag">Multi Stage Processing</span></div>
+            </div>
+            </div></div>
+        <div class="summary-section">
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3>🤖 Providers</h3>
+                    <div class="provider-list">
+                        
+        <div class="provider-item">
+            <span>OpenAI via Vertex AI</span>
+            <strong>5 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Anthropic</span>
+            <strong>3 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Anthropic via Vertex AI</span>
+            <strong>4 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Google Gemini</span>
+            <strong>12 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Google Vertex AI</span>
+            <strong>2 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Revolutionary AI Orchestra</span>
+            <strong>7 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Deep Research Center</span>
+            <strong>2 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Mama Bear Agentic Service</span>
+            <strong>1 models</strong>
+        </div>
+        
+        <div class="provider-item">
+            <span>Scout Workflow Service</span>
+            <strong>1 models</strong>
+        </div>
+        
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <h3>🛠️ All Capabilities</h3>
+                    <div class="capability-grid">
+                        <span class="capability-item">Advanced Coding</span><span class="capability-item">Advanced Reasoning</span><span class="capability-item">Agentic Ai</span><span class="capability-item">Agentic Search</span><span class="capability-item">Agentic Workflows</span><span class="capability-item">Ai Agents</span><span class="capability-item">Analysis</span><span class="capability-item">Api Integrations</span><span class="capability-item">Architecture Decisions</span><span class="capability-item">Batch Processing</span><span class="capability-item">Chat</span><span class="capability-item">Code</span><span class="capability-item">Code Reviews</span><span class="capability-item">Coding</span><span class="capability-item">Collaboration</span><span class="capability-item">Collaborative Research</span><span class="capability-item">Completion</span><span class="capability-item">Complex Analysis</span><span class="capability-item">Complex Debugging</span><span class="capability-item">Complex Reasoning Backup</span><span class="capability-item">Computer Use</span><span class="capability-item">Cost Effective</span><span class="capability-item">Cost Effectiveness</span><span class="capability-item">Creative Writing</span><span class="capability-item">Creativity</span><span class="capability-item">Debugging</span><span class="capability-item">Deep Research</span><span class="capability-item">Development</span><span class="capability-item">Document Analysis</span><span class="capability-item">Efficiency</span><span class="capability-item">Embedding</span><span class="capability-item">Everyday Development</span><span class="capability-item">Exhaustive Research</span><span class="capability-item">Express Mode</span><span class="capability-item">Fast</span><span class="capability-item">Fastest Responses</span><span class="capability-item">Function Calling</span><span class="capability-item">Gemini Search</span><span class="capability-item">General Purpose</span><span class="capability-item">High Throughput</span><span class="capability-item">High Volume</span><span class="capability-item">Image Analysis</span><span class="capability-item">Instant Responses</span><span class="capability-item">Investigation</span><span class="capability-item">Large Context</span><span class="capability-item">Lightweight</span><span class="capability-item">Live Collaboration</span><span class="capability-item">Long Form</span><span class="capability-item">Long Horizon Tasks</span><span class="capability-item">Long Output</span><span class="capability-item">Massive Context</span><span class="capability-item">Master Conductor</span><span class="capability-item">Mem0 Integration</span><span class="capability-item">Memory Operations</span><span class="capability-item">Multi Stage Processing</span><span class="capability-item">Multimodal</span><span class="capability-item">Optimization</span><span class="capability-item">Orchestration</span><span class="capability-item">Real Time</span><span class="capability-item">Real Time Responses</span><span class="capability-item">Reasoning</span><span class="capability-item">Research</span><span class="capability-item">Scout Roles</span><span class="capability-item">Semantic Analysis</span><span class="capability-item">Speed</span><span class="capability-item">Storytelling</span><span class="capability-item">Superpowers</span><span class="capability-item">Task Routing</span><span class="capability-item">Thinking</span><span class="capability-item">Tool Use</span><span class="capability-item">Ui Interactions</span><span class="capability-item">Ultra Fast</span><span class="capability-item">Vector Search</span><span class="capability-item">Vision</span><span class="capability-item">Workflow Orchestration</span><span class="capability-item">Writing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>🐻 Powered by Revolutionary AI Workspace</strong></p>
+            <p>The most comprehensive AI model ecosystem available</p>
+            <p><small>Featuring OpenAI, Claude, Gemini, and Specialized Orchestra Models</small></p>
+        </div>
+    </div>
+</body>
+</html>
+    

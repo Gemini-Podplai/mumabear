@@ -70,9 +70,9 @@ export const useMcpClient = () => {
   };
 
   const connectToMarketplace = async (connectionId: string) => {
-    setConnections(prev => 
-      prev.map(conn => 
-        conn.id === connectionId 
+    setConnections(prev =>
+      prev.map(conn =>
+        conn.id === connectionId
           ? { ...conn, status: 'connecting' }
           : conn
       )
@@ -81,19 +81,19 @@ export const useMcpClient = () => {
     try {
       // Simulate connection delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Mock successful connection
-      setConnections(prev => 
-        prev.map(conn => 
-          conn.id === connectionId 
+      setConnections(prev =>
+        prev.map(conn =>
+          conn.id === connectionId
             ? { ...conn, status: 'connected', agents: getMockAgents(conn.marketplace) }
             : conn
         )
       );
     } catch (error) {
-      setConnections(prev => 
-        prev.map(conn => 
-          conn.id === connectionId 
+      setConnections(prev =>
+        prev.map(conn =>
+          conn.id === connectionId
             ? { ...conn, status: 'error' }
             : conn
         )
@@ -121,7 +121,7 @@ export const useMcpClient = () => {
   };
 
   const searchAgents = async (query: string, filters?: any) => {
-    const allAgents = connections.flatMap(conn => 
+    const allAgents = connections.flatMap(conn =>
       conn.agents.map(agent => ({
         ...agent,
         source: conn.marketplace,
@@ -129,7 +129,7 @@ export const useMcpClient = () => {
       }))
     );
 
-    return allAgents.filter(agent => 
+    return allAgents.filter(agent =>
       agent.name.toLowerCase().includes(query.toLowerCase()) ||
       agent.capabilities.some((cap: string) => cap.toLowerCase().includes(query.toLowerCase()))
     );
@@ -146,7 +146,7 @@ export const useMcpClient = () => {
     // Simulate custom agent creation via Mama Bear
     console.log('Creating custom agent with config:', config);
     await new Promise(resolve => setTimeout(resolve, 3000));
-    
+
     const customAgent = {
       id: `custom-${Date.now()}`,
       name: config.name || 'Custom Agent',

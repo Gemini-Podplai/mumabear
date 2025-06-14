@@ -347,7 +347,7 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
                       AI-powered agent creation based on your project context
                     </div>
                   </button>
-                  
+
                   <button className="w-full p-3 bg-gray-700/50 border border-gray-600 rounded-lg text-left hover:bg-gray-700 transition-colors">
                     <div className="font-medium text-white">⚙️ Manual Configuration</div>
                     <div className="text-xs text-gray-400 mt-1">

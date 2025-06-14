@@ -1,0 +1,131 @@
+{
+  "name": "mama-bear-ai",
+  "displayName": "🐻 Mama Bear AI Assistant",
+  "description": "Autonomous AI development with Mama Bear - your personal AI that remembers everything and builds your $100M app",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "assistant",
+    "autonomous",
+    "mama-bear",
+    "copilot",
+    "claude",
+    "gemini"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mamaBear.buildProject",
+        "title": "🔨 Build Project Autonomously",
+        "category": "Mama Bear"
+      },
+      {
+        "command": "mamaBear.deployProject",
+        "title": "🚀 Deploy Project Autonomously",
+        "category": "Mama Bear"
+      },
+      {
+        "command": "mamaBear.fixAllErrors",
+        "title": "🔧 Fix All Errors Autonomously",
+        "category": "Mama Bear"
+      },
+      {
+        "command": "mamaBear.chat",
+        "title": "💬 Chat with Mama Bear",
+        "category": "Mama Bear"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mamaBear.chat",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      },
+      {
+        "command": "mamaBear.fixAllErrors",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "mamaBear.buildProject"
+        },
+        {
+          "command": "mamaBear.deployProject"
+        },
+        {
+          "command": "mamaBear.fixAllErrors"
+        },
+        {
+          "command": "mamaBear.chat"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "mamaBear.fixAllErrors",
+          "when": "editorHasErrors",
+          "group": "mamaBear"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Mama Bear AI Configuration",
+      "properties": {
+        "mamaBear.backendUrl": {
+          "type": "string",
+          "default": "http://localhost:5001",
+          "description": "Mama Bear backend API URL"
+        },
+        "mamaBear.autonomousMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable autonomous development mode"
+        },
+        "mamaBear.autoFix": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically fix errors when detected"
+        },
+        "mamaBear.primaryModel": {
+          "type": "string",
+          "default": "claude-3.5-sonnet",
+          "enum": [
+            "claude-3.5-sonnet",
+            "claude-3-opus-20240229",
+            "gemini-1.5-pro-latest",
+            "gemini-2.0-flash-exp"
+          ],
+          "description": "Primary AI model for Mama Bear"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

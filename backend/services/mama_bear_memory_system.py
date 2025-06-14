@@ -1,9 +1,68 @@
 import json
 import os
+import logging
 from datetime import datetime
 from mem0 import Memory
 
+logger = logging.getLogger(__name__)
+
 class EnhancedMemoryManager:
+    def __init__(self):
+        """Initialize Enhanced Memory Manager with optional Mem0 integration"""
+        self.memory_client = self._setup_mem0_client()
+        self.conversation_memory = {}
+        self.project_memory = {}
+        self.task_memory = {}
+        self.context_cache = {}
+        self.learning_data = {}
+        
+    def _setup_mem0_client(self):
+        """Initialize Mem0 client with graceful fallback"""
+        try:
+            import os
+            
+            # Check if we should skip Mem0 initialization
+            skip_init = os.getenv('MEM0_SKIP_INITIALIZATION', 'False').lower() == 'true'
+            if skip_init:
+                logger.info("⚡ Skipping Mem0 client initialization (MEM0_SKIP_INITIALIZATION=true)")
+                return None
+            
+            from mem0 import MemoryClient
+            
+            # Check if API key exists in environment
+            api_key = os.getenv('MEM0_API_KEY')
+            if not api_key:
+                logger.warning("⚠️ MEM0_API_KEY not found, using local memory only")
+                return None
+            
+            # Set environment variable explicitly (Mem0 reads from env)
+            os.environ['MEM0_API_KEY'] = api_key
+            
+            # Initialize client (no api_key parameter - reads from env)
+            client = MemoryClient()
+            
+            # Test the connection with a simple request
+            try:
+                # Try to get users to test if API key works
+                client.users()
+                logger.info("✅ Mem0 client initialized and authenticated successfully")
+                return client
+            except Exception as auth_error:
+                logger.warning(f"⚠️ Mem0 API authentication failed: {auth_error}")
+                logger.info("🔄 Falling back to local memory system")
+                return None
+                
+        except ImportError:
+            logger.warning("⚠️ mem0 library not available, using local memory only")
+            return None
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to initialize Mem0 client: {e}")
+            logger.info("🔄 Falling back to local memory system")
+            return None
+
+class EnhancedMemoryManagerDocs:
+    """Documentation manager for Mama Bear"""
+    
     def __init__(self, mem0_client, local_storage_path):
         self.mem0_client = mem0_client
         self.local_storage_path = local_storage_path

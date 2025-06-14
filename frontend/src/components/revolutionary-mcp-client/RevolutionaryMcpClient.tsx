@@ -28,7 +28,7 @@ export const RevolutionaryMcpClient: React.FC<McpClientProps> = ({
   const [isThinking, setIsThinking] = useState(false);
   const [connectedMcpServers, setConnectedMcpServers] = useState<string[]>([
     'mcp-filesystem',
-    'mcp-memory', 
+    'mcp-memory',
     'mcp-search',
     'mcp-thinking'
   ]);
@@ -298,8 +298,8 @@ export const RevolutionaryMcpClient: React.FC<McpClientProps> = ({
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium">{marketplace.name}</h4>
                         <span className={`text-xs px-2 py-1 rounded ${
-                          marketplace.status === 'connected' 
-                            ? 'bg-green-500/20 text-green-300' 
+                          marketplace.status === 'connected'
+                            ? 'bg-green-500/20 text-green-300'
                             : 'bg-yellow-500/20 text-yellow-300'
                         }`}>
                           {marketplace.status}

@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  mama-bear-vscode:
+    build:
+      context: ./docker/code-server-mama-bear
+      dockerfile: Dockerfile
+    container_name: mama-bear-ide
+    ports:
+      - "8080:8080"  # VS Code Server
+    volumes:
+      - ./:/home/mama-bear/workspace/podplay-scout-alpha:rw
+      - mama-bear-extensions:/home/mama-bear/.local/share/code-server
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker access
+    environment:
+      - MAMA_BEAR_BACKEND_URL=http://host.docker.internal:5001
+      - MAMA_BEAR_MCP_ENABLED=true
+      - MAMA_BEAR_GITHUB_TOKEN=${GITHUB_TOKEN}
+      - MAMA_BEAR_ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - MAMA_BEAR_GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - MAMA_BEAR_AUTONOMOUS_MODE=true
+    networks:
+      - mama-bear-network
+    depends_on:
+      - mama-bear-backend
+
+  mama-bear-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: mama-bear-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app:rw
+      - ./podplay-build-alpha-8fcf03975028.json:/app/credentials/service-account.json:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials/service-account.json
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - MCP_CLIENT_ENABLED=true
+      - MAMA_BEAR_AUTONOMOUS_BUILDING=true
+    networks:
+      - mama-bear-network
+
+  mama-bear-mcp-server:
+    image: alpine/socat
+    container_name: mama-bear-mcp-bridge
+    command: TCP-LISTEN:8811,fork,reuseaddr TCP:host.docker.internal:8811
+    ports:
+      - "8811:8811"
+    networks:
+      - mama-bear-network
+
+volumes:
+  mama-bear-extensions:
+
+networks:
+  mama-bear-network:
+    driver: bridge

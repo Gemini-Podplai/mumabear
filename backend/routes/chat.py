@@ -14,6 +14,9 @@ import threading
 
 chat_bp = Blueprint('chat', __name__)
 
+# Model Registry for external imports
+MODEL_REGISTRY = {}
+
 # Comprehensive model configurations with intelligent orchestration
 MODEL_CONFIGS = {
     # OpenAI GPT Models
@@ -423,7 +426,9 @@ Always maintain a caring, supportive tone while being technically excellent. You
                     yield from _generate_fallback_response(model_id, mama_bear_variant, session_id, personality)
                 
             except Exception as e:
-                current_app.logger.error(f"Error in generate_response: {e}")
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Error in generate_response: {e}")
                 error_data = {
                     'error': str(e),
                     'model': model_id,

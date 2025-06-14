@@ -28,7 +28,7 @@ export const AgentScoutHub: React.FC = () => {
                         <div className="text-white">
                             <h2 className="text-2xl font-bold mb-2">🚀 Revolutionary MCP Client</h2>
                             <p className="text-purple-100">
-                                Connect to ALL MCP marketplaces (Docker, Continue.dev, Claude Desktop). 
+                                Connect to ALL MCP marketplaces (Docker, Continue.dev, Claude Desktop).
                                 Let Mama Bear create perfect agents for your projects!
                             </p>
                             <div className="mt-4 flex items-center gap-4 text-sm">
