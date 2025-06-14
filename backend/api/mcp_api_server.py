@@ -398,6 +398,16 @@ async def test_docker_connection():
         logger.error(f"Error testing Docker connection: {e}")
         return {"success": False, "error": str(e)}
 
+@app.on_event("startup")
+async def startup_event():
+    """Initialize Revolutionary MCP Service on startup"""
+    logger.info("🚀 Initializing Revolutionary MCP Client...")
+    try:
+        await revolutionary_mcp_service.initialize()
+        logger.info("✅ Revolutionary MCP Client initialized successfully")
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize Revolutionary MCP Client: {e}")
+
 if __name__ == "__main__":
     # Run the API server
     uvicorn.run(
